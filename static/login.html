@@ -5,21 +5,24 @@
   <head>
     <meta charset="utf-8">
     <!-- TODO: Reference stylesheets here -->
+    <link rel="stylesheet" href="/public/main_styles.css">
     <title>Film Reviews</title>
   </head>
   <body>
     <main>
-        <h1>Sign In</h1>
-        <section>
+        <section id="login-box">
+            <h1>Sign In</h1>
             <!-- TODO: Set action attribute for login form -->
-            <form id="login" method="POST">
+            <form id="login-form" method="POST">
                 <label for="username">Username</label>
                 <input id="username" type="text" name="username" placeholder="Username" />
                 <br>
                 <label for="password">Password</label>
                 <input id="password" type="text" name="password" placeholder="Password" />
                 <br>
-                <button form="login" type="submit">Sign In</button>
+                <button id="login-button" form="login-form" type="submit">Sign In</button>
+                <!-- TODO: Set link destination for creating an account -->
+                <p>Not a member? <a href="https://www.w3schools.com/tags/tag_a.asp">Sign up!</a></p>
             </form>
         </section>
     </main>

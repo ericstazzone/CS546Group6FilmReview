@@ -1,0 +1,71 @@
+html {
+    background-color: white;
+    color: black;
+    font-family: 'Segoe UI', Tahoma, Verdana, sans-serif;
+}
+
+body {
+    
+}
+
+main {
+    
+}
+
+label {
+    /* font-style: italic; */
+    font-weight: 200;
+}
+
+h1 {
+    /* text-align: center; */
+}
+
+section {
+    width: fit-content;
+    height: fit-content;
+}
+
+#login-box {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+
+    padding: 1px 20px;
+    border: 2px solid black;
+    border-radius: 5px;
+
+    /* background-color: rgb(232, 248, 255); */
+}
+
+#login-form {
+    /* background-color: red; */
+}
+
+#username, #password {
+    /* TODO: Setting width to 100% doesn't seem to work properly, 95% is an approximation that should be adjusted when a solution is identified */
+    width: 95%;
+    margin-bottom: 5px;
+    padding: 4px;
+}
+
+#login-button {
+    width: 25%;
+    margin-top: 10px;
+    padding: 4px;
+}
+
+a:link {
+    color: rgb(0, 140, 255);
+}
+
+a:visited {
+    color: rgb(140, 0, 255);
+}
+
+a:hover {
+    color: rgb(100, 185, 255);
+}
