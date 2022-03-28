@@ -27,6 +27,8 @@ section {
 }
 
 #login-box {
+    width: 14%;
+
     position: absolute;
     top: 0;
     bottom: 0;
@@ -45,9 +47,9 @@ section {
     /* background-color: red; */
 }
 
-#username, #password {
-    /* TODO: Setting width to 100% doesn't seem to work properly, 95% is an approximation that should be adjusted when a solution is identified */
-    width: 95%;
+#username, #password, #confirm-password {
+    box-sizing: border-box;
+    width: 100%;
     margin-bottom: 5px;
     padding: 4px;
 }
