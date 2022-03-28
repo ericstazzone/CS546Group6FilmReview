@@ -1,0 +1,26 @@
+{
+  "name": "cs546group6filmreview",
+  "version": "1.0.0",
+  "description": "Introduction\r For our project, we propose a platform for film self-reviews. Users will be required to create accounts in order to upload reviews. When uploading reviews, users will be presented with a form with numerous fields to fill out, including film title, rating, and review body. Film title is to be matched with entries pulled from a third-party API. Users can browse reviews via the central catalog page and sort by such categories as title and reviewer. Users can also view pages dedicated to individual reviews.",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ericstazzone/CS546Group6FilmReview.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ericstazzone/CS546Group6FilmReview/issues"
+  },
+  "homepage": "https://github.com/ericstazzone/CS546Group6FilmReview#readme",
+  "dependencies": {
+    "axios": "^0.26.1",
+    "express": "^4.17.3",
+    "express-handlebars": "^6.0.3",
+    "handlebars": "^4.7.7",
+    "mongodb": "^4.4.1"
+  }
+}
