@@ -8,8 +8,8 @@ const commentData = require('./comments');
 module.exports = {
   // EXAMPLE: userApi: userApiData
   // TODO: _____: _____
-  userData: users,
-  movieData: movies,
-  reviewData: reviews,
-  commentData: comments
+  users: userData,
+  movies: movieData,
+  reviews: reviewData,
+  comments: commentData
 };

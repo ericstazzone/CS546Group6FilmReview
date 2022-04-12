@@ -1,0 +1,40 @@
+body {
+    box-sizing: border-box;
+    margin: 0;
+}
+
+h1 {
+    margin: .25em 0 0 .5em;
+}
+
+.category-box {
+    box-sizing: border-box;
+    border: .15em solid black;
+    border-radius: .2em;
+    width: 30%;
+    height: fit-content;
+    /* min-width: 30%; */
+    padding: .5em 1em 0 1em;
+    font-size: 125%;
+}
+
+.category-header {
+    line-height: 0;
+    text-align: center;
+}
+
+#recent-box {
+    float: left;
+    margin-left: 15%;
+}
+
+#popular-box {
+    float: right;
+    margin-right: 15%;
+}
+
+.divider {
+    height: .15em;
+    border-width: 0;
+    background-color: black;
+}

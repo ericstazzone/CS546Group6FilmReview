@@ -4,7 +4,7 @@ const users = mongoCollections.users;
 const { ObjectId } = require('mongodb');
 const validation = require('../validation');
 
-const settings = require('./settings');
+const settings = require('../config/settings');
 const apiKey = settings.apiKey;
 
 const usernameRequirements = /^[a-zA-Z0-9]+$/g;

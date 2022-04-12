@@ -1,14 +1,12 @@
-// EXAMPLE: const userApiRoutes = require('./userApi');
-// TODO: const _____ = require('_____');
-const userData = require('./users');
-const movieData = require('./movies');
-const reviewData = require('./reviews');
-const commentData = require('./comments');
+const userRoutes = require('./users');
+const movieRoutes = require('./movies');
+const reviewRoutes = require('./reviews');
+const commentRoutes = require('./comments');
 
 const constructorMethod = (app) => {
   // EXAMPLE: app.use('/', userApiRoutes);
-  // TODO: app.use('/', _____);
-
+  //          app.use('_____', _____);
+  app.use('/', userRoutes); // This route is for testing purposes only
   // TODO: Add other routes as necessary
 
   app.use('*', (req, res) => {

@@ -1,0 +1,33 @@
+<section id="login-box">
+    <h1>Sign In</h1>
+    <!-- TODO: Set action attribute for login form -->
+    <form id="login-form" method="POST">
+        <label for="username">Username</label>
+        <input id="username" type="text" name="username" placeholder="Username" />
+        <br>
+        <label for="password">Password</label>
+        <input id="password" type="password" name="password" placeholder="Password" />
+        <br>
+        <button id="login-button" form="login-form" type="submit">Sign In</button>
+        <!-- TODO: Set link destination for creating an account -->
+        <p>Not a member? <a id="signup-link" href="javascript:">Sign up!</a></p>
+    </form>
+</section>
+<section id="signup-box" hidden>
+    <h1>Sign Up</h1>
+    <!-- TODO: Set action attribute for login form -->
+    <form id="login-form" method="POST">
+        <label for="username">Username</label>
+        <input id="username" type="text" name="username" placeholder="Username" />
+        <br>
+        <label for="password">Password</label>
+        <input id="password" type="password" name="password" placeholder="Password" />
+        <br>
+        <label for="password">Confirm Password</label>
+        <input id="confirm-password" type="password" name="confirm-password" placeholder="Password" />
+        <br>
+        <button id="signup-button" form="login-form" type="submit">Sign Up</button>
+        <!-- TODO: Set link destination for creating an account -->
+        <p>Have an account? <a id="login-link" href="javascript:">Sign in!</a></p>
+    </form>
+</section>
