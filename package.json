@@ -21,6 +21,8 @@
     "express": "^4.17.3",
     "express-handlebars": "^6.0.3",
     "handlebars": "^4.7.7",
+    "install": "^0.13.0",
+    "jquery-ui-dist": "^1.13.1",
     "mongodb": "^4.4.1"
   }
 }
