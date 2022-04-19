@@ -5,26 +5,35 @@
   <head>
     <meta charset="utf-8">
     <!-- TODO: Reference stylesheets here -->
-    <link rel="stylesheet" href="/public/main_styles.css">
     <title>Film Reviews</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="/public/css/styles.css">
   </head>
   <body>
     <main>
-      <section id="login-box">
-        <h1>Sign In</h1>
-        <!-- TODO: Set action attribute for login form -->
-        <form id="login-form" method="POST">
-          <label for="username">Username</label>
-          <input id="username" type="text" name="username" placeholder="Username" />
-          <br>
-          <label for="password">Password</label>
-          <input id="password" type="password" name="password" placeholder="Password" />
-          <br>
-          <button id="login-button" form="login-form" type="submit">Sign In</button>
-          <!-- TODO: Set link destination for creating an account -->
-          <p>Not a member? <a href="./signup.html">Sign up!</a></p>
-        </form>
-      </section> 
+      <div class="primary">
+        <div class="container show-border raise">
+          <h1>Sign In</h1>
+          <!-- TODO: Set action attribute for login form -->
+          <form id="login-form" class="needs-validation" novalidate> <!-- method="POST" -->
+            <div class="form-group">
+              <label class="" for="username">Username</label>
+              <input id="username" class="form-control" type="text" name="username" placeholder="Username" required />
+              <div class="invalid-feedback">Please provide a username.</div>
+            </div>
+            <div class="form-group">
+              <label for="password">Password</label>
+              <input id="password" class="form-control" type="password" name="password" placeholder="Password" required />
+              <div class="invalid-feedback">Please provide a password.</div>
+            </div>
+            <button id="login-button" class="btn btn-primary" form="login-form" type="submit">Sign In</button>
+            <span class="align-middle add-to-left">Not a member? <a class="font-weight-bold" href="./signup.html">Sign up!</a></span>
+          </form>
+        </div>
+      </div>
     </main>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="../public/js/validation.js"></script>
   </body>
 </html>
