@@ -2,50 +2,49 @@
 
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <link rel="stylesheet" href="/public/css/main.css">
-        <link rel="stylesheet" href="/public/css/home.css">
-        <title>Film Reviews</title>
-    </head>
-    <body>
-        <header>
-            <h1>Film Reviews</h1>
-        </header>
-        <main>
-            <div id="categories">
-                <section id="recent-box" class="category-box">
-                    <h2 class="category-header">Recent</h1>
-                    <hr class="divider">
-                    <ul class="category-list">
-                        <li><a><span id="review-title">How Toy Story Changed my Life</span><br><span id="review-film">Toy Story</span></a></li>
-                        <li><a><span id="review-title">My Toy Story 2 Story</span><br><span id="review-film">Toy Story 2</span></a></li>
-                        <li><a><span id="review-title">Toy Story 3 and the Conscious Self</span><br><span id="review-film">Toy Story 3</span></a></li>
-                        <li><a><span id="review-title">God I Love Toy Story</span><br><span id="review-film">Toy Story 4</span></a></li>
-                        <li><a><span id="review-title">In Short, Not Enough Toys</span><br><span id="review-film">American Psycho</span></a></li>
-                    </ul>
-                </section>
-                <section id="popular-box" class="category-box">
-                    <h2 class="category-header">Popular</h1>
-                    <hr class="divider">
-                    <ul class="category-list">
-                        <li><a><span id="review-title">How Toy Story Changed my Life</span><br><span id="review-film">Toy Story</span></a></li>
-                        <li><a><span id="review-title">My Toy Story 2 Story</span><br><span id="review-film">Toy Story 2</span></a></li>
-                        <li><a><span id="review-title">Toy Story 3 and the Conscious Self</span><br><span id="review-film">Toy Story 3</span></a></li>
-                        <li><a><span id="review-title">God I Love Toy Story</span><br><span id="review-film">Toy Story 4</span></a></li>
-                        <li><a><span id="review-title">In Short, Not Enough Toys</span><br><span id="review-film">American Psycho</span></a></li>
-                    </ul>
-                </section>
+  <head>
+    <meta charset="utf-8">
+    <!-- TODO: Reference stylesheets here -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="/public/css/styles.css">
+    <title>Film Reviews</title>
+  </head>
+  <body>
+    <main>
+        <div class="primary">
+            <div class="container home-container raise">
+                <div class="row">
+                    <div class="col-12">
+                        <h1>Film Reviews</h1>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6 align-self-start">
+                        <h2 class="category-header">Recent</h1>
+                        <div class="category-list list-group list-group-flush">
+                            <button class="list-group-item list-group-item-action" type="button">How Toy Story Changed my Life<br><small class="font-italic">Toy Story</small></button>
+                            <button class="list-group-item list-group-item-action" type="button">My Toy Story 2 Story<br><small class="font-italic">Toy Story 2</small></button>
+                            <button class="list-group-item list-group-item-action" type="button">Toy Story 3 and the Conscious Self<br><small class="font-italic">Toy Story 3</small></button>
+                            <button class="list-group-item list-group-item-action" type="button">God I Love Toy Story<br><small class="font-italic">Toy Story 4</small></button>
+                            <button class="list-group-item list-group-item-action" type="button">In Short, Not Enough Toys<br><small class="font-italic">American Psycho</small></button>
+                        </div>
+                    </div>
+                    <div class="col-6 align-self-start">
+                        <h2 class="category-header">Popular</h1>
+                        <div class="category-list list-group list-group-flush">
+                            <button class="list-group-item list-group-item-action" type="button">How Toy Story Changed my Life<br><small class="font-italic">Toy Story</small></button>
+                            <button class="list-group-item list-group-item-action" type="button">My Toy Story 2 Story<br><small class="font-italic">Toy Story 2</small></button>
+                            <button class="list-group-item list-group-item-action" type="button">Toy Story 3 and the Conscious Self<br><small class="font-italic">Toy Story 3</small></button>
+                            <button class="list-group-item list-group-item-action" type="button">God I Love Toy Story<br><small class="font-italic">Toy Story 4</small></button>
+                            <button class="list-group-item list-group-item-action" type="button">In Short, Not Enough Toys<br><small class="font-italic">American Psycho</small></button>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </main>
-        <footer>
+        </div>
+    </main>
 
-        </footer>
-
-        <script src="/node_modules/jquery/dist/jquery.min.js"></script>
-        <script src="/node_modules/jquery-ui-dist/jquery-ui.min.js"></script>
-
-        <!-- <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script> -->
-        <script src="../public/js/home.js"></script>
-    </body>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="../public/js/validation.js"></script>
+  </body>
 </html>

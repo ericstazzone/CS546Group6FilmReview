@@ -20,17 +20,20 @@
     align-items: center;
 }
 
-.container {
+.login-container {
     max-width: 400px;
-    /* height: 100vh; */
-    /* background-color: lightcoral; */
-    /* padding: 10px 0; */
-    /* display: flex; */
     justify-content: center;
     align-items: center;
     box-sizing: content-box;
     padding: 20px;
     border-radius: 5px;
+}
+
+.home-container {
+    max-width: 700px;
+    justify-content: center;
+    align-items: center;
+    box-sizing: content-box;
 }
 
 main {
@@ -52,4 +55,9 @@ main {
     from {
         -webkit-transform: translate(0px, 50px);
     }
+}
+
+.list-group-item {
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
