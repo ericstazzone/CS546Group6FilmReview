@@ -20,23 +20,26 @@
     align-items: center;
 }
 
-.login-container {
-    max-width: 400px;
+.main-container, .login-container, .home-container {
     justify-content: center;
     align-items: center;
-    box-sizing: content-box;
+    /* box-sizing: content-box; */
     padding: 20px;
     border-radius: 5px;
+    /* background-color: red; */
+}
+
+.main-container {
+    max-width: 450px;
+    box-sizing: content-box;
 }
 
 .home-container {
     max-width: 700px;
-    justify-content: center;
-    align-items: center;
     box-sizing: content-box;
 }
 
-main {
+body {
     height: 100vh;
     /* background-color: orchid; */
 }
@@ -46,16 +49,63 @@ main {
     display: flex;
     justify-content: center;
     align-items: center;
+    /* background-color: red; */
 }
+
 .raise {
     -webkit-animation: rise .25s ease-out;
 }
-
 @-webkit-keyframes rise {
     from {
         -webkit-transform: translate(0px, 50px);
     }
 }
+
+.slide-left {
+    -webkit-animation: slide-left .5s ease-in-out;
+    -webkit-animation-fill-mode: forwards;
+}
+@-webkit-keyframes slide-left {
+    to {
+        -webkit-transform: translate(-500px, 0px);
+    }
+}
+
+.slide-right {
+    -webkit-animation: slide-right .5s ease-in-out;
+    -webkit-animation-fill-mode: forwards;
+}
+@-webkit-keyframes slide-right {
+    to {
+        -webkit-transform: translate(500px, 0);
+    }
+}
+
+/* @keyframes fade {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+.category-list button {
+    opacity: 0;
+    animation: fade .5s;
+    animation-fill-mode: forwards;
+}
+.category-list button:nth-of-type(2) {
+    animation-delay: .125s;
+}
+.category-list button:nth-of-type(3) {
+    animation-delay: .25s;
+}
+.category-list button:nth-of-type(4) {
+    animation-delay: .375s;
+}
+.category-list button:nth-of-type(5) {
+    animation-delay: .5s;
+} */
 
 .list-group-item {
     overflow: hidden;

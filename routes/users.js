@@ -5,7 +5,7 @@ const userData = data.users;
 const {ObjectId} = require('mongodb');
 
 router.get('/', async (req, res) => {
-    res.render('partials/signin');
+    res.render('partials/login');
 });
 
 module.exports = router;

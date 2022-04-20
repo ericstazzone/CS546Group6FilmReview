@@ -8,8 +8,8 @@ const settings = require('../config/settings');
 const apiKey = settings.apiKey;
 
 const usernameRequirements = /^[a-zA-Z0-9]+$/g;
-// TODO: Modify passwordRequirements to include allowed symbols
-const passwordRequirements = /^[a-zA-Z0-9]+$/g;
+// TODO: If having the ! here doesn't work, remove the ! from in front of the test in checkPassword instead
+const passwordRequirements = !/\s/g;
 
 // Throws an error if the provided username is taken or it does not meet every requirement
 async function checkUsername(username) {
@@ -67,7 +67,7 @@ async function createUser(firstName, lastName, username, password, email) {
     username = await checkUsername(username);
     password = checkPassword(password);
     email = validation.checkString(email, 'email');
-    // TODO: Verify that email exists
+    // TODO: Verify that email is of the proper format and has not been registered
 
     const userCollection = await users();
     let newUser = {
