@@ -1,16 +1,31 @@
 <div class="container home-container raise">
-    <div class="row">
-        <div class="col-6">
+    <div class="row add-to-bottom">
+        <div class="col-9 col-md-4 order-md-1 site-header">
             <h1>Film Reviews</h1>
         </div>
-        <div class="col-6">
+        <div class="col order-xs-2 order-3 order-sm-3 order-md-2">
             <div class="input-group">
+                <div class="input-group-prepend">
+                    <button id="sort-button" class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</button>
+                    <div id="sort-menu" class="dropdown-menu">
+                        <a class="dropdown-item" href="#">Title</a>
+                        <a class="dropdown-item" href="#">Director</a>
+                        <a class="dropdown-item" href="#">Actor</a>
+                        <a class="dropdown-item" href="#">Date</a>
+                        <a class="dropdown-item" href="#">Reviewer</a>
+                    </div>
+                </div>
                 <input id="form1" class="form-control" aria-label="Search" type="search" placeholder="Search" />
                 <div class="input-group-append">
                     <button class="btn btn-primary" type="submit">
                         <i class="fa fa-search"></i>
                     </button>
                 </div>
+            </div>
+        </div>
+        <div class="col-3 col-md-2 order-2 order-sm-2 order-md-3">
+            <div class="text-right">
+                <button class="btn btn-primary">Sign In</button>
             </div>
         </div>
     </div>
