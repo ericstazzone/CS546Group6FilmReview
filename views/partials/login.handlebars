@@ -12,12 +12,12 @@
                 <form id="login-form" class="needs-validation" method="POST" action="/login" novalidate>
                 <div class="form-group login-group">
                     <label for="username">Username</label>
-                    <input id="username" class="form-control" type="text" name="username" placeholder="Username" required />
+                    <input id="login-username" class="form-control" type="text" name="username" placeholder="Username" required />
                     <div class="invalid-feedback login-error">Please provide a username.</div>
                 </div>
                 <div class="form-group login-group">
                     <label for="password">Password</label>
-                    <input id="password" class="form-control" type="password" name="password" placeholder="Password" required />
+                    <input id="login-password" class="form-control" type="password" name="password" placeholder="Password" required />
                     <div class="invalid-feedback login-error">Please provide a password.</div>
                 </div>
                 <button id="login-button" class="btn btn-primary" form="login-form" type="submit">Sign In</button>
@@ -29,37 +29,37 @@
                 <!-- TODO: Set action attribute for login form -->
                 <form id="signup-form" class="needs-validation" method="POST" action="/signup" novalidate>
                 <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-6 form-group">
+                    <div class="col-xs-12 col-sm-12 col-md-6 align-self-start form-group signup-group">
                         <label for="first-name">First Name</label>
                         <input id="first-name" class="form-control" type="text" name="firstName" placeholder="First Name" required />
                         <div class="invalid-feedback">Please enter your first name.</div>
                     </div>
-                        <div class="col-xs-12 col-sm-12 col-md-6 form-group">
+                        <div class="col-xs-12 col-sm-12 col-md-6 align-self-start form-group signup-group">
                         <label for="last-name">Last Name</label>
                         <input id="last-name" class="form-control" type="text" name="lastName" placeholder="Last Name" required />
                         <div class="invalid-feedback">Please enter your last name.</div>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group signup-group">
                     <label for="email">Email</label>
                     <input id="email" class="form-control" type="text" name="email" placeholder="Email" required />
                     <div class="invalid-feedback">Please enter your email.</div>
                 </div>
-                <div class="form-group">
+                <div class="form-group signup-group">
                     <label for="username">Username</label>
-                    <input id="username" class="form-control" type="text" name="username" placeholder="Username" required />
+                    <input id="signup-username" class="form-control" type="text" name="username" placeholder="Username" required />
                     <div class="invalid-feedback">Please provide a username.</div>
                 </div>
                 <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-6 form-group">
-                    <label for="password">Password</label>
-                    <input id="password" class="form-control" type="password" name="password" placeholder="Password" required />
-                    <div class="invalid-feedback">Please provide a password.</div>
+                    <div class="col-xs-12 col-sm-12 col-md-6 align-self-start form-group signup-group">
+                        <label for="password">Password</label>
+                        <input id="signup-password" class="form-control" type="password" name="password" placeholder="Password" required />
+                        <div class="invalid-feedback">Please provide a password.</div>
                     </div>
-                    <div class="col-xs-12 col-sm-12 col-md-6 form-group">
-                    <label for="password">Confirm Password</label>
-                    <input id="confirm-password" class="form-control" type="password" name="confirmPassword" placeholder="Password" required />
-                    <div class="invalid-feedback">Please provide a password.</div>
+                    <div class="col-xs-12 col-sm-12 col-md-6 align-self-start form-group signup-group">
+                        <label for="password">Confirm Password</label>
+                        <input id="confirm-password" class="form-control" type="password" name="confirmPassword" placeholder="Password" required />
+                        <div class="invalid-feedback">Please provide a password.</div>
                     </div>
                 </div>
                 <button id="login-button" class="btn btn-primary" form="signup-form" type="submit">Sign Up</button>

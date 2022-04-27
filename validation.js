@@ -1,3 +1,5 @@
+const emailValidator = require('email-validator');
+
 function checkId(id) {
     if (!id) throw 'Error: You must provide an id to search for';
     if (typeof id !== 'string') throw 'Error: id must be a string';
@@ -35,9 +37,23 @@ function checkPassword(password) {
     return password;
 }
 
+function confirmPassword(password1, password2) {
+    checkString(password2, 'password');
+    if (password1 !== password2) throw 'Password fields must match.';
+    return password2;
+}
+
+function checkEmail(email) {
+    checkString(email, 'email');
+    if (!emailValidator.validate(email)) throw "Email is invalid.";
+    return email;
+}
+
 module.exports = {
     checkId,
     checkString,
     checkUsername,
-    checkPassword
+    checkPassword,
+    confirmPassword,
+    checkEmail
 }

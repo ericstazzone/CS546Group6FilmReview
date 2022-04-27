@@ -37,11 +37,12 @@ router.post('/signup', async (req, res) => {
     try {
         req.body.username = validation.checkUsername(req.body.username);
         req.body.password = validation.checkPassword(req.body.password);
-        req.body.confirmPassword = validation.checkPassword(req.body.confirmPassword);
+        req.body.confirmPassword = validation.confirmPassword(req.body.password, req.body.confirmPassword);
+        req.body.firstName = validation.checkString(req.body.firstName, 'first name');
+        req.body.lastName = validation.checkString(req.body.lastName, 'last name');
+        req.body.email = validation.checkEmail(req.body.email);
 
-        if (req.body.password !== req.body.confirmPassword) throw 'Error: password fields must match';
-
-        const user = await userData.createUser(req.body.username, req.body.password);
+        const user = await userData.createUser(req.body.firstName, req.body.lastName, req.body.username, req.body.password, req.body.email);
         if (user.userInserted) {
             // TODO: Show message indicating successful sign-up on login page
             res.status(200).redirect('/login');
@@ -73,6 +74,7 @@ router.post('/validate', async (req, res) => {
     if ('username' in req.body) {
         try {
             req.body.username = validation.checkUsername(req.body.username);
+            if (await userData.getUserByUsername(req.body.username)) throw 'Username is taken.';
         } catch (e) {
             response['username'.concat('Error')] = e;
         }
@@ -84,16 +86,34 @@ router.post('/validate', async (req, res) => {
             response['password'.concat('Error')] = e;
         }
     }
-    // try {
-    //     req.body.username = validation.checkUsername(req.body.username);
-    // } catch (e) {
-    //     response.usernameError = e;
-    // }
-    // try {
-    //     req.body.password = validation.checkPassword(req.body.password);
-    // } catch (e) {
-    //     response.passwordError = e;
-    // }
+    if ('confirmPassword' in req.body) {
+        try {
+            req.body.confirmPassword = validation.confirmPassword(req.body.password, req.body.confirmPassword);
+        } catch (e) {
+            response['confirmPassword'.concat('Error')] = e;
+        }
+    }
+    if ('firstName' in req.body) {
+        try {
+            req.body.firstName = validation.checkString(req.body.firstName, 'first name');
+        } catch (e) {
+            response['firstName'.concat('Error')] = e;
+        }
+    }
+    if ('lastName' in req.body) {
+        try {
+            req.body.lastName = validation.checkString(req.body.lastName, 'last name');
+        } catch (e) {
+            response['lastName'.concat('Error')] = e;
+        }
+    }
+    if ('email' in req.body) {
+        try {
+            req.body.email = validation.checkEmail(req.body.email);
+        } catch (e) {
+            response['email'.concat('Error')] = e;
+        }
+    }
     res.json(response);
 });
 

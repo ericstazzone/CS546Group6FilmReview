@@ -54,21 +54,22 @@ async function checkUser(username, password) {
 }
 
 async function createUser(firstName, lastName, username, password, email) {
-    firstName = validation.checkString(firstName, 'firstName');
-    lastName = validation.checkString(lastName, 'lastName');
-    username = await validation.checkUsername(username);
+    firstName = validation.checkString(firstName, 'first name');
+    lastName = validation.checkString(lastName, 'last name');
+    username = validation.checkUsername(username);
     password = validation.checkPassword(password);
-    email = validation.checkString(email, 'email');
+    email = validation.checkEmail(email);
     // TODO: Verify that email is of the proper format and has not been registered
 
     if (await getUserByUsername(username)) throw 'Error: username is taken';
 
+    const hash = await bcrypt.hash(password, saltRounds);
     const userCollection = await users();
     let newUser = {
         firstName: firstName,
         lastName: lastName,
         username: username,
-        password: password,
+        password: hash,
         email: email,
         reviews: [],
         moviesReviewed: []
@@ -115,10 +116,11 @@ async function updatePassword(id, password) {
     id = validation.checkId(id);
     password = validation.checkPassword(password);
 
+    const hash = await bcrypt.hash(password, saltRounds);
     const userCollection = await users();
     const updateInfo = await userCollection.updateOne(
         {_id: ObjectId(id)},
-        {$set: {password: password}}
+        {$set: {password: hash}}
     );
     if (!updateInfo.matchedCount && !updateInfo.modifiedCount) throw 'Error: Could not update password';
 
@@ -135,6 +137,7 @@ function testFunction() {
 
 module.exports = {
     getUser,
+    getUserByUsername,
     getAllUsers,
     checkUser,
     createUser,
