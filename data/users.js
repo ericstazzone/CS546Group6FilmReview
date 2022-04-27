@@ -1,4 +1,6 @@
 const axios = require('axios');
+const bcrypt = require('bcrypt');
+const saltRounds = 16;
 const mongoCollections = require('../config/mongoCollections');
 const users = mongoCollections.users;
 const { ObjectId } = require('mongodb');
@@ -7,47 +9,25 @@ const validation = require('../validation');
 const settings = require('../config/settings');
 const apiKey = settings.apiKey;
 
-const usernameRequirements = /^[a-zA-Z0-9]+$/g;
-// TODO: If having the ! here doesn't work, remove the ! from in front of the test in checkPassword instead
-const passwordRequirements = !/\s/g;
 
-// Throws an error if the provided username is taken or it does not meet every requirement
-async function checkUsername(username) {
-    username = validation.checkString(username, 'username');
-
-    // Check if username is of sufficient length
-    if (username.length < 8) throw 'Error: username must be at least 8 characters long';
-    // Check if username contains any illegal characters
-    if (!usernameRequirements.test(username)) throw 'Error: username contains illegal characters';
-
-    // Check if username is taken
-    const userCollection = await users();
-    const user = await userCollection.findOne({ username: username });
-    if (user !== null) throw 'Error: username is taken';
-
-    return username;
-}
-
-// Throws an error if the provided password does not meet every requirement
-function checkPassword(password) {
-    password = validation.checkString(password, 'password');
-    
-    // Check if password is of sufficient length
-    if (password.length < 8) throw 'Error: password must be at least 8 characters long';
-    // Check if password contains any illegal characters
-    if (!passwordRequirements.test(password)) throw 'Error: password contains illegal characters';
-
-    return password;
-}
 
 async function getUser(id) {
     id = validation.checkId(id);
 
     const userCollection = await users();
     const user = await userCollection.findOne({ _id: ObjectId(id) });
-    if (user === null) throw 'Error: No user with that id';
+    if (!user) throw 'Error: No user with that id';
 
     user._id = user._id.toString();
+    return user;
+}
+
+async function getUserByUsername(username) {
+    username = validation.checkUsername(username);
+
+    const userCollection = await users();
+    const user = await userCollection.findOne({username: {$regex: new RegExp(username, 'i')}});
+
     return user;
 }
 
@@ -61,13 +41,27 @@ async function getAllUsers() {
     return userList;
 }
 
+async function checkUser(username, password) {
+    username = validation.checkUsername(username);
+    password = validation.checkPassword(password);
+    
+    let user = await getUserByUsername(username);
+    if (!user) throw 'Error: Either the username or password is invalid';
+
+    const compare = await bcrypt.compare(password, user.password);
+    if (!compare) throw 'Error: Either the username or password is invalid';
+    return {authenticated: true};
+}
+
 async function createUser(firstName, lastName, username, password, email) {
     firstName = validation.checkString(firstName, 'firstName');
     lastName = validation.checkString(lastName, 'lastName');
-    username = await checkUsername(username);
-    password = checkPassword(password);
+    username = await validation.checkUsername(username);
+    password = validation.checkPassword(password);
     email = validation.checkString(email, 'email');
     // TODO: Verify that email is of the proper format and has not been registered
+
+    if (await getUserByUsername(username)) throw 'Error: username is taken';
 
     const userCollection = await users();
     let newUser = {
@@ -82,11 +76,7 @@ async function createUser(firstName, lastName, username, password, email) {
 
     const insertInfo = await userCollection.insertOne(newUser);
     if (!insertInfo.acknowledged || !insertInfo.insertedId) throw 'Error: Could not add user';
-    const id = insertInfo.insertedId.toString();
-
-    const user = await this.getUser(id);
-    user._id = user._id.toString();
-    return user;
+    return {userInserted: true};
 }
 
 async function removeUser(id) {
@@ -105,7 +95,9 @@ async function removeUser(id) {
 
 async function updateUsername(id, username) {
     id = validation.checkId(id);
-    username = await checkUsername(username);
+    username = await validation.checkUsername(username);
+
+    if (await getUserByUsername(username)) throw 'Error: username is taken';
 
     const userCollection = await users();
     const updateInfo = await userCollection.updateOne(
@@ -121,7 +113,7 @@ async function updateUsername(id, username) {
 
 async function updatePassword(id, password) {
     id = validation.checkId(id);
-    password = checkPassword(password);
+    password = validation.checkPassword(password);
 
     const userCollection = await users();
     const updateInfo = await userCollection.updateOne(
@@ -135,13 +127,19 @@ async function updatePassword(id, password) {
     return user;
 }
 
+function testFunction() {
+    console.log("Test output!");
+}
+
 // TODO: Add function(s) to update a user's firstName, lastName, and email as deemed necessary
 
 module.exports = {
     getUser,
     getAllUsers,
+    checkUser,
     createUser,
     removeUser,
     updateUsername,
-    updatePassword
+    updatePassword,
+    testFunction
 }

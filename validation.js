@@ -9,11 +9,35 @@ function checkId(id) {
 }
 
 function checkString(string, parameter) {
-    if (!string || typeof string != 'string' || string.trim().length == 0) throw `Error: ${parameter} must be a non-empty string`;
+    if (!string || typeof string != 'string' || string.trim().length == 0) throw `Please enter your ${parameter}.`;
     return string.trim();
+}
+
+// Throws an error if the provided username is taken or it does not meet every requirement
+function checkUsername(username) {
+    checkString(username, 'username');
+
+    // Check if username contains any illegal characters
+    if (!/^[a-zA-Z0-9]+$/g.test(username)) throw 'Username contains illegal characters.';
+    // Check if username is of sufficient length
+    if (username.length < 8) throw 'Username must be at least 8 characters long.';
+    return username;
+}
+
+// Throws an error if the provided password does not meet every requirement
+function checkPassword(password) {
+    checkString(password, 'password');
+    
+    // Check if password contains any illegal characters
+    if (/\s/g.test(password)) throw 'Password contains illegal characters.';
+    // Check if password is of sufficient length
+    if (password.length < 8) throw 'Password must be at least 8 characters long.';
+    return password;
 }
 
 module.exports = {
     checkId,
-    checkString
+    checkString,
+    checkUsername,
+    checkPassword
 }
