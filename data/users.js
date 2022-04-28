@@ -26,7 +26,7 @@ async function getUserByUsername(username) {
     username = validation.checkUsername(username);
 
     const userCollection = await users();
-    const user = await userCollection.findOne({username: {$regex: new RegExp(username, 'i')}});
+    const user = await userCollection.findOne({username: {$regex: new RegExp(`^${username}$`, 'i')}});
 
     return user;
 }
@@ -46,10 +46,10 @@ async function checkUser(username, password) {
     password = validation.checkPassword(password);
     
     let user = await getUserByUsername(username);
-    if (!user) throw 'Error: Either the username or password is invalid';
+    if (!user) throw 'Either the username or password is invalid.';
 
     const compare = await bcrypt.compare(password, user.password);
-    if (!compare) throw 'Error: Either the username or password is invalid';
+    if (!compare) throw 'Either the username or password is invalid.';
     return {authenticated: true};
 }
 
