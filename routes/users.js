@@ -147,4 +147,12 @@ router.post('/signupValidation', async (req, res) => {
     res.json(response);
 });
 
+router.get('/settings', async (req, res) => {
+    if (req.session.user) {
+        res.render('partials/settings');
+    } else {
+        res.redirect('/login');
+    }
+});
+
 module.exports = router;

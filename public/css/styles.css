@@ -14,8 +14,16 @@ hr {
     margin-bottom: 10px;
 }
 
+.add-to-left-lesser {
+    margin-left: 5px;
+}
+
 .add-to-left {
     margin-left: 10px;
+}
+
+#settings-button {
+    
 }
 
 .full-height {
