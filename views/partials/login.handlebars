@@ -9,9 +9,9 @@
             <div id="login" class="container login-container show-border">
                 <h2>Sign In</h2>
                 {{#if success}}
-                <div id="login-alert" class="alert alert-success add-to-top" role="alert">Your account has been created!</div>
+                <div id="login-alert" class="alert alert-success add-to-top-greater" role="alert">Your account has been created!</div>
                 {{else}}
-                <div id="login-alert" class="alert alert-danger add-to-top" role="alert" hidden>Either the username or password is invalid.</div>
+                <div id="login-alert" class="alert alert-danger add-to-top-greater" role="alert" hidden>Either the username or password is invalid.</div>
                 {{/if}}
                 <form id="login-form" class="needs-validation" method="POST" action="/login" novalidate>
                     <div class="form-group login-group">

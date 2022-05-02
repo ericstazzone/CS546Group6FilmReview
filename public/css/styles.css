@@ -6,7 +6,15 @@ hr {
     border-color: #CED4DA;
 }
 
+.add-to-top-lesser {
+    margin-top: 5px;
+}
+
 .add-to-top {
+    margin-top: 10px;
+}
+
+.add-to-top-greater {
     margin-top: 20px;
 }
 
