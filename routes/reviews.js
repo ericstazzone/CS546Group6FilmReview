@@ -16,6 +16,5 @@ router.post('/', async (req, res) => {
     }catch(e){
         return res.status(500).json({error:e});
     }
-    reviewList.push({reviewTitle: "test", movieTitle: "123"}) //**DEBUG code
     return res.status(200).json({success: true, reviewAndMovieTitlesList: reviewList});
 });

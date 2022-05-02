@@ -1,4 +1,5 @@
 const emailValidator = require('email-validator');
+const { ObjectId } = require('mongodb');
 
 function checkId(id) {
     if (!id) throw 'Error: You must provide an id to search for';
