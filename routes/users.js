@@ -82,11 +82,6 @@ router.get('/home', async (req, res) => {
     res.render('partials/home', {user: req.session.user});
 });
 
-router.get('/reviews', async (req, res) => {
-    res.render('partials/reviews', {user: req.session.user});
-});
-
-
 router.get('/logout', async (req, res) => {
     if (req.session.user) req.session.destroy();
     res.redirect('/login');

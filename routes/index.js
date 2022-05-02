@@ -8,6 +8,7 @@ const constructorMethod = (app) => {
   //          app.use('_____', _____);
   app.use('/', userRoutes); // This route is for testing purposes only
   // TODO: Add other routes as necessary
+  app.use('/reviews',reviewRoutes);
 
   app.use('*', (req, res) => {
     // EXAMPLE: res.status(404).json({ error: 'Not found' });
