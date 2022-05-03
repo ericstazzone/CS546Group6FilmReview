@@ -7,7 +7,7 @@ const constructorMethod = (app) => {
   // EXAMPLE: app.use('/', userApiRoutes);
   //          app.use('_____', _____);
   app.use('/', userRoutes); // This route is for testing purposes only
-  // TODO: Add other routes as necessary
+  // **TODO: Add other routes as necessary
   app.use('/reviews',reviewRoutes);
 
   app.use('*', (req, res) => {

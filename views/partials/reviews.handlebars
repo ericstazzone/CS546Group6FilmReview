@@ -1,26 +1,24 @@
-<div class="container home-container">
+<div class="container home-container" id="review-catalog">
     <div class="row raise">
         <div class="col-6 col-md-4 order-md-1 site-header">
             <h1><a class="text-reset text-decoration-none" href="home">Film Reviews</a></h1>
         </div>
         <div class="col order-xs-2 order-3 order-sm-3 order-md-2">
             <div class="input-group">
-                <div class="input-group-prepend">
-                    <button id="category-button" class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Title</button>
-                    <div id="category-menu" class="dropdown-menu">
-                        <a class="dropdown-item" href="#">Title</a>
-                        <a class="dropdown-item" href="#">Director</a>
-                        <a class="dropdown-item" href="#">Actor</a>
-                        <a class="dropdown-item" href="#">Date</a>
-                        <a class="dropdown-item" href="#">Reviewer</a>
-                    </div>
-                </div>
-                <input id="form1" class="form-control" aria-label="Search" type="search" placeholder="Search" />
-                <div class="input-group-append">
-                    <button class="btn btn-primary" type="submit">
-                        <i class="fa fa-search"></i>
-                    </button>
-                </div>
+                <form method="POST" action="/reviews" id="searchForm">
+                    <label for="keyword"> Select Keyword</label>
+                    <select name="keyword" id="keyword">
+                        <option value = "Title" >Title</option>
+                        <option value = "Director" >Director</option>
+                        <option value = "Actor">Actor</option>
+                        <option value = "Release Date">Release Date</option>
+                        <option value = "Reviewer">Reviewer</option>
+                    </select>
+                    <br></br>
+                    <label for="searchbar">Search</label>
+                    <input type="search" placeholder="Search" name="searchbar" id="searchbar"/>
+                    <button class="btn btn-primary" type="submit">Submit</button>
+                </form>
             </div>
         </div>
         <div class="col-6 col-md-2 order-2 order-md-3 text-right">
@@ -52,32 +50,19 @@
                 <div class="col text-right">
                     <button id="sort-button" class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Recent</button>
                     <div id="sort-menu" class="dropdown-menu dropdown-menu-right">
-                        <a class="dropdown-item" href="#">Recent</a>
-                        <a class="dropdown-item" href="#">Popular</a>
-                        <a class="dropdown-item" href="#">A-Z</a>
+                        <a class="dropdown-item" href="#" id="recent listing option">Recent</a>
+                        <a class="dropdown-item" href="#" id="popular listing option">Popular</a>
+                        <a class="dropdown-item" href="#" id="alphabetical listing option">A-Z</a>
                     </div>
                 </div>
             </div>
             
             <div class="category-list list-group list-group-flush add-to-top">
-                <ul id="reviewList">
-
-                </ul>
-                {{!-- <button class="list-group-item list-group-item-action" type="button">Review Title<br><small class="font-italic">Film Title</small></button>
-                <button class="list-group-item list-group-item-action" type="button">Review Title<br><small class="font-italic">Film Title</small></button>
-                <button class="list-group-item list-group-item-action" type="button">Review Title<br><small class="font-italic">Film Title</small></button>
-                <button class="list-group-item list-group-item-action" type="button">Review Title<br><small class="font-italic">Film Title</small></button>
-                <button class="list-group-item list-group-item-action" type="button">Review Title<br><small class="font-italic">Film Title</small></button>
-                <button class="list-group-item list-group-item-action" type="button">Review Title<br><small class="font-italic">Film Title</small></button>
-                <button class="list-group-item list-group-item-action" type="button">Review Title<br><small class="font-italic">Film Title</small></button>
-                <button class="list-group-item list-group-item-action" type="button">Review Title<br><small class="font-italic">Film Title</small></button>
-                <button class="list-group-item list-group-item-action" type="button">Review Title<br><small class="font-italic">Film Title</small></button>
-                <button class="list-group-item list-group-item-action" type="button">Review Title<br><small class="font-italic">Film Title</small></button>
-                <button class="list-group-item list-group-item-action" type="button">Review Title<br><small class="font-italic">Film Title</small></button>
-                <button class="list-group-item list-group-item-action" type="button">Review Title<br><small class="font-italic">Film Title</small></button>
-                <button class="list-group-item list-group-item-action" type="button">Review Title<br><small class="font-italic">Film Title</small></button>
-                <button class="list-group-item list-group-item-action" type="button">Review Title<br><small class="font-italic">Film Title</small></button> --}}
+                <ul id="reviewListRecent"></ul>
+                <ul id="reviewListPopular"></ul>
+                <ul id="reviewListAlphabetical"></ul>
             </div>
         </div>
     </div>
 </div>
+

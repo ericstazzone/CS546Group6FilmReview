@@ -1,6 +1,7 @@
 const dbConnection = require('../config/mongoConnection');
 const data = require('../data/');
 const reviews = data.reviews;
+const movies = data.movies;
 const users = data.users;
 
 async function main() {
@@ -29,21 +30,21 @@ async function main() {
     console.log("2");
     //seeding movies
     try {
-        movie1 = await reviews.addMovieSeed("Movie Title 1", "Director 1", ["Genre 1", "Genre 2"], ["Actor 1","Actress 1"], "1/1/2001", 1, "temp img link 1");
+        movie1 = await movies.addMovieSeed("AMovie Title 1", "Director 1", ["Genre 1", "Genre 2"], ["Actor 1","Actress 1"], "1/1/2001", 1, "temp img link 1");
     } catch(e) {
         console.log("Got an error! 3");
         console.log(e);
     }
     console.log("3");
     try {
-        movie2 = await reviews.addMovieSeed("Movie Title 2", "Director 2", ["Genre 3", "Genre 4"], ["Actor 3","Actress 4"], "2/2/2002", 2, "temp img link 2");
+        movie2 = await movies.addMovieSeed("BMovie Title 2", "Director 2", ["Genre 3", "Genre 4"], ["Actor 3","Actress 4"], "2/2/2002", 2, "temp img link 2");
     } catch(e) {
         console.log("Got an error! 4");
         console.log(e);
     }
     console.log("4");
     try {
-        movie3 = await reviews.addMovieSeed("Movie Title 3", "Director 3", ["Genre 5", "Genre 6"], ["Actor 5","Actress 6"], "3/3/2003", 3, "temp img link 3");
+        movie3 = await movies.addMovieSeed("CMovie Title 3", "Director 3", ["Genre 5", "Genre 6"], ["Actor 5","Actress 6"], "3/3/2003", 3, "temp img link 3");
     } catch(e) {
         console.log("Got an error! 5");
         console.log(e);
