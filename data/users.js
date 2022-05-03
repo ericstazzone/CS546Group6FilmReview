@@ -5,11 +5,7 @@ const mongoCollections = require('../config/mongoCollections');
 const users = mongoCollections.users;
 const { ObjectId } = require('mongodb');
 const validation = require('../validation');
-
-const settings = require('../config/settings');
-const apiKey = settings.apiKey;
-
-
+const { endpoint, apiKey } = require('../config');
 
 async function getUser(id) {
     id = validation.checkId(id);
@@ -50,7 +46,7 @@ async function checkUser(username, password) {
 
     const compare = await bcrypt.compare(password, user.password);
     if (!compare) throw 'Either the username or password is invalid.';
-    return {authenticated: true};
+    return {id: user._id};
 }
 
 async function createUser(firstName, lastName, username, password, email) {
