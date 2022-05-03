@@ -2,6 +2,5 @@
   "mongoConfig": {
     "serverUrl": "mongodb://localhost:27017/",
     "database": "FilmReviews"
-  },
-  "apiKey": "k_3f3tgnu1"
+  }
 }

@@ -4,6 +4,4 @@ const mongoCollections = require('../config/mongoCollections');
 // const comments = mongoCollections.comments;
 const { ObjectId } = require('mongodb');
 const validation = require('../validation');
-
-const settings = require('../config/settings');
-const apiKey = settings.apiKey;
+const { endpoint, apiKey } = require('../config');

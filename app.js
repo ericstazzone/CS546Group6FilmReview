@@ -18,6 +18,7 @@ const rewriteUnsupportedBrowserMethods = (req, res, next) => {
     // let the next middleware run:
     next();
 }; 
+const { port } = require('./config');
 
 app.use('/public', static);
 app.use(express.json());
@@ -35,7 +36,7 @@ app.set('view engine', 'handlebars');
 
 configRoutes(app);
 
-app.listen(3000, () => {
+app.listen(port, () => {
     console.log('The server is up!');
-    console.log('Your routes will run on http://localhost:3000');
+    console.log(`Your routes will run on http://localhost:${port}`);
 });

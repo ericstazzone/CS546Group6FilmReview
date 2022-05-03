@@ -1,0 +1,87 @@
+<div class="container home-container">
+    <div class="row raise">
+        <div class="col-6 col-md-4 order-md-1 site-header">
+            <h1><a class="text-reset text-decoration-none" href="home">Film Reviews</a></h1>
+        </div>
+        <div class="col order-xs-2 order-3 order-sm-3 order-md-2">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <button id="category-button" class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Title</button>
+                    <div id="category-menu" class="dropdown-menu">
+                        <a class="dropdown-item" href="#">Title</a>
+                        <a class="dropdown-item" href="#">Director</a>
+                        <a class="dropdown-item" href="#">Actor</a>
+                        <a class="dropdown-item" href="#">Date</a>
+                        <a class="dropdown-item" href="#">Reviewer</a>
+                    </div>
+                </div>
+                <input id="form1" class="form-control" aria-label="Search" type="search" placeholder="Search" />
+                <div class="input-group-append">
+                    <button class="btn btn-primary" type="submit">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-2 order-2 order-md-3 text-right">
+            <button type="button" class="btn btn-primary" data-toggle="dropdown">
+                <i class="fa fa-bars fa-lg"></i>
+            </button>
+            <div class="dropdown-menu dropdown-menu-right">
+                <a class="dropdown-item" href="reviews">Browse</a>
+                {{#if user}}
+                <a class="dropdown-item" href="publish">Publish</a>
+                <a class="dropdown-item" href="settings">Settings</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="logout">Sign Out</a>
+                {{else}}
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="login">Sign In</a>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+
+    <div class="row raise add-to-top">
+        <div id="publish" class="container publish-container">
+            <h2>Publish Review</h2>
+            <form id="publish-form" class="needs-validation" method="POST" action="/publish" novalidate>
+                <div class="form-group publish-group">
+                    <label for="movie-search">Movie</label>
+                    <select id="movie-search" class="selectpicker" data-live-search="true" data-show-subtext="true" data-width="100%" name="movieId"></select>
+                    <div class="invalid-feedback publish-error">Please select a movie.</div>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-sm-9 align-self-start form-group publish-group">
+                        <label for="review-title">Title</label>
+                        <input id="review-title" class="form-control" type="text" name="title" placeholder="Title" required />
+                        <div class="invalid-feedback publish-error">Please provide a review title.</div>
+                    </div>
+                    <div class="col-12 col-sm-3 align-self-start form-group publish-group">
+                        <label for="review-rating">Rating</label>
+                        <select id="review-rating" class="form-control" name="rating" required>
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                            <option>6</option>
+                            <option>7</option>
+                            <option>8</option>
+                            <option>9</option>
+                            <option>10</option>
+                        </select>
+                        <div class="invalid-feedback publish-error">Please provide a rating.</div>
+                    </div>
+                </div>
+                <div class="form-group publish-group">
+                    <label for="review-content">Content</label>
+                    <textarea id="review-content" class="form-control" name="content" placeholder="Content"></textarea>
+                    <div class="invalid-feedback publish-error">Please provide a review body.</div>
+                </div>
+                <button id="publish-button" class="btn btn-primary" form="publish-form" type="submit">Publish</button>
+                <a class="btn btn-secondary add-to-left-lesser" href="home">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
