@@ -8,43 +8,88 @@
         <div class="col-12">
             <div id="settings" class="container login-container show-border">
                 <h2>Settings</h2>
-                <form id="settings-form" class="needs-validation" method="POST" action="/signup" novalidate>
+                <form id="settings-form" class="needs-validation" method="POST" action="/settings" novalidate>
                 <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-6 align-self-start form-group signup-group">
+                    <div id="first-name-group" class="col-12 col-md align-self-start form-group settings-group">
                         <label for="first-name">First Name</label>
-                        <input id="first-name" class="form-control" type="text" name="firstName" placeholder="First Name" required />
-                        <div class="invalid-feedback">Please enter your first name.</div>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <button id="edit-first-name" class="btn btn-outline-secondary">
+                                    <svg class="bi bi-pencil d-flex" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor">
+                                        <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                            <input id="first-name" class="form-control" type="text" name="firstName" placeholder="First Name" value="{{user.firstName}}" readonly />
+                            <div class="invalid-feedback"></div>
+                        </div>
                     </div>
-                        <div class="col-xs-12 col-sm-12 col-md-6 align-self-start form-group signup-group">
+                        <div id="last-name-group" class="col-12 col-md align-self-start form-group settings-group">
                         <label for="last-name">Last Name</label>
-                        <input id="last-name" class="form-control" type="text" name="lastName" placeholder="Last Name" required />
-                        <div class="invalid-feedback">Please enter your last name.</div>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <button id="edit-last-name" class="btn btn-outline-secondary">
+                                    <svg class="bi bi-pencil d-flex" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor">
+                                        <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                            <input id="last-name" class="form-control" type="text" name="lastName" placeholder="Last Name" value="{{user.lastName}}" readonly />
+                            <div class="invalid-feedback"></div>
+                        </div>
                     </div>
                 </div>
-                <div class="form-group signup-group">
+                <div id="email-group" class="form-group settings-group">
                     <label for="email">Email</label>
-                    <input id="email" class="form-control" type="text" name="email" placeholder="Email" required />
-                    <div class="invalid-feedback">Please enter your email.</div>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <button id="edit-email" class="btn btn-outline-secondary">
+                                <svg class="bi bi-pencil d-flex" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor">
+                                    <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        <input id="email" class="form-control" type="text" name="email" placeholder="Email" value="{{user.email}}" readonly />
+                        <div class="invalid-feedback"></div>
+                    </div>
                 </div>
-                <div class="form-group signup-group">
+                <div id="username-group" class="form-group settings-group">
                     <label for="username">Username</label>
-                    <input id="signup-username" class="form-control" type="text" name="username" placeholder="Username" required />
-                    <div class="invalid-feedback">Please provide a username.</div>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <button id="edit-username" class="btn btn-outline-secondary">
+                                <svg class="bi bi-pencil d-flex" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor">
+                                    <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        <input id="username" class="form-control" type="text" name="username" placeholder="Username" value="{{user.username}}" readonly />
+                        <div class="invalid-feedback"></div>
+                    </div>
                 </div>
                 <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-6 align-self-start form-group signup-group">
+                    <div id="password-group" class="col-12 col-md-12 align-self-start form-group settings-group">
                         <label for="password">Password</label>
-                        <input id="signup-password" class="form-control" type="password" name="password" placeholder="Password" required />
-                        <div class="invalid-feedback">Please provide a password.</div>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <button id="edit-password" class="btn btn-outline-secondary">
+                                    <svg class="bi bi-pencil d-flex" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor">
+                                        <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                            <input id="password" class="form-control" type="password" name="password" placeholder="Password" value="{{user.password}}" readonly />
+                            <div class="invalid-feedback"></div>
+                        </div>
                     </div>
-                    <div class="col-xs-12 col-sm-12 col-md-6 align-self-start form-group signup-group">
+                    {{!-- <div class="col-12 col-md-6 align-self-start form-group settings-group">
                         <label for="password">Confirm Password</label>
                         <input id="confirm-password" class="form-control" type="password" name="confirmPassword" placeholder="Password" required disabled />
                         <div class="invalid-feedback">Please provide a password.</div>
-                    </div>
+                    </div> --}}
                 </div>
-                <button id="settings-button" class="btn btn-primary" {{!--form="settings-form" type="submit"--}}>Update</button>
-                <a class="btn btn-secondary add-to-left" href="home">Cancel</a>
+                <button id="submit-button" class="btn btn-primary" form="settings-form" type="submit">Confirm</button>
+                <a id="cancel-button" class="btn btn-secondary add-to-left" href="home">Cancel</a>
                 </form>
             </div>
         </div>

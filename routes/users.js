@@ -152,7 +152,13 @@ router.post('/signupValidation', async (req, res) => {
 
 router.get('/settings', async (req, res) => {
     if (req.session.user) {
-        res.render('partials/settings', {user: req.session.user});
+        try {
+            const user = await userData.getUser(req.session.user)
+            res.render('partials/settings', {user: user});
+        } catch (e) {
+            // TODO: Implement non-JSON response
+            res.json({error: "Something went wrong..."});
+        }
     } else {
         res.redirect('/login');
     }
@@ -202,29 +208,63 @@ router.post('/publish', async (req, res) => {
     }
 });
 
+router.post('/settings', async (req, res) => {
+    let response = {};
+    if ('username' in req.body) {
+        try {
+            req.body.username = validation.checkUsername(req.body.username);
+            if (await userData.getUserByUsername(req.body.username)) throw 'Username is taken.';
+        } catch (e) {
+            response.error = e;
+        }
+    } else if ('password' in req.body) {
+        try {
+            req.body.password = validation.checkPassword(req.body.password);
+        } catch (e) {
+            response.error = e;
+        }
+    // } else if ('confirmPassword' in req.body) {
+    //     try {
+    //         req.body.confirmPassword = validation.confirmPassword(req.body.password, req.body.confirmPassword);
+    //     } catch (e) {
+    //         response['confirmPassword'.concat('Error')] = e;
+    //     }
+    } else if ('firstName' in req.body) {
+        try {
+            req.body.firstName = validation.checkString(req.body.firstName, 'first name');
+        } catch (e) {
+            response.error = e;
+        }
+    } else if ('lastName' in req.body) {
+        try {
+            req.body.lastName = validation.checkString(req.body.lastName, 'last name');
+        } catch (e) {
+            response.error = e;
+        }
+    }
+    // TODO: Prevent duplicate emails
+    else if ('email' in req.body) {
+        try {
+            req.body.email = validation.checkEmail(req.body.email);
+        } catch (e) {
+            response.error = e;
+        }
+    }
+    if (('error' in response) || req.body.stopSubmission === true) {
+        res.json(response);
+    } else {
+        try {
+            // TODO (PATRICK): Update the property in the DB and redirect back to settings
+            res.redirect('/settings');
+        } catch (e) {
+            res.json({error: e});
+        }
+    }
+});
+
 // ALL ROUTES PREPENDED WITH "test" ARE EXCLUSIVELY FOR TESTING PURPOSES AND WILL BE REMOVED!
 
-router.get('/testMovie/:id', async (req, res) => {
-    try {
-        req.params.id = validation.checkString(req.params.id);
 
-        const data = await movieData.getMovie(req.params.id);
-        res.json(data);
-    } catch (e) {
-        console.log(e)
-    }
-});
-
-router.get('/testSearch/:term', async (req, res) => {
-    try {
-        req.params.term = validation.checkString(req.params.term);
-
-        const data = await movieData.searchMovie(req.params.term);
-        res.json(data);
-    } catch (e) {
-        console.log(e)
-    }
-});
 
 
 
