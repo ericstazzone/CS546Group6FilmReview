@@ -52,13 +52,13 @@ function checkEmail(email) {
 
 function checkKeyword(keyword){
     keyword = checkString(keyword, 'keyword');
-    if (keyword != "Title" || keyword != "Director" || keyword != "Actor" || keyword != "Release Date" || keyword != "Reviewer") throw "Keyword is invalid.";
+    if (keyword != "Title" && keyword != "Director" && keyword != "Actor" && keyword != "Release Date" && keyword != "Reviewer") throw "Keyword is invalid.";
     return keyword;
 }
 
 function checkSearchTerm(searchTerm){
     if(searchTerm){
-        if(typeof string != 'string' || string.trim().length == 0){ throw 'Search term is invalid';} //search term exists make sure it is correct type and not just spaces
+        if(typeof searchTerm != 'string' || searchTerm.trim().length == 0){ throw 'Search term is invalid';} //search term exists make sure it is correct type and not just spaces
         return searchTerm.trim();
     } else {
         return searchTerm //empty search term is valid

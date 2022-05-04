@@ -57,8 +57,8 @@ async function searchMovie(term) {
 }
 
 module.exports = {
+    getMovieById,
+    addMovieSeed,
     getMovie,
     searchMovie,
-    getMovieById,
-    addMovieSeed
 }

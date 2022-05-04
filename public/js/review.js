@@ -30,7 +30,7 @@
                 //alphabetical
                 let reviewDisplayListAlphabetical = responseData.reviewDisplayInfo;
                 reviewDisplayListAlphabetical.sort((a, b) => a.reviewTitle.localeCompare(b.reviewTitle)) //sort reviews alphabetically
-                for(let item of responseData.reviewDisplayInfo){ //append all shows to showList ul elemen
+                for(let item of reviewDisplayListAlphabetical){ //append all shows to showList ul elemen
                     let li = `<button class="list-group-item list-group-item-action" type="button"><medium>${item.reviewTitle}</medium> <br><small class="font-italic">${item.movieTitle}</small><br> <small>${item.reviewerName}</small> </button>`;
                     $('#reviewListAlphabetical').append(li);
                 }
@@ -53,10 +53,10 @@
         var requestConfig = { //make request to /reviews route for all reviews
             method: 'POST',
             url: '/reviews',
-            data: JSON.stringify({ // **TODO clientside input checking
+            data: { // **TODO clientside input checking
                 keyword:userKeyword,
                 searchTerm:userSearchTerm.toLowerCase()
-            })
+            }
         };
         $.ajax(requestConfig).then(function (responseData) { //ajax request to get all reviews from server
             
@@ -82,24 +82,22 @@
         $('#reviewListRecent').show();
     });
 
-    $("recent listing option").on("click", function (event) {
-        event.preventDefault();
-        $('#reviewListRecent').show();
-        $('#reviewListPopular').hide();
-        $('#reviewListAlphabetical').hide();
-    });
-
-    $("popular listing option").on("click", function (event) {
-        event.preventDefault();
-        $('#reviewListRecent').hide();
-        $('#reviewListPopular').show();
-        $('#reviewListAlphabetical').hide();
-    });
-
-    $("alphabetical listing option").on("click", function(event) {
-        event.preventDefault();
-        $('#reviewListRecent').hide();
-        $('#reviewListPopular').hide();
-        $('#reviewListAlphabetical').show();
+    $("#sort-menu").children().click(function(event) {
+            event.preventDefault();
+            $("#sort-button").text($(this).text());
+            $("#sort-button").val($(this).text());
+            if($("#sort-button").val() == "Recent"){
+                $('#reviewListRecent').show();
+                $('#reviewListPopular').hide();
+                $('#reviewListAlphabetical').hide();
+            } else if($("#sort-button").html() == "Popular"){
+                $('#reviewListRecent').hide();
+                $('#reviewListPopular').show();
+                $('#reviewListAlphabetical').hide();
+            } else if($("#sort-button").html() == "A-Z"){
+                $('#reviewListRecent').hide();
+                $('#reviewListPopular').hide();
+                $('#reviewListAlphabetical').show();
+            }
     });
 })(window.jQuery);
