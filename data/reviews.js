@@ -5,8 +5,7 @@ const { ObjectId } = require('mongodb');
 const validation = require('../validation');
 const moviesData = require('./movies');
 const usersData = require('./users');
-const settings = require('../config/settings');
-const apiKey = settings.apiKey;
+const { endpoint, apiKey } = require('../config');
 
 // Returns an array of all review titles and thier correspomdimg movie title
 // the elements of the array are objects in the form of {reviewTitle: reviewTitle, movieTitle: movieTitle, reviewerName: reviewerName}
@@ -76,12 +75,6 @@ async function addReviewSeed(title, createdDate, content, rating, movieId, userI
     if (!insertInfo.acknowledged || !insertInfo.insertedId){ throw 'Error: Could not add band';} //check if the newBand was inserted
 }
 
-module.exports = {
-    getAllReviewDisplayInfo,
-    addReviewSeed,
-};
-const { endpoint, apiKey } = require('../config');
-
 function currentDate() {
     const date = new Date();
     let month = (date.getMonth() + 1).toString();
@@ -117,5 +110,7 @@ async function createReview(userId, movieId, title, content, rating) {
 }
 
 module.exports = {
+    getAllReviewDisplayInfo,
+    addReviewSeed,
     createReview
 }

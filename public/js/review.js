@@ -10,10 +10,10 @@
             var requestConfig = { //make request to /reviews route for all reviews
                 method: 'POST',
                 url: '/reviews',
-                data: JSON.stringify({
+                data: {
                     keyword:'Title',
                     searchTerm: ''
-                })
+                }
             };
             $.ajax(requestConfig).then(function (responseData) { //ajax request to get all reviews from server //**TO DO: Error message load instead of appending to list due to input/server error
                 //recent

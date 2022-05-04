@@ -5,9 +5,6 @@ const { ObjectId } = require('mongodb');
 const validation = require('../validation');
 const { endpoint, apiKey } = require('../config');
 
-const settings = require('../config/settings');
-const apiKey = settings.apiKey;
-
 // returns the movie title of the id provided
 async function getMovieById(movieId){
     movieId = validation.checkId(movieId); //check movie id is valid
