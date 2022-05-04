@@ -37,14 +37,14 @@ async function main() {
     }
     console.log("3");
     try {
-        movie2 = await movies.addMovieSeed("BMovie Title 2", "Director 2", ["Genre 3", "Genre 4"], ["Actor 3","Actress 4"], "2/2/2002", 2, "temp img link 2");
+        movie2 = await movies.addMovieSeed("BMovie Title 2", "Director 1", ["Genre 3", "Genre 4"], ["Actor 3","Actress 4"], "2/2/2002", 2, "temp img link 2");
     } catch(e) {
         console.log("Got an error! 4");
         console.log(e);
     }
     console.log("4");
     try {
-        movie3 = await movies.addMovieSeed("CMovie Title 3", "Director 3", ["Genre 5", "Genre 6"], ["Actor 5","Actress 6"], "3/3/2003", 3, "temp img link 3");
+        movie3 = await movies.addMovieSeed("CMovie Title 3", "Director 2", ["Genre 5", "Genre 6"], ["Actor 5","Actress 6"], "3/3/2003", 3, "temp img link 3");
     } catch(e) {
         console.log("Got an error! 5");
         console.log(e);

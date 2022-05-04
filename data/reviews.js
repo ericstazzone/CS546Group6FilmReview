@@ -11,17 +11,18 @@ const { endpoint, apiKey } = require('../config');
 // the elements of the array are objects in the form of {reviewTitle: reviewTitle, movieTitle: movieTitle, reviewerName: reviewerName}
 function userSearchFilter(movieRecord, keyword, searchTerm, reviewer){
     let check = false;
-    searchTerm = searchTerm.toLowercase();
+    searchTerm = searchTerm.toLowerCase();
     if(keyword=="Title"){
-        if(movieRecord.title == searchTerm){ check = true; }
+        if(movieRecord.title.toLowerCase() == searchTerm){ check = true; }
     } else if(keyword=="Director"){
-        if(movieRecord.director == searchTerm){ check = true; }
+        if(movieRecord.director.toLowerCase() == searchTerm){ check = true; }
     } else if(keyword=="Actor"){
-        if(movieRecord.mainCast.includes(searchTerm)){ check = true; }
+        let maincast = movieRecord.mainCast.map(element => {return element.toLowerCase();})
+        if(maincast.includes(searchTerm)){ check = true; }
     } else if (keyword=="Release Date"){ //** TODO: check that if the user provides a data as a search term is is a valid date 
         if(movieRecord.releaseDate == searchTerm){ check = true; }
     } else if (keyword=="Reviewer"){
-        if(reviewer == searchTerm){ check = true; }
+        if(reviewer.toLowerCase() == searchTerm){ check = true; }
     }
     return check;
 }

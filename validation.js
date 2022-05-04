@@ -58,7 +58,7 @@ function checkKeyword(keyword){
 
 function checkSearchTerm(searchTerm){
     if(searchTerm){
-        if(typeof string != 'string' || string.trim().length == 0){ throw 'Search term is invalid';} //search term exists make sure it is correct type and not just spaces
+        if(typeof searchTerm != 'string' || searchTerm.trim().length == 0){ throw 'Search term is invalid';} //search term exists make sure it is correct type and not just spaces
         return searchTerm.trim();
     } else {
         return searchTerm //empty search term is valid
