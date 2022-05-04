@@ -41,10 +41,6 @@ async function addMovieSeed(title, director, genre, mainCast, releaseDate, avera
     return movie;
 }
 
-module.exports = {
-    getMovieById,
-    addMovieSeed
-};
 async function getMovie(id) {
     id = validation.checkString(id, 'movie');
 
@@ -62,5 +58,7 @@ async function searchMovie(term) {
 
 module.exports = {
     getMovie,
-    searchMovie
+    searchMovie,
+    getMovieById,
+    addMovieSeed
 }

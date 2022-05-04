@@ -57,6 +57,16 @@ async function getAllReviewDisplayInfo(keyword,searchTerm){
     return reviewTitleAndMovieTitlesList;
 }
 
+async function getAllReviews(){
+    const reviewCollection = await reviews();
+    const allReviews = await reviewCollection.find({}).toArray();
+    if (!allReviews) throw 'Could not get all reviews';
+        for (let i = 0; i < allReviews.length; i++){
+            allReviews[i]._id = allReviews[i]._id.toString();
+        }
+    return allReviews.slice(0,5);
+};
+
 //adds a review for seed task
 //**add argument checking if going into production
 async function addReviewSeed(title, createdDate, content, rating, movieId, userId, comments){
@@ -112,5 +122,6 @@ async function createReview(userId, movieId, title, content, rating) {
 module.exports = {
     getAllReviewDisplayInfo,
     addReviewSeed,
-    createReview
+    createReview,
+    getAllReviews
 }

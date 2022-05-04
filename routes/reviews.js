@@ -22,3 +22,15 @@ router.post('/', async (req, res) => {
     }
     return res.status(200).json({success: true, reviewDisplayInfo: reviewList});
 });
+
+router.get('/home', async (req, res) => {
+    let reviewList = []; //declare reviewList before attempting to populate it with data from database
+    try{
+        reviewList = await reviewData.getAllReviews();
+        console.log(reviewList);
+        console.log("test");
+    }catch(e){
+        return res.status(500).json({error:e});
+    }
+    return res.status(200).json({success: true, reviewDisplayInfo: reviewList});
+});
