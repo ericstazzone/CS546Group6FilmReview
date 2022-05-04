@@ -82,14 +82,7 @@ router.post('/signup', async (req, res) => {
 
 router.get('/home', async (req, res) => {
     res.render('partials/home', {user: req.session.user});
-});
-
-router.get('/reviews', async (req, res) => {
-    res.render('partials/reviews', {user: req.session.user});
-});
-
-router.get('/reviews/:id', async (req, res) => {
-    // TODO
+    
 });
 
 router.get('/logout', async (req, res) => {

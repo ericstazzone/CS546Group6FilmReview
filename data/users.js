@@ -22,8 +22,8 @@ async function getUserByUsername(username) {
     username = validation.checkUsername(username);
 
     const userCollection = await users();
+    //const user = await userCollection.findOne({username:username});
     const user = await userCollection.findOne({username: {$regex: new RegExp(`^${username}$`, 'i')}});
-
     return user;
 }
 
