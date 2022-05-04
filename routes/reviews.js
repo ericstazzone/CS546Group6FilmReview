@@ -26,9 +26,8 @@ router.post('/', async (req, res) => {
 router.get('/home', async (req, res) => {
     let reviewList = []; //declare reviewList before attempting to populate it with data from database
     try{
-        reviewList = await reviewData.getAllReviews();
-        console.log(reviewList);
-        console.log("test");
+        reviewList = await reviewData.getAllReviewDisplayInfo('Title',''); //no search term will display all reviews
+        reviewList = reviewList.slice(0,5);
     }catch(e){
         return res.status(500).json({error:e});
     }

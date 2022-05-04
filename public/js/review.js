@@ -7,6 +7,7 @@
             $('#reviewListRecent').empty();
             $('#reviewListPopular').empty();
             $('#reviewListAlphabetical').empty();
+
             var requestConfig = { //make request to /reviews route for all reviews
                 method: 'POST',
                 url: '/reviews',
@@ -80,6 +81,7 @@
             }
         });
         $('#reviewListRecent').show();
+        $('#recentlistingoption').trigger('click');
     });
 
     $("#sort-menu").children().click(function(event) {
