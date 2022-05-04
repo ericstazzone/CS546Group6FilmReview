@@ -52,7 +52,7 @@ function checkEmail(email) {
 
 function checkKeyword(keyword){
     keyword = checkString(keyword, 'keyword');
-    if (keyboard != "Title" || keyboard != "Director" || keyboard != "Actor" || keyboard != "Release Date" || keyboard != "Reviewer") throw "Keyword is invalid.";
+    if (keyword != "Title" && keyword != "Director" && keyword != "Actor" && keyword != "Release Date" && keyword != "Reviewer") throw "Keyword is invalid.";
     return keyword;
 }
 

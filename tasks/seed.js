@@ -53,7 +53,7 @@ async function main() {
     //seeding reviews
     try {
         let temp1 = await users.getUserByUsername("jonnjonn");
-        await reviews.addReviewSeed("Review 1", "05/02/2022", "Good Job Steve 1", 5, movie1._id, temp1._id, []);
+        await reviews.addReviewSeed("AReview 1", "05/02/2022", "Good Job Steve 1", 5, movie1._id, temp1._id, []);
     } catch(e) {
         console.log("Got an error! 6");
         console.log(e);
@@ -61,7 +61,7 @@ async function main() {
     console.log("6");
     try {
         let temp2 = await users.getUserByUsername("savsavsav");
-        await reviews.addReviewSeed("Review 2", "05/02/2022", "Good Job Steve 2", 4.5, movie2._id, temp2._id, []);
+        await reviews.addReviewSeed("BReview 2", "05/02/2022", "Good Job Steve 2", 4.5, movie2._id, temp2._id, []);
     } catch(e) {
         console.log("Got an error! 7");
         console.log(e);
@@ -69,7 +69,7 @@ async function main() {
     console.log("7");
     try {
         let temp2 = await users.getUserByUsername("savsavsav");
-        review1 = await reviews.addReviewSeed("Review 3", "05/02/2022", "Good Job Steve 3", 4, movie3._id, temp2._id, []);
+        review1 = await reviews.addReviewSeed("CReview 3", "05/02/2022", "Good Job Steve 3", 4, movie3._id, temp2._id, []);
     } catch(e) {
         console.log("Got an error! 8");
         console.log(e);

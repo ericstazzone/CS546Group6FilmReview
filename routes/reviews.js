@@ -15,7 +15,7 @@ router.post('/', async (req, res) => {
     try{
         req.body.keyword = validation.checkKeyword(req.body.keyword);
         req.body.searchTerm = validation.checkSearchTerm(req.body.searchTerm);
-        let searchTerm = req.body.searchTerm.toLowercase();
+        let searchTerm = (!req.body.searchTerm ? '' : req.body.searchTerm.toLowercase());
         reviewList = await reviewData.getAllReviewDisplayInfo(req.body.keyword, searchTerm); //attemot to retrieve all review titles and thier corresponding movie titles from the database
     }catch(e){
         return res.status(500).json({error:e});
