@@ -22,8 +22,15 @@ async function getUserByUsername(username) {
     username = validation.checkUsername(username);
 
     const userCollection = await users();
-    //const user = await userCollection.findOne({username:username});
     const user = await userCollection.findOne({username: {$regex: new RegExp(`^${username}$`, 'i')}});
+    return user;
+}
+
+async function getUserByEmail(email) {
+    email = validation.checkEmail(email);
+
+    const userCollection = await users();
+    const user = await userCollection.findOne({email: {$regex: new RegExp(`^${email}$`, 'i')}});
     return user;
 }
 
@@ -47,6 +54,18 @@ async function checkUser(username, password) {
     const compare = await bcrypt.compare(password, user.password);
     if (!compare) throw 'Either the username or password is invalid.';
     return {id: user._id};
+}
+
+async function confirmPassword(password1, password2, hash) {
+    password2 = validation.checkPassword(password2);
+
+    if (hash) {
+        const compare = await bcrypt.compare(password2, password1);
+        if (!compare) throw 'Password fields must match.';
+    } else {
+        if (password1 !== password2) throw 'Password fields must match.';
+    }
+    return password2;
 }
 
 async function createUser(firstName, lastName, username, password, email) {
@@ -92,19 +111,18 @@ async function removeUser(id) {
 
 async function updateUsername(id, username) {
     id = validation.checkId(id);
-    username = await validation.checkUsername(username);
+    username = validation.checkUsername(username);
 
-    if (await getUserByUsername(username)) throw 'Error: username is taken';
+    if (await getUserByUsername(username)) throw 'Username is taken.';
 
     const userCollection = await users();
     const updateInfo = await userCollection.updateOne(
         {_id: ObjectId(id)},
         {$set: {username: username}}
     );
-    if (!updateInfo.matchedCount && !updateInfo.modifiedCount) throw 'Error: Could not update username';
+    if (!updateInfo.matchedCount && !updateInfo.modifiedCount) throw 'Could not update username.';
 
     const user = await this.getUser(id);
-    user._id = user._id.toString();
     return user;
 }
 
@@ -118,27 +136,71 @@ async function updatePassword(id, password) {
         {_id: ObjectId(id)},
         {$set: {password: hash}}
     );
-    if (!updateInfo.matchedCount && !updateInfo.modifiedCount) throw 'Error: Could not update password';
+    if (!updateInfo.matchedCount && !updateInfo.modifiedCount) throw 'Could not update password';
 
     const user = await this.getUser(id);
-    user._id = user._id.toString();
     return user;
 }
 
-function testFunction() {
-    console.log("Test output!");
+async function updateEmail(id, email) {
+    id = validation.checkId(id);
+    email = validation.checkEmail(email);
+
+    if (await getUserByEmail(email)) throw 'Email is in use.';
+
+    const userCollection = await users();
+    const updateInfo = await userCollection.updateOne(
+        {_id: ObjectId(id)},
+        {$set: {email: email}}
+    );
+    if (!updateInfo.matchedCount && !updateInfo.modifiedCount) throw 'Could not update email.';
+
+    const user = await this.getUser(id);
+    return user;
 }
 
-// TODO: Add function(s) to update a user's firstName, lastName, and email as deemed necessary
+async function updateFirstName(id, firstName) {
+    id = validation.checkId(id);
+    firstName = validation.checkString(firstName);
+
+    const userCollection = await users();
+    const updateInfo = await userCollection.updateOne(
+        {_id: ObjectId(id)},
+        {$set: {firstName: firstName}}
+    );
+    if (!updateInfo.matchedCount && !updateInfo.modifiedCount) throw 'Could not update first name.';
+
+    const user = await this.getUser(id);
+    return user;
+}
+
+async function updateLastName(id, lastName) {
+    id = validation.checkId(id);
+    lastName = validation.checkString(lastName);
+
+    const userCollection = await users();
+    const updateInfo = await userCollection.updateOne(
+        {_id: ObjectId(id)},
+        {$set: {lastName: lastName}}
+    );
+    if (!updateInfo.matchedCount && !updateInfo.modifiedCount) throw 'Could not update last name.';
+
+    const user = await this.getUser(id);
+    return user;
+}
 
 module.exports = {
     getUser,
     getUserByUsername,
+    getUserByEmail,
     getAllUsers,
     checkUser,
+    confirmPassword,
     createUser,
     removeUser,
     updateUsername,
     updatePassword,
-    testFunction
+    updateEmail,
+    updateFirstName,
+    updateLastName
 }
