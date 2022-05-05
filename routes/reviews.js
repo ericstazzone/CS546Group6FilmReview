@@ -33,3 +33,41 @@ router.get('/home', async (req, res) => {
     }
     return res.status(200).json({success: true, reviewDisplayInfo: reviewList});
 });
+
+router
+    .route('/:id')
+    .get(async (req, res) => {
+        const id = req.params.id;
+        if (id) {
+            try {
+                const review = await reviewData.getReviewById(id);
+                if (review) {
+                    review._id = review._id || 'N/A';
+                    review.title = review.title || 'N/A';
+                    review.createdDate = review.createdDate || 'N/A';
+                    review.content = review.content || 'N/A';
+                    review.rating = review.rating || 'N/A';
+                    review.movieId = review.movieId || 'N/A';
+                    review.userId = review.userId || 'N/A';
+                    review.counter = review.counter || 'N/A';
+                    // if there are no comments we don't really care
+                }
+                //render handlebars file in views/layouts/reviews.handlebars
+                res.render('layouts/review', {
+                    _id: review._id,
+                    title: review.title,
+                    createdDate: review.createdDate,
+                    content: review.content,
+                    rating: review.rating,
+                    movieId: review.movieId,
+                    userId: review.userId,
+                    counter: review.counter,
+                    comments: review.comments
+                });
+            } catch (e) {
+                res.status(500).json({error: e});
+            }
+        } else {
+            res.status(400).json({error: 'Invalid id'});
+        }
+    });

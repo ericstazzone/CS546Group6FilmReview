@@ -109,8 +109,19 @@ async function createReview(userId, movieId, title, content, rating) {
     return {id: reviewId};
 }
 
+async function getReviewById(reviewId) {
+    reviewId = validation.checkString(reviewId, 'review id');
+    const reviewCollection = await reviews();
+    const review = await reviewCollection.findOne({_id: ObjectId(reviewId)});
+    if (!review) {
+        throw 'Review not found.';
+    }
+    return review;
+}
+
 module.exports = {
     getAllReviewDisplayInfo,
     addReviewSeed,
     createReview,
+    getReviewById
 }
