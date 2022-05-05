@@ -159,35 +159,45 @@ router.get('/publish', async (req, res) => {
 });
 
 router.post('/publish', async (req, res) => {
-    let response = {};
-    try {
-        req.body.movieId = validation.checkString(req.body.movieId, 'movie');
-        const movie = await movieData.getMovie(req.body.movieId);
-    } catch (e) {
-        response['movieError'] = e;
+    let response = {errors: {}};
+    if ('movieId' in req.body) {
+        try {
+            req.body.movieId = validation.checkString(req.body.movieId, 'movie');
+            const movie = await movieData.getMovie(req.body.movieId);
+        } catch (e) {
+            response.errors['movieId'] = e;
+        }
     }
-    try {
-        req.body.title = validation.checkString(req.body.title, 'review title');
-    } catch (e) {
-        response['titleError'] = e;
+    if ('title' in req.body) {
+        try {
+            req.body.title = validation.checkString(req.body.title, 'review title');
+        } catch (e) {
+            response.errors['title'] = e;
+        }
     }
-    try {
-        req.body.content = validation.checkString(req.body.content, 'review body');
-    } catch (e) {
-        response['contentError'] = e;
+    if ('content' in req.body) {
+        try {
+            req.body.content = validation.checkString(req.body.content, 'review body');
+        } catch (e) {
+            response.errors['content'] = e;
+        }
     }
-    if (Object.keys(response).length > 0) {
+    if ((Object.keys(req.body).length < 4) || (Object.keys(response.errors).length > 0)) {
         res.json(response);
     } else {
         try {
             const review = await reviewData.createReview(req.session.user, req.body.movieId, req.body.title, req.body.content, req.body.rating);
             if (review.id) {
+                response.reviewId = review.id;
                 // TODO: Redirect to review page instead.
-                res.status(200).redirect('/home');
+                // res.status(200).redirect('/home');
+                res.json(response);
             } else {
+                // TODO: Complete
                 res.json({error: 'Internal Server Error'});
             }
         } catch (e) {
+            // TODO: Complete
             res.json({error: e});
         }
     }
