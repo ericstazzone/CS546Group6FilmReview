@@ -22,8 +22,17 @@ $(document).ready(function() {
     let usernameGroup = $('#username-group');
     let passwordGroup = $('#password-group');
 
+    let completeButton = $('#complete-button');
     let submitButton = $('#submit-button');
     let cancelButton = $('#cancel-button');
+    submitButton.hide();
+    cancelButton.hide();
+
+    let confirmPasswordGroup = $('#confirm-password-group');
+    let confirmPasswordLabel = confirmPasswordGroup.children('label');
+    let confirmPasswordInput = confirmPasswordGroup.children('input');
+    let confirmPasswordErrorDiv = confirmPasswordGroup.children('.invalid-feedback');
+    confirmPasswordGroup.hide();
 
     $('.form-group button').click(function(event) {
         event.preventDefault();
@@ -51,28 +60,42 @@ $(document).ready(function() {
         inputGroupPrepend.remove();
         input.removeAttr('readonly');
         input.prop('required', true);
-        cancelButton.prop('href', 'settings');
+        completeButton.hide();
+        submitButton.show();
+        cancelButton.show();
+
+        // Show confirm password field
+        if (input.attr('name') === 'password') {
+            confirmPasswordInput.removeAttr('disabled');
+            confirmPasswordInput.prop('required', true);
+            confirmPasswordGroup.show();
+        }
 
         function validate(stopSubmission) {
-            if (input.val() === current) {
+            if ((input.attr('name') !== 'password') && (input.val().toLowerCase() === current.toLowerCase())) {
                 styleInput(label, input, errorDiv);
             } else {
+                let data = {
+                    [input.attr('name')]: input.val(),
+                    stopSubmission: stopSubmission
+                };
+                if (input.attr('name') === 'password') data[confirmPasswordInput.attr('name')] = confirmPasswordInput.val();
+
                 var requestConfig = {
                     method: 'POST',
                     url: '/settings',
                     contentType: 'application/json',
-                    data: JSON.stringify({
-                        [input.attr('name')]: input.val(),
-                        stopSubmission: stopSubmission
-                    })
+                    data: JSON.stringify(data)
                 };
     
                 $.ajax(requestConfig).then(function(data) {
-                    if (data.error) {
-                        styleInput(label, input, errorDiv, data.error);
+                    if (Object.keys(data).length > 0) {
+                        data.error ? styleInput(label, input, errorDiv, data.error) : styleInput(label, input, errorDiv);
+                        data.secondaryError ? styleInput(confirmPasswordLabel, confirmPasswordInput, confirmPasswordErrorDiv, data.secondaryError) : styleInput(confirmPasswordLabel, confirmPasswordInput, confirmPasswordErrorDiv);
                     } else {
                         if (stopSubmission) {
                             styleInput(label, input, errorDiv);
+                            styleInput(confirmPasswordLabel, confirmPasswordInput, confirmPasswordErrorDiv);
                         } else {
                             window.location.replace('settings');
                         }
@@ -86,11 +109,18 @@ $(document).ready(function() {
                 validate(true);
             }
         });
+        if (input.attr('name') === 'password') {
+            confirmPasswordInput.on('input', function() {
+                if (validated) {
+                    validate(true);
+                }
+            });
+        }
 
         settingsForm.submit(function(event) {
             event.preventDefault();
 
-            if (input.val() === current) {
+            if ((input.attr('name') !== 'password') && (input.val().toLowerCase() === current.toLowerCase())) {
                 window.location.replace('settings');
             } else {
                 validated = true;

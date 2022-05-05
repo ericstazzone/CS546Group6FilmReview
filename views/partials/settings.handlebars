@@ -20,7 +20,7 @@
                                     </svg>
                                 </button>
                             </div>
-                            <input id="first-name" class="form-control" type="text" name="firstName" placeholder="First Name" value="{{user.firstName}}" readonly />
+                            <input id="first-name" class="form-control rounded-right" type="text" name="firstName" placeholder="First Name" value="{{user.firstName}}" readonly />
                             <div class="invalid-feedback"></div>
                         </div>
                     </div>
@@ -34,7 +34,7 @@
                                     </svg>
                                 </button>
                             </div>
-                            <input id="last-name" class="form-control" type="text" name="lastName" placeholder="Last Name" value="{{user.lastName}}" readonly />
+                            <input id="last-name" class="form-control rounded-right" type="text" name="lastName" placeholder="Last Name" value="{{user.lastName}}" readonly />
                             <div class="invalid-feedback"></div>
                         </div>
                     </div>
@@ -49,7 +49,7 @@
                                 </svg>
                             </button>
                         </div>
-                        <input id="email" class="form-control" type="text" name="email" placeholder="Email" value="{{user.email}}" readonly />
+                        <input id="email" class="form-control rounded-right" type="text" name="email" placeholder="Email" value="{{user.email}}" readonly />
                         <div class="invalid-feedback"></div>
                     </div>
                 </div>
@@ -63,12 +63,12 @@
                                 </svg>
                             </button>
                         </div>
-                        <input id="username" class="form-control" type="text" name="username" placeholder="Username" value="{{user.username}}" readonly />
+                        <input id="username" class="form-control rounded-right" type="text" name="username" placeholder="Username" value="{{user.username}}" readonly />
                         <div class="invalid-feedback"></div>
                     </div>
                 </div>
                 <div class="row">
-                    <div id="password-group" class="col-12 col-md-12 align-self-start form-group settings-group">
+                    <div id="password-group" class="col-12 align-self-start form-group settings-group">
                         <label for="password">Password</label>
                         <div class="input-group">
                             <div class="input-group-prepend">
@@ -78,18 +78,19 @@
                                     </svg>
                                 </button>
                             </div>
-                            <input id="password" class="form-control" type="password" name="password" placeholder="Password" value="{{user.password}}" readonly />
+                            <input id="password" class="form-control rounded-right" type="password" name="password" placeholder="Password" readonly />
                             <div class="invalid-feedback"></div>
                         </div>
                     </div>
-                    {{!-- <div class="col-12 col-md-6 align-self-start form-group settings-group">
+                    <div id="confirm-password-group" class="col-12 align-self-start form-group settings-group">
                         <label for="password">Confirm Password</label>
-                        <input id="confirm-password" class="form-control" type="password" name="confirmPassword" placeholder="Password" required disabled />
-                        <div class="invalid-feedback">Please provide a password.</div>
-                    </div> --}}
+                        <input id="confirm-password" class="form-control rounded-right" type="password" name="confirmPassword" placeholder="Password" disabled />
+                        <div class="invalid-feedback"></div>
+                    </div>
                 </div>
+                <a id="complete-button" class="btn btn-primary" href="home">Confirm</a>
                 <button id="submit-button" class="btn btn-primary" form="settings-form" type="submit">Confirm</button>
-                <a id="cancel-button" class="btn btn-secondary add-to-left" href="home">Cancel</a>
+                <a id="cancel-button" class="btn btn-secondary add-to-left" href="settings">Cancel</a>
                 </form>
             </div>
         </div>

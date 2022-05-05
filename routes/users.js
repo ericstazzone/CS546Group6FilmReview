@@ -7,6 +7,7 @@ const reviewData = data.reviews;
 const validation = require('../validation');
 const {ObjectId} = require('mongodb');
 const { response } = require('express');
+const { updateUsername } = require('../data/users');
 
 let successFlag = false;
 
@@ -15,6 +16,7 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/login', async (req, res) => {
+    // userData.updatePassword('6269786a8c3f8451f36f8d21', 'mypassword')
     if (req.session.user) {
         res.redirect('/home');
     } else {
@@ -58,7 +60,7 @@ router.post('/signup', async (req, res) => {
     try {
         req.body.username = validation.checkUsername(req.body.username);
         req.body.password = validation.checkPassword(req.body.password);
-        req.body.confirmPassword = validation.confirmPassword(req.body.password, req.body.confirmPassword);
+        req.body.confirmPassword = await userData.confirmPassword(req.body.password, req.body.confirmPassword, false);
         req.body.firstName = validation.checkString(req.body.firstName, 'first name');
         req.body.lastName = validation.checkString(req.body.lastName, 'last name');
         req.body.email = validation.checkEmail(req.body.email);
@@ -66,8 +68,6 @@ router.post('/signup', async (req, res) => {
         const user = await userData.createUser(req.body.firstName, req.body.lastName, req.body.username, req.body.password, req.body.email);
         if (user.userInserted) {
             const success = encodeURIComponent(true);
-            // NOTE: Old query string method
-            // res.status(200).redirect('/login/?success=' + success);
             successFlag = true;
             res.status(200).redirect('/login');
         } else {
@@ -120,7 +120,7 @@ router.post('/signupValidation', async (req, res) => {
     }
     if ('confirmPassword' in req.body) {
         try {
-            req.body.confirmPassword = validation.confirmPassword(req.body.password, req.body.confirmPassword);
+            req.body.confirmPassword = await userData.confirmPassword(req.body.password, req.body.confirmPassword, false);
         } catch (e) {
             response['confirmPassword'.concat('Error')] = e;
         }
@@ -139,29 +139,15 @@ router.post('/signupValidation', async (req, res) => {
             response['lastName'.concat('Error')] = e;
         }
     }
-    // TODO: Prevent duplicate emails
     if ('email' in req.body) {
         try {
             req.body.email = validation.checkEmail(req.body.email);
+            if (await userData.getUserByEmail(req.body.email)) throw 'Email is in use.';
         } catch (e) {
             response['email'.concat('Error')] = e;
         }
     }
     res.json(response);
-});
-
-router.get('/settings', async (req, res) => {
-    if (req.session.user) {
-        try {
-            const user = await userData.getUser(req.session.user)
-            res.render('partials/settings', {user: user});
-        } catch (e) {
-            // TODO: Implement non-JSON response
-            res.json({error: "Something went wrong..."});
-        }
-    } else {
-        res.redirect('/login');
-    }
 });
 
 router.get('/publish', async (req, res) => {
@@ -208,6 +194,20 @@ router.post('/publish', async (req, res) => {
     }
 });
 
+router.get('/settings', async (req, res) => {
+    if (req.session.user) {
+        try {
+            const user = await userData.getUser(req.session.user)
+            res.render('partials/settings', {user: user});
+        } catch (e) {
+            // TODO: Implement non-JSON response
+            res.json({error: "Something went wrong..."});
+        }
+    } else {
+        res.redirect('/login');
+    }
+});
+
 router.post('/settings', async (req, res) => {
     let response = {};
     if ('username' in req.body) {
@@ -223,12 +223,11 @@ router.post('/settings', async (req, res) => {
         } catch (e) {
             response.error = e;
         }
-    // } else if ('confirmPassword' in req.body) {
-    //     try {
-    //         req.body.confirmPassword = validation.confirmPassword(req.body.password, req.body.confirmPassword);
-    //     } catch (e) {
-    //         response['confirmPassword'.concat('Error')] = e;
-    //     }
+        try {
+            req.body.confirmPassword = await userData.confirmPassword(req.body.password, req.body.confirmPassword, false);
+        } catch (e) {
+            response.secondaryError = e;
+        }
     } else if ('firstName' in req.body) {
         try {
             req.body.firstName = validation.checkString(req.body.firstName, 'first name');
@@ -241,22 +240,33 @@ router.post('/settings', async (req, res) => {
         } catch (e) {
             response.error = e;
         }
-    }
-    // TODO: Prevent duplicate emails
-    else if ('email' in req.body) {
+    } else if ('email' in req.body) {
         try {
             req.body.email = validation.checkEmail(req.body.email);
+            if (await userData.getUserByEmail(req.body.email)) throw 'Email is in use.';
         } catch (e) {
             response.error = e;
         }
     }
-    if (('error' in response) || req.body.stopSubmission === true) {
+    if ((Object.keys(response).length > 0) || req.body.stopSubmission === true) {
         res.json(response);
     } else {
         try {
-            // TODO (PATRICK): Update the property in the DB and redirect back to settings
-            res.redirect('/settings');
+            if ('username' in req.body) {
+                userData.updateUsername(req.session.user, req.body.username);
+            } else if ('password' in req.body) {
+                userData.updatePassword(req.session.user, req.body.password);
+            } else if ('firstName' in req.body) {
+                userData.updateFirstName(req.session.user, req.body.firstName);
+            } else if ('lastName' in req.body) {
+                userData.updateLastName(req.session.user, req.body.lastName);
+            } else if ('email' in req.body) {
+                userData.updateEmail(req.session.user, req.body.email);
+            } 
+            res.json(response);
+            // res.redirect('/settings');
         } catch (e) {
+            // TODO: Render this properly
             res.json({error: e});
         }
     }

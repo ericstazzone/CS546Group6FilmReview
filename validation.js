@@ -38,12 +38,6 @@ function checkPassword(password) {
     return password;
 }
 
-function confirmPassword(password1, password2) {
-    checkString(password2, 'password');
-    if (password1 !== password2) throw 'Password fields must match.';
-    return password2;
-}
-
 function checkEmail(email) {
     checkString(email, 'email');
     if (!emailValidator.validate(email)) throw "Email is invalid.";
@@ -70,7 +64,6 @@ module.exports = {
     checkString,
     checkUsername,
     checkPassword,
-    confirmPassword,
     checkEmail,
     checkKeyword,
     checkSearchTerm
