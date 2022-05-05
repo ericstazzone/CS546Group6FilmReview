@@ -162,7 +162,6 @@ router.post('/publish', async (req, res) => {
     let response = {};
     try {
         req.body.movieId = validation.checkString(req.body.movieId, 'movie');
-        console.log("DONE")
         const movie = await movieData.getMovie(req.body.movieId);
     } catch (e) {
         response['movieError'] = e;

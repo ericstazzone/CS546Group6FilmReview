@@ -1,13 +1,14 @@
 const axios = require('axios');
 const mongoCollections = require('../config/mongoCollections');
 const reviews = mongoCollections.reviews;
+const users = mongoCollections.users;
 const { ObjectId } = require('mongodb');
 const validation = require('../validation');
 const moviesData = require('./movies');
 const usersData = require('./users');
 const { endpoint, apiKey } = require('../config');
 
-// Returns an array of all review titles and thier correspomdimg movie title
+// Returns an array of all review titles and thier corresponding movie title
 // the elements of the array are objects in the form of {reviewTitle: reviewTitle, movieTitle: movieTitle, reviewerName: reviewerName}
 function userSearchFilter(movieRecord, keyword, searchTerm, reviewer){
     let check = false;
@@ -104,9 +105,15 @@ async function createReview(userId, movieId, title, content, rating) {
         comments: []
     };
 
-    const insertInfo = await reviewCollection.insertOne(newReview);
+    let insertInfo = await reviewCollection.insertOne(newReview);
     if (!insertInfo.acknowledged || !insertInfo.insertedId) throw 'Could not add review.';
-    return {id: reviewId};
+
+    const userCollection = await users();
+    return userCollection
+        .updateOne({_id: ObjectId(userId)}, {$addToSet: {reviews: reviewId, moviesReviewed: movieId}})
+        .then(async function () {
+            return {id: reviewId};
+        });
 }
 
 module.exports = {

@@ -1,8 +1,4 @@
-// window.onerror = function (msg, source, lineNo, columnNo, error) {
-//     alert(msg);
-// }
-
-function styleInput(field, errorMsg) {
+function styleInputSignUp(field, errorMsg) {
     if (errorMsg) {
         field.error.text(errorMsg);
         field.label.removeClass('text-success');
@@ -166,9 +162,9 @@ $(document).ready(function() {
                 };
                 
                 $.ajax(requestConfig).then(function(data) {      
-                    styleInput(signupFields[index], data[input.attr('name').concat('Error')]);
+                    styleInputSignUp(signupFields[index], data[input.attr('name').concat('Error')]);
                     if (input.attr('name') === 'password') {
-                        styleInput(signupFields.find(field => field.input.attr('name') === 'confirmPassword'), data['confirmPasswordError']);
+                        styleInputSignUp(signupFields.find(field => field.input.attr('name') === 'confirmPassword'), data['confirmPasswordError']);
                     }
                 });
             }
@@ -199,7 +195,7 @@ $(document).ready(function() {
                     signupForm.submit();
                 } else {
                     for (const field of signupFields) {
-                        styleInput(field, data[field.input.attr('name').concat('Error')]);
+                        styleInputSignUp(field, data[field.input.attr('name').concat('Error')]);
                     }
                     signupForm.addClass('validated');
                 }
