@@ -116,8 +116,20 @@ async function createReview(userId, movieId, title, content, rating) {
         });
 }
 
+async function getReview(id) {
+    id = validation.checkId(id);
+
+    const reviewCollection = await reviews();
+    const review = await reviewCollection.findOne({ _id: ObjectId(id) });
+    if (!review) throw 'Error: No user with that id';
+
+    review._id = review._id.toString();
+    return review;
+}
+
 module.exports = {
     getAllReviewDisplayInfo,
     addReviewSeed,
     createReview,
+    getReview
 }
