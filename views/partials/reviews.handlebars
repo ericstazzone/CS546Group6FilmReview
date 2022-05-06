@@ -45,7 +45,7 @@
             <div class="row">
                 <div class="col">
                     {{!-- NOTE: When this page is first navigated to, this header should be empty. Otherwise, it should show the search term. --}}
-                    <h2 class="category-header d-inline">Search Term</h1>
+                    <h2 class="category-header">Search Term</h1>
                 </div>
                 <div class="col text-right">
                     <button id="sort-button" class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Recent</button>
@@ -57,11 +57,14 @@
                 </div>
             </div>
             
-            <div class="category-list list-group list-group-flush add-to-top">
+            {{!-- <div class="category-list list-group list-group-flush add-to-top">
                 <ul id="reviewListRecent"></ul>
                 <ul id="reviewListPopular"></ul>
                 <ul id="reviewListAlphabetical"></ul>
-            </div>
+            </div> --}}
+            <ul class="category-list list-group list-group-flush" id="reviewListRecent"></ul>
+            <ul class="category-list list-group list-group-flush" id="reviewListPopular"></ul>
+            <ul class="category-list list-group list-group-flush" id="reviewListAlphabetical"></ul>
         </div>
     </div>
 </div>

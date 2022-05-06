@@ -20,19 +20,19 @@
                 //recent
                 for(let item of responseData.reviewDisplayInfo){ //append all shows to showList ul elemen
                     // get the _id of the 
-                    let li = `<a href="/reviews/${item.reviewId}"><button class="list-group-item list-group-item-action" type="button" "><medium>${item.reviewTitle}</medium> <br><small class="font-italic">${item.movieTitle}</small><br> <small>${item.reviewerName}</small> </button></a>`;                    
+                    let li = `<a href="/reviews/${item.reviewId}" target="_blank"><button class="list-group-item list-group-item-action" type="button" "><medium>${item.reviewTitle}</medium> <br><small class="font-italic">${item.movieTitle}</small><br> <small>${item.reviewerName}</small> </button></a>`;                    
                     $('#reviewListRecent').append(li);
                 }
                 //popular //**TODO: change order of review listing to be most popular to least 
                 for(let item of responseData.reviewDisplayInfo){ //append all shows to showList ul elemen
-                    let li = `<a href="/reviews/${item.reviewId}"><button class="list-group-item list-group-item-action" type="button" "><medium>${item.reviewTitle}</medium> <br><small class="font-italic">${item.movieTitle}</small><br> <small>${item.reviewerName}</small> </button></a>`;                    
+                    let li = `<a href="/reviews/${item.reviewId}" target="_blank"><button class="list-group-item list-group-item-action" type="button" "><medium>${item.reviewTitle}</medium> <br><small class="font-italic">${item.movieTitle}</small><br> <small>${item.reviewerName}</small> </button></a>`;                    
                     $('#reviewListPopular').append(li);
                 }
                 //alphabetical
                 let reviewDisplayListAlphabetical = responseData.reviewDisplayInfo;
                 reviewDisplayListAlphabetical.sort((a, b) => a.reviewTitle.localeCompare(b.reviewTitle)) //sort reviews alphabetically
                 for(let item of reviewDisplayListAlphabetical){ //append all shows to showList ul elemen
-                    let li = `<a href="/reviews/${item.reviewId}"><button class="list-group-item list-group-item-action" type="button" "><medium>${item.reviewTitle}</medium> <br><small class="font-italic">${item.movieTitle}</small><br> <small>${item.reviewerName}</small> </button></a>`;                    
+                    let li = `<a href="/reviews/${item.reviewId}" target="_blank"><button class="list-group-item list-group-item-action" type="button" "><medium>${item.reviewTitle}</medium> <br><small class="font-italic">${item.movieTitle}</small><br> <small>${item.reviewerName}</small> </button></a>`;                    
                     $('#reviewListAlphabetical').append(li);
                 }
             });
@@ -63,20 +63,20 @@
             
             //recent
             for(let item of responseData.reviewDisplayInfo){ //append all shows to showList ul elemen
-                let li = `<a href="/reviews/${item.reviewId}"><button class="list-group-item list-group-item-action" type="button" "><medium>${item.reviewTitle}</medium> <br><small class="font-italic">${item.movieTitle}</small><br> <small>${item.reviewerName}</small> </button></a>`;                    
+                let li = `<a href="/reviews/${item.reviewId}" target="_blank"><button class="list-group-item list-group-item-action" type="button" "><medium>${item.reviewTitle}</medium> <br><small class="font-italic">${item.movieTitle}</small><br> <small>${item.reviewerName}</small> </button></a>`;                    
                 $('#reviewListRecent').append(li);
             }
 
             //popular //**TODO: change order of review listing to be most popular to least 
             for(let item of responseData.reviewDisplayInfo){ //append all shows to showList ul elemen
-                let li = `<a href="/reviews/${item.reviewId}"><button class="list-group-item list-group-item-action" type="button" "><medium>${item.reviewTitle}</medium> <br><small class="font-italic">${item.movieTitle}</small><br> <small>${item.reviewerName}</small> </button></a>`;                    
+                let li = `<a href="/reviews/${item.reviewId}" target="_blank"><button class="list-group-item list-group-item-action" type="button" "><medium>${item.reviewTitle}</medium> <br><small class="font-italic">${item.movieTitle}</small><br> <small>${item.reviewerName}</small> </button></a>`;                    
                 $('#reviewListPopular').append(li);
             }
             //alphabetical
             let reviewDisplayListAlphabetical = responseData.reviewDisplayInfo;
             reviewDisplayListAlphabetical.sort((a, b) => a.reviewTitle.localeCompare(b.reviewTitle)) //sort reviews alphabetically
             for(let item of reviewDisplayListAlphabetical){ //append all shows to showList ul elemen
-                let li = `<a href="/reviews/${item.reviewId}"><button class="list-group-item list-group-item-action" type="button" "><medium>${item.reviewTitle}</medium> <br><small class="font-italic">${item.movieTitle}</small><br> <small>${item.reviewerName}</small> </button></a>`;                    
+                let li = `<a href="/reviews/${item.reviewId}" target="_blank"><button class="list-group-item list-group-item-action" type="button" "><medium>${item.reviewTitle}</medium> <br><small class="font-italic">${item.movieTitle}</small><br> <small>${item.reviewerName}</small> </button></a>`;                    
                 $('#reviewListAlphabetical').append(li);
             }
         });
