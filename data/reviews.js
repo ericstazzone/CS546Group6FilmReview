@@ -45,14 +45,14 @@ async function getAllReviewDisplayInfo(keyword,searchTerm){
             const movie = await moviesData.getMovieById(review.movieId.toString()); //call data function to get movie title from movieId gathered from review
             const user = await usersData.getUser(review.userId.toString());
             if(userSearchFilter(movie, keyword, searchTerm, user.username)){
-                reviewTitleAndMovieTitlesList.push( {reviewTitle: review.title, movieTitle: movie.title, reviewerName: user.username} );
+                reviewTitleAndMovieTitlesList.push( {reviewTitle: review.title, movieTitle: movie.title, reviewerName: user.username, reviewId: review._id} );
             }        
         }
     } else { //if no search term is provided then display all data
         for(let review of allReviewsTitleAndMovieId){
             const movie = await moviesData.getMovieById(review.movieId.toString()); //call data function to get movie title from movieId gathered from review
             const user = await usersData.getUser(review.userId.toString());
-            reviewTitleAndMovieTitlesList.push( {reviewTitle: review.title, movieTitle: movie.title, reviewerName: user.username} );      
+            reviewTitleAndMovieTitlesList.push( {reviewTitle: review.title, movieTitle: movie.title, reviewerName: user.username, reviewId: review._id} );      
         }
     }
     
@@ -116,8 +116,19 @@ async function createReview(userId, movieId, title, content, rating) {
         });
 }
 
+async function getReviewById(reviewId) {
+    reviewId = validation.checkString(reviewId, 'review id');
+    const reviewCollection = await reviews();
+    const review = await reviewCollection.findOne({_id: ObjectId(reviewId)});
+    if (!review) {
+        throw 'Review not found.';
+    }
+    return review;
+}
+
 module.exports = {
     getAllReviewDisplayInfo,
     addReviewSeed,
     createReview,
+    getReviewById
 }
