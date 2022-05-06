@@ -16,7 +16,7 @@ router.post('/', async (req, res) => {
         req.body.keyword = validation.checkKeyword(req.body.keyword);
         req.body.searchTerm = validation.checkSearchTerm(req.body.searchTerm);
         let searchTerm = (!req.body.searchTerm ? '' : req.body.searchTerm.toLowerCase());
-        reviewList = await reviewData.getAllReviewDisplayInfo(req.body.keyword, searchTerm); //attemot to retrieve all review titles and thier corresponding movie titles from the database
+        reviewList = await reviewData.getAllReviewDisplayInfo(req.body.keyword, searchTerm); //attempt to retrieve all review titles and thier corresponding movie titles from the database
     }catch(e){
         return res.status(500).json({error:e});
     }
@@ -33,3 +33,41 @@ router.get('/home', async (req, res) => {
     }
     return res.status(200).json({success: true, reviewDisplayInfo: reviewList});
 });
+
+router
+    .route('/:id')
+    .get(async (req, res) => {
+        const id = req.params.id;
+        if (id) {
+            try {
+                const review = await reviewData.getReviewById(id);
+                if (review) {
+                    review._id = review._id || 'N/A';
+                    review.title = review.title || 'N/A';
+                    review.createdDate = review.createdDate || 'N/A';
+                    review.content = review.content || 'N/A';
+                    review.rating = review.rating || 'N/A';
+                    review.movieId = review.movieId || 'N/A';
+                    review.userId = review.userId || 'N/A';
+                    review.counter = review.counter || 'N/A';
+                    // if there are no comments we don't really care
+                }
+                //render handlebars file in views/layouts/reviews.handlebars
+                res.render('layouts/review', {
+                    _id: review._id,
+                    title: review.title,
+                    createdDate: review.createdDate,
+                    content: review.content,
+                    rating: review.rating,
+                    movieId: review.movieId,
+                    userId: review.userId,
+                    counter: review.counter,
+                    comments: review.comments
+                });
+            } catch (e) {
+                res.status(500).json({error: e});
+            }
+        } else {
+            res.status(400).json({error: 'Invalid id'});
+        }
+    });
