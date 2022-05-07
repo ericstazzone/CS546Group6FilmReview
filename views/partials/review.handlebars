@@ -15,11 +15,11 @@
                         <option value = "Reviewer">Reviewer</option>
                     </select>
                     <br></br>
-                    <p class="searchErrorMessage">{{{error}}}</p>
                     <label for="searchbar">Search</label>
                     <input type="search" placeholder="Search" name="searchbar" id="searchbar"/>
                     <button class="btn btn-primary" type="submit">Submit</button>
                 </form>
+                <p class="searchErrorMessage">{{{error}}}</p>
             </div>
         </div>
         <div class="col-6 col-md-2 order-2 order-md-3 text-right">
@@ -47,20 +47,20 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">{{content}}</h5>
+                            <h5 class="card-title"><span class="text-muted">Title: {{movieTitle}}</span></h5>
+                            <p class="card-text"><span class="text-muted">Review By: {{reviewAuthor}}</span></p>
+                            <p class="card-text"><span class="text-muted">Created On {{createdDate}}</span></p>
                             <p class="card-text"><span class="text-muted">Rating: {{rating}}</span></p>
-                            <p class="card-text"><span class="text-muted">Created on {{createdDate}}</span></p>
-                            <p class="card-text"><span class="text-muted">Movie ID: {{movieId}}</span></p>
-                            <p class="card-text"><span class="text-muted">User ID: {{userId}}</span></p>
                             <p class="card-text"><span class="text-muted">Page Hits: {{counter}}</span></p>
+                            <p class="card-title">{{content}}</p]>
                         </div>
                     </div>
                 </div>
             </div>
             {{#if comments}}
                 <br>
+                <h3>Comments:</h3>
                 <div class="row">
-                    <h3>Comments:</h3>
                     {{!-- display each comment in a card, using this.userId, this.name, this.createdDate, this.commentContent --}}
                     {{#each this.comments}}
                         <div class="col-md-12">
@@ -86,7 +86,7 @@
             {{else}}
                 <p>Please login to comment</p>
             {{/if}}
-            <a href="/">Home</a>
+            <a href="/">Back To Home</a>
         </div>
     </div>
     </div>

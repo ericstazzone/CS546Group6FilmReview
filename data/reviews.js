@@ -31,7 +31,7 @@ function userSearchFilter(movieRecord, keyword, searchTerm, reviewer){
 
 async function getAllReviewDisplayInfo(keyword,searchTerm){
     keyword = validation.checkKeyword(keyword);
-    searchTerm = validation.checkSearchTerm(searchTerm);
+    searchTerm = validation.checkSearchTerm(searchTerm,keyword);
     const reviewCollection = await reviews();
 
     //get all reviews and use projection to only get _id, review title, review movieId, reviewer userId

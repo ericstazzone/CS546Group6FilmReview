@@ -1,14 +1,11 @@
 const axios = require('axios');
 const mongoCollections = require('../config/mongoCollections');
-// TODO: Do we need a collection for comments? Or should we configure comments.js in such a way that it draws from the reviews collection?
-// const comments = mongoCollections.comments;
 const { ObjectId } = require('mongodb');
 const validation = require('../validation');
 const { endpoint, apiKey } = require('../config');
 const reviews = require('./reviews')
 const users = require('./users')
 const allReviews = mongoCollections.reviews
-
 
 function currentDate() {
     const date = new Date();
@@ -19,7 +16,6 @@ function currentDate() {
     const year = date.getFullYear();
     return `${month}/${day}/${year}`;
 }
-
 
 async function addComment(reviewId, userId, commentContent){
 
@@ -48,5 +44,6 @@ async function addComment(reviewId, userId, commentContent){
 }
 
 module.exports = {
-    addComment
+    addComment,
+    currentDate
 }
