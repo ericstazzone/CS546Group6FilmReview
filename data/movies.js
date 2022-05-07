@@ -1,7 +1,4 @@
 const axios = require('axios');
-const mongoCollections = require('../config/mongoCollections');
-const movies = mongoCollections.movies;
-const { ObjectId } = require('mongodb');
 const validation = require('../validation');
 const { endpoint, apiKey } = require('../config');
 
@@ -21,8 +18,6 @@ async function searchMovie(term) {
 }
 
 module.exports = {
-    //getMovieById,
-    //addMovieSeed,
     getMovie,
     searchMovie,
 }

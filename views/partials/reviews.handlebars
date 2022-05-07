@@ -15,11 +15,11 @@
                         <option value = "Reviewer">Reviewer</option>
                     </select>
                     <br></br>
-                    <p class="searchErrorMessage">{{{error}}}</p>
                     <label for="searchbar">Search</label>
                     <input type="search" placeholder="Search" name="searchbar" id="searchbar"/>
                     <button class="btn btn-primary " type="submit">Submit</button>
                 </form>
+                <p class="searchErrorMessage">{{{error}}}</p>
             </div>
         </div>
         <div class="col-6 col-md-2 order-2 order-md-3 text-right">
@@ -46,7 +46,7 @@
             <div class="row">
                 <div class="col">
                     {{!-- NOTE: When this page is first navigated to, this header should be empty. Otherwise, it should show the search term. --}}
-                    <h2 class="category-header">Search Term</h1>
+                    <h2 class="category-header">Results</h1>
                 </div>
                 <div class="col text-right">
                     <button id="sort-button" class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Recent</button>
