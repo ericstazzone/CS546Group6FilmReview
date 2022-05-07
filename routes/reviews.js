@@ -68,8 +68,6 @@ router
                 if(req.session.user){
                     isLoggedIn = true
                 }
-                
-
                 //render handlebars file in views/layouts/reviews.handlebars
                 res.render('partials/review', {
                     _id: review._id,
@@ -81,7 +79,8 @@ router
                     userId: review.userId,
                     counter: review.counter,
                     comments: review.comments,
-                    isLoggedIn : isLoggedIn
+                    isLoggedIn : isLoggedIn,
+                    error : req.body.error
                 });
             } catch (e) {
                 res.status(500).json({error: e});
