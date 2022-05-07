@@ -36,7 +36,7 @@ async function getAllReviewDisplayInfo(keyword,searchTerm){
 
     //get all reviews and use projection to only get _id, review title, review movieId, reviewer userId
     //then use sort() method to sort the reivews from newest to oldest.
-    const allReviewsTitleAndMovieId = await reviewCollection.find({}, {projection: {_id:1,title:1,movieId:1,userId:1}}).sort({_id:-1}).toArray(); 
+    const allReviewsTitleAndMovieId = await reviewCollection.find({}, {projection: {_id:1,title:1,movieId:1,userId:1,counter:1}}).sort({_id:-1}).toArray(); 
     if (!allReviewsTitleAndMovieId) { throw 'Error: Could not get all review titles and corresponding movie Ids';}
 
     let reviewTitleAndMovieTitlesList = [];
@@ -45,14 +45,14 @@ async function getAllReviewDisplayInfo(keyword,searchTerm){
             const movie = await moviesData.getMovie(review.movieId.toString()); //call data function to get movie title from movieId gathered from review
             const user = await usersData.getUser(review.userId.toString());
             if(userSearchFilter(movie, keyword, searchTerm, user.username)){
-                reviewTitleAndMovieTitlesList.push( {reviewTitle: review.title, movieTitle: movie.title, reviewerName: user.username, reviewId: review._id} );
+                reviewTitleAndMovieTitlesList.push( {reviewTitle: review.title, movieTitle: movie.title, reviewerName: user.username, reviewId: review._id, counter:review.counter} );
             }        
         }
     } else { //if no search term is provided then display all data
         for(let review of allReviewsTitleAndMovieId){
             const movie = await moviesData.getMovie(review.movieId.toString()); //call data function to get movie title from movieId gathered from review
             const user = await usersData.getUser(review.userId.toString());
-            reviewTitleAndMovieTitlesList.push( {reviewTitle: review.title, movieTitle: movie.title, reviewerName: user.username, reviewId: review._id} );      
+            reviewTitleAndMovieTitlesList.push( {reviewTitle: review.title, movieTitle: movie.title, reviewerName: user.username, reviewId: review._id, counter:review.counter} );      
         }
     }
     

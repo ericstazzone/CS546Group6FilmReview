@@ -10,15 +10,20 @@ module.exports = router;
 router.get('/', async (req, res) => {
     reviewList = await reviewData.getAllReviewDisplayInfo('Title', ''); //get request will return all reviews to be displayed
     reviewList = reviewList.map(elem => JSON.stringify(elem))
-    return res.status(200).render('partials/reviews', {user: req.session.user, reviewDisplayInfo:reviewList});
+    return res.status(200).render('partials/reviews', {user: req.session.user, reviewDisplayInfo:reviewList, error:""});
 });
 router.post('/', async (req, res) => {
     let reviewList = []; //declare reviewList before attempting to populate it with data from database
     try{
         req.body.keyword = validation.checkKeyword(req.body.keyword);
         req.body.searchbar = validation.checkSearchTerm(req.body.searchbar);
-        let searchTerm = (!req.body.searchbar ? '' : req.body.searchbar.toLowerCase());
-        reviewList = await reviewData.getAllReviewDisplayInfo(req.body.keyword, searchTerm); //attempt to retrieve all review titles and thier corresponding movie titles from the database
+        req.body.searchbar = (!req.body.searchbar ? '' : req.body.searchbar.toLowerCase());
+    } catch (e){
+
+        return res.status(400).render('partials/reviews', {user: req.session.user, reviewDisplayInfo:reviewList, error:e}); 
+    }
+    try{
+        reviewList = await reviewData.getAllReviewDisplayInfo(req.body.keyword, req.body.searchbar); //attempt to retrieve all review titles and thier corresponding movie titles from the database
     }catch(e){
         return res.status(500).json({error:e});
     }

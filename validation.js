@@ -52,6 +52,7 @@ function checkKeyword(keyword){
 
 function checkSearchTerm(searchTerm){
     if(searchTerm){
+        if (!/^[a-zA-Z0-9]+$/g.test(searchTerm)) throw 'Search term contains illegal characters.';
         if(typeof searchTerm != 'string' || searchTerm.trim().length == 0){ throw 'Search term is invalid';} //search term exists make sure it is correct type and not just spaces
         return searchTerm.trim();
     } else {

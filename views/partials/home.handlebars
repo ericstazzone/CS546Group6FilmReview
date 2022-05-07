@@ -15,6 +15,7 @@
                         <option value = "Reviewer">Reviewer</option>
                     </select>
                     <br></br>
+                    <p class="searchErrorMessage">{{{error}}}</p>
                     <label for="searchbar">Search</label>
                     <input type="search" placeholder="Search" name="searchbar" id="searchbar"/>
                     <button class="btn btn-primary" type="submit">Submit</button>
@@ -47,13 +48,7 @@
         </div>
         <div class="col-6 align-self-start">
             <h2 class="category-header">Popular</h1>
-            <div class="category-list list-group list-group-flush">
-                <button class="list-group-item list-group-item-action" type="button">How Toy Story Changed my Life<br><small class="font-italic">Toy Story</small></button>
-                <button class="list-group-item list-group-item-action" type="button">My Toy Story 2 Story<br><small class="font-italic">Toy Story 2</small></button>
-                <button class="list-group-item list-group-item-action" type="button">Toy Story 3 and the Conscious Self<br><small class="font-italic">Toy Story 3</small></button>
-                <button class="list-group-item list-group-item-action" type="button">God I Love Toy Story<br><small class="font-italic">Toy Story 4</small></button>
-                <button class="list-group-item list-group-item-action" type="button">In Short, Not Enough Toys<br><small class="font-italic">American Psycho</small></button>
-            </div>
+            <ul class="category-list list-group list-group-flush" id="reviewListHomePopular"></ul>
         </div>
     </div>
     <div class="row raise">
