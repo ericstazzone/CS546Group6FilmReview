@@ -28,6 +28,7 @@ async function main() {
     } catch(e) {
         console.log(e);
     }
+    console.log("Still seeding users");
     try {
         user3 = await users.createUser("Kenneth", "Skelton", "KennsworthS", "123456789", "kskelto1@stevens.edu");
     } catch(e) {

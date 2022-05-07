@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const data = require('../data');
 const reviewData = data.reviews;
+const userData = data.users;
+const movieData = data.movies;
 const {ObjectId} = require('mongodb');
 const validation = require('../validation');
 
@@ -46,10 +48,23 @@ router.get('/home', async (req, res) => {
 router
     .route('/:id')
     .get(async (req, res) => {
-        const id = req.params.id;
+        let id = req.params.id;
+        try {
+            id = validation.checkId(id.toString());
+        } catch (e){
+            res.status(400).json({error: 'Invalid id'});
+        }
         if (id) {
             try {
                 const review = await reviewData.getReviewById(id);
+                if (!review) {throw 'no review'};
+                let tempMovie = await movieData.getMovie(review.movieId);
+                let tempUser = await userData.getUser(review.userId.toString());
+                if (!tempMovie || !tempUser) {throw 'invalid review'};
+                console.log(tempUser.username);
+                console.log(tempMovie.fullTitle);
+
+                // let tempUser = await userData.getUser(review.userId);
                 if (review) {
                     review._id = review._id || 'N/A';
                     review.title = review.title || 'N/A';
@@ -69,7 +84,6 @@ router
                     isLoggedIn = true
                 }
                 
-
                 //render handlebars file in views/layouts/reviews.handlebars
                 res.render('partials/review', {
                     _id: review._id,
@@ -77,8 +91,8 @@ router
                     createdDate: review.createdDate,
                     content: review.content,
                     rating: review.rating,
-                    movieId: review.movieId,
-                    userId: review.userId,
+                    movieTitle: tempMovie.fullTitle,
+                    reviewAuthor: tempUser.username,
                     counter: review.counter,
                     comments: review.comments,
                     isLoggedIn : isLoggedIn

@@ -80,11 +80,11 @@ function checkSearchTerm(searchTerm,keyword){
                 $('#reviewListAlphabetical').append(li);
             }
             $('#reviewListRecent').show();
-            $('#recentlistingoption').trigger('click');
-
-            if(reviewDisplayInfo ==[]){
+            $(".searchErrorMessage").empty();
+            if(reviewDisplayInfo.length == 0){
                 $(".searchErrorMessage").html("Sorry there are no results for your search");
             }
+            $('#recentlistingoption').trigger('click');
         }
     });
 
