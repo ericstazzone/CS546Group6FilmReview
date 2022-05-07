@@ -53,9 +53,18 @@ router
                     review.rating = review.rating || 'N/A';
                     review.movieId = review.movieId || 'N/A';
                     review.userId = review.userId || 'N/A';
-                    review.counter = review.counter || 'N/A';
+                    review.counter = review.counter.toString() || 'N/A';
                     // if there are no comments we don't really care
                 }
+                // use the function updateReviewCounter(reviewId) in the reviewData.js file to increment the counter for the review
+                await reviewData.updateReviewCounter(id);
+
+                var isLoggedIn = false
+                if(req.session.user){
+                    isLoggedIn = true
+                }
+                
+
                 //render handlebars file in views/layouts/reviews.handlebars
                 res.render('partials/review', {
                     _id: review._id,
@@ -66,7 +75,8 @@ router
                     movieId: review.movieId,
                     userId: review.userId,
                     counter: review.counter,
-                    comments: review.comments
+                    comments: review.comments,
+                    isLoggedIn : isLoggedIn
                 });
             } catch (e) {
                 res.status(500).json({error: e});

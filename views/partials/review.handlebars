@@ -57,18 +57,35 @@
                 </div>
             </div>
             {{#if comments}}
+                <br>
                 <div class="row">
-                    {{!-- If there are comments then display them --}}
-                    {{#each comments}}
-                        <p>{{comments.userId}}</p>
-                        <p>{{comments.name}}</p>
-                        <p>{{comments.createdDate}}</p>
-                        <p>{{comments.commentContent}}</p>
+                    <h3>Comments:</h3>
+                    {{!-- display each comment in a card, using this.userId, this.name, this.createdDate, this.commentContent --}}
+                    {{#each this.comments}}
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{this.name}}</h5>
+                                    <p class="card-text"><span class="text-muted">Created on {{this.date}}</span></p>
+                                    <p class="card-text"><span class="text-muted">{{this.commentContent}}</span></p>
+                                </div>
+                            </div>
+                        </div>
                     {{/each}}
                 </div>
             {{else}}
                 <p>No comments yet</p>
             {{/if}}
+            {{#if isLoggedIn}}
+                <form method="POST" action="/comments" id="commentForm">
+                    <label for="commentForm">Comment</label>
+                    <input type="text" placeholder="Comment" name="commentForm" id="commentForm"/>
+                    <button class="btn btn-primary" type="submit">Submit</button>
+                </form>
+            {{else}}
+                <p>Please login to comment</p>
+            {{/if}}
+            <a href="/">Home</a>
         </div>
     </div>
     </div>
