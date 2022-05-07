@@ -77,10 +77,15 @@
             {{else}}
                 <p>No comments yet</p>
             {{/if}}
+            {{!-- if there is error then display error message --}}
+            {{#if error}}
+                <p class="searchErrorMessage">{{{error}}}</p>
+            {{/if}}
             {{#if isLoggedIn}}
-                <form method="POST" action="/comments" id="commentForm">
+                {{!-- create a post route to /comments that is required and must be a non empty string --}}
+                <form name="commentForm" method="POST" action="/comments" onsubmit="return validateForm()" id="commentForm">
                     <label for="commentForm">Comment</label>
-                    <input type="text" placeholder="Comment" name="commentForm" id="commentForm"/>
+                    <input type="text" placeholder="Comment" name="comment" id="commentForm"/>
                     <button class="btn btn-primary" type="submit">Submit</button>
                 </form>
             {{else}}

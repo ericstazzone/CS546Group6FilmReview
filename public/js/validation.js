@@ -42,6 +42,17 @@ function toggleForm(form) {
     });
 }
 
+function validateForm() {
+    let string = document.forms["commentForm"]["comment"].value;
+
+    console.log("String is: "+string)
+
+    if (!string || typeof string != 'string' || string.trim().length == 0){
+        alert("Invalid Comment String");
+        return false;
+    }
+}
+
 $(document).ready(function() {
     let loginForm = $('#login-form');
     let loginAlert = $('#login-alert');

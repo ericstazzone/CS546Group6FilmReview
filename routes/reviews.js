@@ -83,7 +83,6 @@ router
                 if(req.session.user){
                     isLoggedIn = true
                 }
-                
                 //render handlebars file in views/layouts/reviews.handlebars
                 res.render('partials/review', {
                     _id: review._id,
