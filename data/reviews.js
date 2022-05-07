@@ -16,11 +16,12 @@ function userSearchFilter(movieRecord, keyword, searchTerm, reviewer){
     if(keyword=="Title"){
         if(movieRecord.title.toLowerCase() == searchTerm){ check = true; }
     } else if(keyword=="Director"){
-        if(movieRecord.director.toLowerCase() == searchTerm){ check = true; }
+        let dList = map(attrgetter('name').toLowerCase(), movieRecord.directorList)
+        if(dList.includes(searchTerm)){ check = true; }
     } else if(keyword=="Actor"){
-        let maincast = movieRecord.mainCast.map(element => {return element.toLowerCase();})
-        if(maincast.includes(searchTerm)){ check = true; }
-    } else if (keyword=="Release Date"){ //** TODO: check that if the user provides a data as a search term is is a valid date 
+        let aList = map(attrgetter('name').toLowerCase(), movieRecord.starList)
+        if(aList.includes(searchTerm)){ check = true; }
+    } else if (keyword=="Release Date"){ //** TODO: check that if the user provides a data as a search term is is a valid date 2001-01-30
         if(movieRecord.releaseDate == searchTerm){ check = true; }
     } else if (keyword=="Reviewer"){
         if(reviewer.toLowerCase() == searchTerm){ check = true; }
@@ -35,14 +36,13 @@ async function getAllReviewDisplayInfo(keyword,searchTerm){
 
     //get all reviews and use projection to only get _id, review title, review movieId, reviewer userId
     //then use sort() method to sort the reivews from newest to oldest.
-    //**utilize createdDate attribute of
     const allReviewsTitleAndMovieId = await reviewCollection.find({}, {projection: {_id:1,title:1,movieId:1,userId:1}}).sort({_id:-1}).toArray(); 
     if (!allReviewsTitleAndMovieId) { throw 'Error: Could not get all review titles and corresponding movie Ids';}
 
     let reviewTitleAndMovieTitlesList = [];
     if(searchTerm){ //if a search term is provided provide data normally
         for(let review of allReviewsTitleAndMovieId){
-            const movie = await moviesData.getMovieById(review.movieId.toString()); //call data function to get movie title from movieId gathered from review
+            const movie = await moviesData.getMovie(review.movieId.toString()); //call data function to get movie title from movieId gathered from review
             const user = await usersData.getUser(review.userId.toString());
             if(userSearchFilter(movie, keyword, searchTerm, user.username)){
                 reviewTitleAndMovieTitlesList.push( {reviewTitle: review.title, movieTitle: movie.title, reviewerName: user.username, reviewId: review._id} );
@@ -50,7 +50,7 @@ async function getAllReviewDisplayInfo(keyword,searchTerm){
         }
     } else { //if no search term is provided then display all data
         for(let review of allReviewsTitleAndMovieId){
-            const movie = await moviesData.getMovieById(review.movieId.toString()); //call data function to get movie title from movieId gathered from review
+            const movie = await moviesData.getMovie(review.movieId.toString()); //call data function to get movie title from movieId gathered from review
             const user = await usersData.getUser(review.userId.toString());
             reviewTitleAndMovieTitlesList.push( {reviewTitle: review.title, movieTitle: movie.title, reviewerName: user.username, reviewId: review._id} );      
         }
@@ -60,21 +60,21 @@ async function getAllReviewDisplayInfo(keyword,searchTerm){
 }
 //adds a review for seed task
 //**add argument checking if going into production
-async function addReviewSeed(title, createdDate, content, rating, movieId, userId, comments){
-    const reviewCollection = await reviews();
-    let newReview = { //construct new band object to be added to the bands collection
-        title:title,
-        createdDate:createdDate,
-        content:content,
-        rating:rating,
-        movieId:movieId,
-        userId:userId,
-        comments:comments
-    }
+// async function addReviewSeed(title, createdDate, content, rating, movieId, userId, comments){
+//     const reviewCollection = await reviews();
+//     let newReview = { //construct new band object to be added to the bands collection
+//         title:title,
+//         createdDate:createdDate,
+//         content:content,
+//         rating:rating,
+//         movieId:movieId,
+//         userId:userId,
+//         comments:comments
+//     }
 
-    const insertInfo = await reviewCollection.insertOne(newReview); //atempt to add newBand to the bands collection
-    if (!insertInfo.acknowledged || !insertInfo.insertedId){ throw 'Error: Could not add band';} //check if the newBand was inserted
-}
+//     const insertInfo = await reviewCollection.insertOne(newReview); //atempt to add newBand to the bands collection
+//     if (!insertInfo.acknowledged || !insertInfo.insertedId){ throw 'Error: Could not add band';} //check if the newBand was inserted
+// }
 
 function currentDate() {
     const date = new Date();
@@ -91,7 +91,7 @@ async function createReview(userId, movieId, title, content, rating) {
     title = validation.checkString(title, 'review title');
     content = validation.checkString(content, 'review body');
     if (!rating) throw 'Please provide a rating.';
-    
+
     const reviewCollection = await reviews();
     const reviewId = ObjectId();
     let newReview = {
@@ -102,6 +102,7 @@ async function createReview(userId, movieId, title, content, rating) {
         createdDate: currentDate(),
         movieId: movieId,
         userId: userId,
+        counter: 0,
         comments: []
     };
 
@@ -126,11 +127,23 @@ async function getReviewById(reviewId) {
     return review;
 }
 
-
+async function updateReviewCounter(reviewId) {
+    reviewId = validation.checkString(reviewId, 'review id');
+    const reviewCollection = await reviews();
+    const review = await reviewCollection.findOne({_id: ObjectId(reviewId)});
+    if (!review) {
+        throw 'Review not found.';
+    }
+    const updatedReview = await reviewCollection.updateOne({_id: ObjectId(reviewId)}, {$inc: {counter: 1}});
+    if (!updatedReview.modifiedCount) {
+        throw 'Could not increment counter.';
+    }
+    return true;
+}
 
 module.exports = {
     getAllReviewDisplayInfo,
-    addReviewSeed,
     createReview,
-    getReviewById
+    getReviewById,
+    updateReviewCounter
 }
