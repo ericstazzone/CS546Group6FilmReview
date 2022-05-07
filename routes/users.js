@@ -189,8 +189,6 @@ router.post('/publish', async (req, res) => {
             const review = await reviewData.createReview(req.session.user, req.body.movieId, req.body.title, req.body.content, req.body.rating);
             if (review.id) {
                 response.reviewId = review.id;
-                // TODO: Redirect to review page instead.
-                // res.status(200).redirect('/home');
                 res.json(response);
             } else {
                 // TODO: Complete

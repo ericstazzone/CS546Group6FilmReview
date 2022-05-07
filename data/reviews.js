@@ -16,10 +16,10 @@ function userSearchFilter(movieRecord, keyword, searchTerm, reviewer){
     if(keyword=="Title"){
         if(movieRecord.title.toLowerCase() == searchTerm){ check = true; }
     } else if(keyword=="Director"){
-        let dList = map(attrgetter('name').toLowerCase(), movieRecord.directorList)
+        let dList = movieRecord.directorList.map(attrgetter('name').toLowerCase())
         if(dList.includes(searchTerm)){ check = true; }
     } else if(keyword=="Actor"){
-        let aList = map(attrgetter('name').toLowerCase(), movieRecord.starList)
+        let aList = movieRecord.starList.map(attrgetter('name').toLowerCase())
         if(aList.includes(searchTerm)){ check = true; }
     } else if (keyword=="Release Date"){ //** TODO: check that if the user provides a data as a search term is is a valid date 2001-01-30
         if(movieRecord.releaseDate == searchTerm){ check = true; }
@@ -58,23 +58,6 @@ async function getAllReviewDisplayInfo(keyword,searchTerm){
     
     return reviewTitleAndMovieTitlesList;
 }
-//adds a review for seed task
-//**add argument checking if going into production
-// async function addReviewSeed(title, createdDate, content, rating, movieId, userId, comments){
-//     const reviewCollection = await reviews();
-//     let newReview = { //construct new band object to be added to the bands collection
-//         title:title,
-//         createdDate:createdDate,
-//         content:content,
-//         rating:rating,
-//         movieId:movieId,
-//         userId:userId,
-//         comments:comments
-//     }
-
-//     const insertInfo = await reviewCollection.insertOne(newReview); //atempt to add newBand to the bands collection
-//     if (!insertInfo.acknowledged || !insertInfo.insertedId){ throw 'Error: Could not add band';} //check if the newBand was inserted
-// }
 
 function currentDate() {
     const date = new Date();

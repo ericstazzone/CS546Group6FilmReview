@@ -8,19 +8,23 @@ const validation = require('../validation');
 module.exports = router;
 
 router.get('/', async (req, res) => {
-    return res.render('partials/reviews', {user: req.session.user});
+    reviewList = await reviewData.getAllReviewDisplayInfo('Title', ''); //get request will return all reviews to be displayed
+    reviewList = reviewList.map(elem => JSON.stringify(elem))
+    return res.status(200).render('partials/reviews', {user: req.session.user, reviewDisplayInfo:reviewList});
 });
 router.post('/', async (req, res) => {
     let reviewList = []; //declare reviewList before attempting to populate it with data from database
     try{
         req.body.keyword = validation.checkKeyword(req.body.keyword);
-        req.body.searchTerm = validation.checkSearchTerm(req.body.searchTerm);
-        let searchTerm = (!req.body.searchTerm ? '' : req.body.searchTerm.toLowerCase());
+        req.body.searchbar = validation.checkSearchTerm(req.body.searchbar);
+        let searchTerm = (!req.body.searchbar ? '' : req.body.searchbar.toLowerCase());
         reviewList = await reviewData.getAllReviewDisplayInfo(req.body.keyword, searchTerm); //attempt to retrieve all review titles and thier corresponding movie titles from the database
     }catch(e){
         return res.status(500).json({error:e});
     }
-    return res.status(200).json({success: true, reviewDisplayInfo: reviewList});
+    //return res.status(200).json({success: true, reviewDisplayInfo: reviewList});
+    reviewList = reviewList.map(elem => JSON.stringify(elem))
+    return res.status(200).render('partials/reviews', {user: req.session.user, reviewDisplayInfo:reviewList});
 });
 
 router.get('/home', async (req, res) => {
@@ -53,7 +57,7 @@ router
                     // if there are no comments we don't really care
                 }
                 //render handlebars file in views/layouts/reviews.handlebars
-                res.render('layouts/review', {
+                res.render('partials/review', {
                     _id: review._id,
                     title: review.title,
                     createdDate: review.createdDate,

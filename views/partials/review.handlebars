@@ -1,7 +1,7 @@
 <div class="container home-container">
     <div class="row raise">
         <div class="col-6 col-md-4 order-md-1 site-header">
-            <h1><a class="text-reset text-decoration-none" href="home">Film Reviews</a></h1>
+            <h1><a class="text-reset text-decoration-none" href="/home">Film Reviews</a></h1>
         </div>
         <div class="col order-xs-2 order-3 order-sm-3 order-md-2">
             <div class="input-group">
@@ -26,12 +26,12 @@
                 <i class="fa fa-bars fa-lg"></i>
             </button>
             <div class="dropdown-menu dropdown-menu-right">
-                <a class="dropdown-item browseReviews" href="reviews">Browse</a>
+                <a class="dropdown-item browseReviews" href="/reviews">Browse</a>
                 {{#if user}}
-                <a class="dropdown-item" href="publish">Publish</a>
-                <a class="dropdown-item" href="settings">Settings</a>
+                <a class="dropdown-item" href="/publish">Publish</a>
+                <a class="dropdown-item" href="/settings">Settings</a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="logout">Sign Out</a>
+                <a class="dropdown-item" href="/logout">Sign Out</a>
                 {{else}}
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="login">Sign In</a>
@@ -39,26 +39,37 @@
             </div>
         </div>
     </div>
-
     <div class="row raise add-to-top">
-        <div class="col-6 align-self-start">
-            <h2 class="category-header">Recent</h2>
-            <ul class="category-list list-group list-group-flush" id="reviewListHomeRecent"></ul>
-        </div>
-        <div class="col-6 align-self-start">
-            <h2 class="category-header">Popular</h1>
-            <div class="category-list list-group list-group-flush">
-                <button class="list-group-item list-group-item-action" type="button">How Toy Story Changed my Life<br><small class="font-italic">Toy Story</small></button>
-                <button class="list-group-item list-group-item-action" type="button">My Toy Story 2 Story<br><small class="font-italic">Toy Story 2</small></button>
-                <button class="list-group-item list-group-item-action" type="button">Toy Story 3 and the Conscious Self<br><small class="font-italic">Toy Story 3</small></button>
-                <button class="list-group-item list-group-item-action" type="button">God I Love Toy Story<br><small class="font-italic">Toy Story 4</small></button>
-                <button class="list-group-item list-group-item-action" type="button">In Short, Not Enough Toys<br><small class="font-italic">American Psycho</small></button>
+        <div class="col-md-12">
+            <h2>{{title}}</h2>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">{{content}}</h5>
+                            <p class="card-text"><span class="text-muted">Rating: {{rating}}</span></p>
+                            <p class="card-text"><span class="text-muted">Created on {{createdDate}}</span></p>
+                            <p class="card-text"><span class="text-muted">Movie ID: {{movieId}}</span></p>
+                            <p class="card-text"><span class="text-muted">User ID: {{userId}}</span></p>
+                            <p class="card-text"><span class="text-muted">Page Hits: {{counter}}</span></p>
+                        </div>
+                    </div>
+                </div>
             </div>
+            {{#if comments}}
+                <div class="row">
+                    {{!-- If there are comments then display them --}}
+                    {{#each comments}}
+                        <p>{{comments.userId}}</p>
+                        <p>{{comments.name}}</p>
+                        <p>{{comments.createdDate}}</p>
+                        <p>{{comments.commentContent}}</p>
+                    {{/each}}
+                </div>
+            {{else}}
+                <p>No comments yet</p>
+            {{/if}}
         </div>
     </div>
-    <div class="row raise">
-        <div class="col-12">
-            <a class="btn btn-outline-primary btn-lg btn-block add-to-top browseReviews" href="/reviews">Browse Reviews</a>
-        </div>
     </div>
 </div>
