@@ -72,7 +72,7 @@ $(document).ready(function() {
                 }
                 if ('reviewId' in data) {
                     // TODO: Fix redirect!
-                    window.location.replace(`reviews/${reviewId}`);
+                    window.location.replace(`reviews/${data.reviewId}`);
                 }
             }
         });
