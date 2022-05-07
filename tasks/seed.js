@@ -10,7 +10,7 @@ async function main() {
     await db.dropDatabase();
 
     //TO DO: seed should have 5 users, 10 reviews, 5 movies
-    let user1, user2 = undefined;
+    let user1, user2, user3, user4 = undefined;
     let review1, review2, review3 = undefined;
     let movie1, movie2, movie3 = undefined;
     let comment1 = undefined;
@@ -30,47 +30,61 @@ async function main() {
         console.log(e);
     }
     console.log("2");
-
-    //seeding movies
     try {
-        movie1 = await movies.getMovie("tt0325980");
-    } catch (e) {
+        user3 = await users.createUser("Kenneth", "Skelton", "KennsworthS", "123456789", "kskelto1@stevens.edu");
+    } catch(e) {
         console.log("Got an error! 3");
         console.log(e);
     }
     console.log("3");
     try {
-        movie2 = await movies.getMovie("tt0317219");
-    } catch (e) {
+        user3 = await users.createUser("Abcdefg", "hijklmnop", "Abcd1234", "123456789", "12345678@stevens.edu");
+    } catch(e) {
         console.log("Got an error! 4");
         console.log(e);
     }
     console.log("4");
+
+    //seeding movies
     try {
-        movie3 = await movies.getMovie("tt7321322");
+        movie1 = await movies.getMovie("tt0325980");
     } catch (e) {
         console.log("Got an error! 5");
         console.log(e);
     }
-    console.log("5")
+    console.log("5");
+    try {
+        movie2 = await movies.getMovie("tt0317219");
+    } catch (e) {
+        console.log("Got an error! 6");
+        console.log(e);
+    }
+    console.log("6");
+    try {
+        movie3 = await movies.getMovie("tt7321322");
+    } catch (e) {
+        console.log("Got an error! 7");
+        console.log(e);
+    }
+    console.log("7")
     
     //seeding reviews
     try {
         let temp1 = await users.getUserByUsername("jonnjonn");
         review1 = await reviews.createReview(temp1._id, movie1.id, "AReview 1", "Good Job Steve 1", 5);
     } catch(e) {
-        console.log("Got an error! 6");
+        console.log("Got an error! 8");
         console.log(e);
     }
-    console.log("6");
+    console.log("8");
     try {
         let temp2 = await users.getUserByUsername("savsavsav");
         review2 = await reviews.createReview(temp2._id, movie2.id, "BReview 2", "Good Job Steve 2", 7);
     } catch(e) {
-        console.log("Got an error! 7");
+        console.log("Got an error! 9");
         console.log(e);
     }
-    console.log("7");
+    console.log("9");
     try {
         let temp3 = await users.getUserByUsername("savsavsav");
         review3 = await reviews.createReview(temp3._id, movie3.id, "CReview 4", "Good Job Steve 12412", 6);
@@ -80,10 +94,10 @@ async function main() {
 
         comment1 = await comments.addComment(reviewIdString, userIdString, "This movie is good")
     } catch(e) {
-        console.log("Got an error! 8");
+        console.log("Got an error! 10");
         console.log(e);
     }
-    console.log("8");
+    console.log("10");
 
 
 
