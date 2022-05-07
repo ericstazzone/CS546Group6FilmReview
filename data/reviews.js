@@ -127,8 +127,23 @@ async function getReviewById(reviewId) {
     return review;
 }
 
+async function updateReviewCounter(reviewId) {
+    reviewId = validation.checkString(reviewId, 'review id');
+    const reviewCollection = await reviews();
+    const review = await reviewCollection.findOne({_id: ObjectId(reviewId)});
+    if (!review) {
+        throw 'Review not found.';
+    }
+    const updatedReview = await reviewCollection.updateOne({_id: ObjectId(reviewId)}, {$inc: {counter: 1}});
+    if (!updatedReview.modifiedCount) {
+        throw 'Could not increment counter.';
+    }
+    return true;
+}
+
 module.exports = {
     getAllReviewDisplayInfo,
     createReview,
-    getReviewById
+    getReviewById,
+    updateReviewCounter
 }

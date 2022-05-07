@@ -49,9 +49,12 @@ router
                     review.rating = review.rating || 'N/A';
                     review.movieId = review.movieId || 'N/A';
                     review.userId = review.userId || 'N/A';
-                    review.counter = review.counter || 'N/A';
+                    review.counter = review.counter.toString() || 'N/A';
                     // if there are no comments we don't really care
                 }
+                // use the function updateReviewCounter(reviewId) in the reviewData.js file to increment the counter for the review
+                await reviewData.updateReviewCounter(id);
+
                 //render handlebars file in views/layouts/reviews.handlebars
                 res.render('layouts/review', {
                     _id: review._id,
