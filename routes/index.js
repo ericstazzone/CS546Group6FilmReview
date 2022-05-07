@@ -10,6 +10,8 @@ const constructorMethod = (app) => {
   // **TODO: Add other routes as necessary
   app.use('/reviews',reviewRoutes);
 
+  app.use('/comments', commentRoutes);
+
   app.use('*', (req, res) => {
     // EXAMPLE: res.status(404).json({ error: 'Not found' });
     // TODO: Decide what to do for unspecified routes

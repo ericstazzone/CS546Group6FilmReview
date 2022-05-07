@@ -118,7 +118,7 @@ async function createReview(userId, movieId, title, content, rating) {
 }
 
 async function getReviewById(reviewId) {
-    reviewId = validation.checkString(reviewId, 'review id');
+    reviewId = validation.checkId(reviewId, 'review id');
     const reviewCollection = await reviews();
     const review = await reviewCollection.findOne({_id: ObjectId(reviewId)});
     if (!review) {
