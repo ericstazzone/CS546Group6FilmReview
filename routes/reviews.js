@@ -16,7 +16,7 @@ router.post('/', async (req, res) => {
     let reviewList = []; //declare reviewList before attempting to populate it with data from database
     try{
         req.body.keyword = validation.checkKeyword(req.body.keyword);
-        req.body.searchbar = validation.checkSearchTerm(req.body.searchbar);
+        req.body.searchbar = validation.checkSearchTerm(req.body.searchbar,req.body.keyword);
         req.body.searchbar = (!req.body.searchbar ? '' : req.body.searchbar.toLowerCase());
     } catch (e){
 

@@ -17,8 +17,5 @@ const getCollectionFn = (collection) => {
 /* Now, you can list your collections here: */
 module.exports = {
   users: getCollectionFn('users'),
-  movies: getCollectionFn('movies'),
   reviews: getCollectionFn('reviews')
-  // TODO: Do we need a collection for comments? Or should we configure comments.js in such a way that it draws from the reviews collection?
-  // comments: getCollectionFn('comments')
 };

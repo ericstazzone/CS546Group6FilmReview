@@ -1,5 +1,4 @@
 const userRoutes = require('./users');
-const movieRoutes = require('./movies');
 const reviewRoutes = require('./reviews');
 const commentRoutes = require('./comments');
 

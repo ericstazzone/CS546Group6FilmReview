@@ -14,7 +14,7 @@ router.post('/', async (req, res) => {
 
     var reviewId = previousUrl.slice(previousUrl.lastIndexOf("/")+1)
     var commentContent = req['body']['commentForm']
-
+    //add validation
     var comment = await comments.addComment(reviewId, userId, commentContent)
 
     res.redirect('back')

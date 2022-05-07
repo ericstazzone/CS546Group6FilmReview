@@ -1,3 +1,55 @@
+function leapYear(year){
+    return ((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0);
+}
+function checkValidDate(date){
+    let splitSearchTerm = date.split("-");
+    if(splitSearchTerm.length != 3){throw "Release Date should be in the form of YYYY-MM-DD (ex. 2001-01-30)";} //check if there is the correct number of dashes
+    let year = splitSearchTerm[0];
+    let month = splitSearchTerm[1];
+    let day = splitSearchTerm[2];
+    
+    if(year === 'null' || month === 'null' || day === 'null') {throw "Release Date should be in the form of YYYY-MM-DD (ex. 2001-01-30)";}
+    if (year.trim().length === 0) {throw "Release Date should be in the form of YYYY-MM-DD (ex. 2001-01-30)";}
+    if (month.trim().length === 0) {throw "Release Date should be in the form of YYYY-MM-DD (ex. 2001-01-30)";}
+    if (day.trim().length === 0) {throw "Release Date should be in the form of YYYY-MM-DD (ex. 2001-01-30)";}
+    if(splitSearchTerm[0].length != 4){throw "Release Date should be in the form of YYYY-MM-DD (ex. 2001-01-30)";} //check for correct number of digits for year
+    if(splitSearchTerm[1].length != 2){throw "Release Date should be in the form of YYYY-MM-DD (ex. 2001-01-30)";} //check for correct number of digits for month
+    if(splitSearchTerm[2].length != 2){throw "Release Date should be in the form of YYYY-MM-DD (ex. 2001-01-30)";} //check for correct number of digits for day
+    year = Number(year);
+    month = Number(month);
+    day = Number(day);
+    if(typeof year !== 'number' || isNaN(year)){ throw "Release Date should be in the form of YYYY-MM-DD (ex. 2001-01-30)";}
+    if(typeof month !== 'number' || isNaN(month)){ throw "Release Date should be in the form of YYYY-MM-DD (ex. 2001-01-30)";}
+    if(typeof day !== 'number' || isNaN(day)){ throw "Release Date should be in the form of YYYY-MM-DD (ex. 2001-01-30)";}
+
+    if(month < 1 || month > 12){ throw "Release Date should be in the form of YYYY-MM-DD (ex. 2001-01-30)";}
+    if(day > 31 || day < 1) { throw "Release Date should be in the form of YYYY-MM-DD (ex. 2001-01-30)";}
+    if(month === 4 || month === 6 || month === 9 || month === 11){
+        if(day > 30){ throw "Release Date should be in the form of YYYY-MM-DD (ex. 2001-01-30)";}
+    }
+    if(month === 2 && day > 28 && !leapYear(year)){ throw "Release Date should be in the form of YYYY-MM-DD (ex. 2001-01-30)";}
+    if(month === 2 && day > 29 && leapYear(year)){ throw "Release Date should be in the form of YYYY-MM-DD (ex. 2001-01-30)";}
+}
+
+function checkKeyword(keyword){ //validation function for keyword from main validatio.js file
+    if (!keyword || typeof keyword != 'string' || keyword.trim().length == 0) throw `Please enter your keyword.`;
+    keyword = keyword.trim();
+    if (keyword != "Title" && keyword != "Director" && keyword != "Actor" && keyword != "Release Date" && keyword != "Reviewer") throw "Keyword is invalid.";
+    return keyword;
+}
+
+function checkSearchTerm(searchTerm,keyword){
+    if(searchTerm){
+        if (!/^[a-zA-Z0-9\-]+$/g.test(searchTerm)) throw 'Search term contains illegal characters.';
+        if(typeof searchTerm != 'string' || searchTerm.trim().length == 0){ throw 'Search term is invalid';} //search term exists make sure it is correct type and not just spaces
+        searchTerm = searchTerm.trim();
+        if(keyword == "Release Date"){ checkValidDate(searchTerm); } //validate that the user provides a data in the form of 2001-01-30
+        return searchTerm;
+    } else {
+        return searchTerm //empty search term is valid
+    }   
+}
+
 (function ($) {
     $(document).ready( function(){ //on page load function
         $('#hiddeninfo').hide();
@@ -29,7 +81,25 @@
             }
             $('#reviewListRecent').show();
             $('#recentlistingoption').trigger('click');
+
+            if(reviewDisplayInfo ==[]){
+                $(".searchErrorMessage").html("Sorry there are no results for your search");
+            }
         }
+    });
+
+    $("#searchForm").submit(function (event){
+        $(".searchErrorMessage").empty();
+        let keyword = $("#keyword").val();
+        let searchbar = $("#searchbar").val();
+        try{
+            keyword = checkKeyword(keyword);
+            searchbar = checkSearchTerm(searchbar,keyword);
+        } catch(e){
+            event.preventDefault();
+            $(".searchErrorMessage").html(e);
+        }
+        return;
     });
 
     $("#sort-menu").children().click(function(event) {
