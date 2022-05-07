@@ -79,8 +79,8 @@ router
                     userId: review.userId,
                     counter: review.counter,
                     comments: review.comments,
-                    isLoggedIn : isLoggedIn,
-                    error : req.body.error
+                    isLoggedIn: isLoggedIn,
+                    user: req.session.user
                 });
             } catch (e) {
                 res.status(500).json({error: e});
