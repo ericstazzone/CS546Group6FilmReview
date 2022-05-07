@@ -3,6 +3,7 @@ const data = require('../data/');
 const reviews = data.reviews;
 const movies = data.movies;
 const users = data.users;
+const comments = data.comments;
 
 async function main() {
     const db = await dbConnection.dbConnection();
@@ -12,6 +13,7 @@ async function main() {
     let user1, user2 = undefined;
     let review1, review2, review3 = undefined;
     let movie1, movie2, movie3 = undefined;
+    let comment1 = undefined;
 
     //creating users
     try {
@@ -72,11 +74,19 @@ async function main() {
     try {
         let temp3 = await users.getUserByUsername("savsavsav");
         review3 = await reviews.createReview(temp3._id, movie3.id, "CReview 4", "Good Job Steve 12412", 6);
+
+        let userIdString = temp3._id.toString()
+        let reviewIdString = review3.id.toString()
+
+        comment1 = await comments.addComment(reviewIdString, userIdString, "This movie is good")
     } catch(e) {
         console.log("Got an error! 8");
         console.log(e);
     }
     console.log("8");
+
+
+
     
     await dbConnection.closeConnection();
     console.log('Done seeding database');
