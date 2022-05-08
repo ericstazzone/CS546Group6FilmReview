@@ -1,3 +1,8 @@
+function checkString(string, parameter) {
+    if (!string || typeof string != 'string' || string.trim().length == 0) throw `Please enter your ${parameter}.`;
+    return string.trim();
+}
+
 $(document).ready(function() {
     var req;
     let term = '';
@@ -11,6 +16,7 @@ $(document).ready(function() {
         if ($('.selectpicker').val()) unselected = false;
 
         term = $(this).val();
+        term = checkString(term,"term"); //validating searchbox user input
         
         if (req) req.abort();
         $('#movie-search').find('*').not($('.selectpicker').find("option:selected")).remove();

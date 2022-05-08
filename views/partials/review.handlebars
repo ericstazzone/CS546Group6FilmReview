@@ -23,7 +23,8 @@
             </div>
         </div>
         <div class="col-6 col-md-2 order-2 order-md-3 text-right">
-            <button type="button" class="btn btn-primary" data-toggle="dropdown">
+            <label for="userOptionsDropdown" aria-label="Dropdown menu for various user options"></label>
+            <button type="button" class="btn btn-primary" data-toggle="dropdown" id="userOptionsDropdown">
                 <i class="fa fa-bars fa-lg"></i>
             </button>
             <div class="dropdown-menu dropdown-menu-right">
@@ -47,7 +48,10 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title"><span class="text-muted">Title: {{movieTitle}}</span></h5>
+                            <h3 class="card-title"><span class="text-muted">Movie Title: {{movieTitle}}</span></h3>
+                            <p class="card-text"><span class="text-muted">Director: {{director}}</span></p>
+                            <p class="card-text"><span class="text-muted">Actors: {{actorList}}</span></p>
+                            <p class="card-text"><span class="text-muted">Movie Release Date: {{movieReleaseDate}}</span></p>
                             <p class="card-text"><span class="text-muted">Review By: {{reviewAuthor}}</span></p>
                             <p class="card-text"><span class="text-muted">Created On {{createdDate}}</span></p>
                             <p class="card-text"><span class="text-muted">Rating: {{rating}}</span></p>
@@ -66,7 +70,7 @@
                         <div class="col-md-12">
                             <div class="card">
                                 <div class="card-body">
-                                    <h5 class="card-title">{{this.name}}</h5>
+                                    <h4 class="card-title">{{this.name}}</h4>
                                     <p class="card-text"><span class="text-muted">Created on {{this.date}}</span></p>
                                     <p class="card-text"><span class="text-muted">{{this.commentContent}}</span></p>
                                 </div>

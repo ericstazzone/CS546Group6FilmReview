@@ -3,9 +3,9 @@ const mongoCollections = require('../config/mongoCollections');
 const { ObjectId } = require('mongodb');
 const validation = require('../validation');
 const { endpoint, apiKey } = require('../config');
-const reviews = require('./reviews')
-const users = require('./users')
-const allReviews = mongoCollections.reviews
+const reviews = require('./reviews');
+const users = require('./users');
+const allReviews = mongoCollections.reviews;
 
 function currentDate() {
     const date = new Date();
@@ -19,9 +19,15 @@ function currentDate() {
 
 async function addComment(reviewId, userId, commentContent){
 
-    var review = await reviews.getReviewById(reviewId)
-    var user = await users.getUser(userId)
-
+    commentContent = validation.checkString(commentContent);
+    reviewId = validation.checkId(reviewId);
+    userId = validation.checkId(userId);
+    
+    var review = await reviews.getReviewById(reviewId);
+    if(!review){throw 'Could not get review';}
+    var user = await users.getUser(userId);
+    if(!user){throw 'Could not get user';}
+    
     let comment = {
         userId : userId,
         name : user.username,
@@ -29,18 +35,18 @@ async function addComment(reviewId, userId, commentContent){
         commentContent : commentContent
     }
 
-    review.comments.push(comment)
-    const reviewCollection = await allReviews()
+    review.comments.push(comment);
+    const reviewCollection = await allReviews();
 
     const updatedInfo = await reviewCollection.updateOne(
         { _id: ObjectId(reviewId) },
         { $set: review }
     );
     if (updatedInfo.modifiedCount === 0) {
-        throw 'could not update band successfully';
+        throw 'could not update comment successfully';
     }
 
-    return comment
+    return comment;
 }
 
 module.exports = {

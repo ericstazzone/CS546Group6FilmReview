@@ -3,7 +3,7 @@ const validation = require('../validation');
 const { endpoint, apiKey } = require('../config');
 
 async function getMovie(id) {
-    id = validation.checkString(id, 'movie');
+    id = validation.checkString(id, 'movie'); //movie ids are from IMDB api, so they are not Object Ids
 
     const {data} = await axios.get(`${endpoint}/Title/${apiKey}/${id}`);
     if (!data.id) throw 'Could not find movie.'

@@ -11,17 +11,18 @@ const { endpoint, apiKey } = require('../config');
 // Returns an array of all review titles and thier corresponding movie title
 // the elements of the array are objects in the form of {reviewTitle: reviewTitle, movieTitle: movieTitle, reviewerName: reviewerName}
 function userSearchFilter(movieRecord, keyword, searchTerm, reviewer){
+    movieRecord = validation.validateMovieData(movieRecord);
     let check = false;
     searchTerm = searchTerm.toLowerCase();
     if(keyword=="Title"){
         if(movieRecord.title.toLowerCase() == searchTerm){ check = true; }
     } else if(keyword=="Director"){
-        let dList = movieRecord.directorList.map(attrgetter('name').toLowerCase())
+        let dList = movieRecord.directorList.map(elem => elem.name.toLowerCase())
         if(dList.includes(searchTerm)){ check = true; }
     } else if(keyword=="Actor"){
-        let aList = movieRecord.starList.map(attrgetter('name').toLowerCase())
+        let aList = movieRecord.starList.map(elem => elem.name.toLowerCase())
         if(aList.includes(searchTerm)){ check = true; }
-    } else if (keyword=="Release Date"){ //** TODO: check that if the user provides a data as a search term is is a valid date 2001-01-30
+    } else if (keyword=="Release Date"){
         if(movieRecord.releaseDate == searchTerm){ check = true; }
     } else if (keyword=="Reviewer"){
         if(reviewer.toLowerCase() == searchTerm){ check = true; }
@@ -36,13 +37,13 @@ async function getAllReviewDisplayInfo(keyword,searchTerm){
 
     //get all reviews and use projection to only get _id, review title, review movieId, reviewer userId
     //then use sort() method to sort the reivews from newest to oldest.
-    const allReviewsTitleAndMovieId = await reviewCollection.find({}, {projection: {_id:1,title:1,movieId:1,userId:1,counter:1}}).sort({_id:-1}).toArray(); 
+    const allReviewsTitleAndMovieId = await reviewCollection.find({}, {projection: {_id:1,title:1,movieId:1,movieTitle:1,userId:1,counter:1}}).sort({_id:-1}).toArray(); 
     if (!allReviewsTitleAndMovieId) { throw 'Error: Could not get all review titles and corresponding movie Ids';}
 
     let reviewTitleAndMovieTitlesList = [];
     if(searchTerm){ //if a search term is provided provide data normally
         for(let review of allReviewsTitleAndMovieId){
-            const movie = await moviesData.getMovie(review.movieId.toString()); //call data function to get movie title from movieId gathered from review
+            let movie = await moviesData.getMovie(review.movieId.toString()); //call data function to get movie title from movieId gathered from review
             const user = await usersData.getUser(review.userId.toString());
             if(userSearchFilter(movie, keyword, searchTerm, user.username)){
                 reviewTitleAndMovieTitlesList.push( {reviewTitle: review.title, movieTitle: movie.title, reviewerName: user.username, reviewId: review._id, counter:review.counter} );
@@ -50,9 +51,8 @@ async function getAllReviewDisplayInfo(keyword,searchTerm){
         }
     } else { //if no search term is provided then display all data
         for(let review of allReviewsTitleAndMovieId){
-            const movie = await moviesData.getMovie(review.movieId.toString()); //call data function to get movie title from movieId gathered from review
             const user = await usersData.getUser(review.userId.toString());
-            reviewTitleAndMovieTitlesList.push( {reviewTitle: review.title, movieTitle: movie.title, reviewerName: user.username, reviewId: review._id, counter:review.counter} );      
+            reviewTitleAndMovieTitlesList.push( {reviewTitle: review.title, movieTitle: review.movieTitle, reviewerName: user.username, reviewId: review._id, counter:review.counter} );      
         }
     }
     
@@ -70,11 +70,13 @@ function currentDate() {
 }
 
 async function createReview(userId, movieId, title, content, rating) {
+    userId = validation.checkId(userId);
     movieId = validation.checkString(movieId, 'movie');
     title = validation.checkString(title, 'review title');
     content = validation.checkString(content, 'review body');
-    if (!rating) throw 'Please provide a rating.';
+    rating = validation.checkRating(rating);
 
+    const movie = await moviesData.getMovie(movieId.toString());
     const reviewCollection = await reviews();
     const reviewId = ObjectId();
     let newReview = {
@@ -84,6 +86,7 @@ async function createReview(userId, movieId, title, content, rating) {
         rating: rating,
         createdDate: currentDate(),
         movieId: movieId,
+        movieTitle: movie.title,
         userId: userId,
         counter: 0,
         comments: []
@@ -101,7 +104,7 @@ async function createReview(userId, movieId, title, content, rating) {
 }
 
 async function getReviewById(reviewId) {
-    reviewId = validation.checkId(reviewId, 'review id');
+    reviewId = validation.checkId(reviewId);
     const reviewCollection = await reviews();
     const review = await reviewCollection.findOne({_id: ObjectId(reviewId)});
     if (!review) {
@@ -111,7 +114,7 @@ async function getReviewById(reviewId) {
 }
 
 async function updateReviewCounter(reviewId) {
-    reviewId = validation.checkString(reviewId, 'review id');
+    reviewId = validation.checkId(reviewId);
     const reviewCollection = await reviews();
     const review = await reviewCollection.findOne({_id: ObjectId(reviewId)});
     if (!review) {

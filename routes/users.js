@@ -4,6 +4,7 @@ const data = require('../data');
 const userData = data.users;
 const movieData = data.movies;
 const reviewData = data.reviews;
+const xss = require('xss');
 const validation = require('../validation');
 const {ObjectId} = require('mongodb');
 const { response } = require('express');
@@ -16,12 +17,9 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/login', async (req, res) => {
-    // userData.updatePassword('6269786a8c3f8451f36f8d21', 'mypassword')
     if (req.session.user) {
         res.redirect('/home');
     } else {
-        // NOTE: Old query string method
-        // if (req.query.success) {
         if (successFlag) {
             successFlag = false;
             res.render('partials/login', {success: true});
@@ -41,10 +39,10 @@ router.get('/signup', async (req, res) => {
 
 router.post('/login', async (req, res) => {
     try {
-        req.body.username = validation.checkUsername(req.body.username);
-        req.body.password = validation.checkPassword(req.body.password);
+        req.body.username = validation.checkUsername(xss(req.body.username));
+        req.body.password = validation.checkPassword(xss(req.body.password));
 
-        const user = await userData.checkUser(req.body.username, req.body.password);
+        const user = await userData.checkUser(xss(req.body.username), xss(req.body.password));
         if (user.id) {
             req.session.user = user.id;
             res.status(200).redirect('/home');
@@ -58,24 +56,24 @@ router.post('/login', async (req, res) => {
 
 router.post('/signup', async (req, res) => {
     try {
-        req.body.username = validation.checkUsername(req.body.username);
-        req.body.password = validation.checkPassword(req.body.password);
-        req.body.confirmPassword = await userData.confirmPassword(req.body.password, req.body.confirmPassword, false);
-        req.body.firstName = validation.checkString(req.body.firstName, 'first name');
-        req.body.lastName = validation.checkString(req.body.lastName, 'last name');
-        req.body.email = validation.checkEmail(req.body.email);
+        req.body.username = validation.checkUsername(xss(req.body.username));
+        if (await userData.getUserByUsername(xss(req.body.username))) throw 'Username is taken.';
+        req.body.password = validation.checkPassword(xss(req.body.password));
+        req.body.confirmPassword = await userData.confirmPassword(xss(req.body.password), xss(req.body.confirmPassword), false);
+        req.body.firstName = validation.checkString(xss(req.body.firstName), 'first name');
+        req.body.lastName = validation.checkString(xss(req.body.lastName), 'last name');
+        req.body.email = validation.checkEmail(xss(req.body.email));
+        if (await userData.getUserByEmail(xss(req.body.email))) throw 'Email is in use.';
 
-        const user = await userData.createUser(req.body.firstName, req.body.lastName, req.body.username, req.body.password, req.body.email);
+        const user = await userData.createUser(xss(req.body.firstName), xss(req.body.lastName), xss(req.body.username), xss(req.body.password), xss(req.body.email));
         if (user.userInserted) {
             const success = encodeURIComponent(true);
             successFlag = true;
             res.status(200).redirect('/login');
         } else {
-            // TODO
             res.status(500).render('partials/login', {error: 'Internal Server Error'});
         }
     } catch (e) {
-        // TODO
         res.status(400).render('partials/signup', {error: e});
     }
 });
@@ -93,8 +91,10 @@ router.get('/logout', async (req, res) => {
 router.post('/loginValidation', async (req, res) => {
     let response = {};
     try {
-        // TODO: Account for internal server error
-        const user = await userData.checkUser(req.body.username, req.body.password);
+        req.body.username = validation.checkUsername(xss(req.body.username));
+        req.body.password = validation.checkPassword(xss(req.body.password));
+
+        const user = await userData.checkUser(xss(req.body.username), xss(req.body.password));
     } catch (e) {
         response['error'] = 'Either the username or password is invalid.';
     }
@@ -105,44 +105,45 @@ router.post('/signupValidation', async (req, res) => {
     let response = {};
     if ('username' in req.body) {
         try {
-            req.body.username = validation.checkUsername(req.body.username);
-            if (await userData.getUserByUsername(req.body.username)) throw 'Username is taken.';
+            req.body.username = validation.checkUsername(xss(req.body.username));
+            if (await userData.getUserByUsername(xss(req.body.username))) throw 'Username is taken.';
         } catch (e) {
             response['username'.concat('Error')] = e;
         }
     }
     if ('password' in req.body) {
         try {
-            req.body.password = validation.checkPassword(req.body.password);
+            req.body.password = validation.checkPassword(xss(req.body.password));
         } catch (e) {
             response['password'.concat('Error')] = e;
         }
     }
     if ('confirmPassword' in req.body) {
         try {
-            req.body.confirmPassword = await userData.confirmPassword(req.body.password, req.body.confirmPassword, false);
+            req.body.confirmPassword = validation.checkPassword(xss(req.body.confirmPassword));
+            req.body.confirmPassword = await userData.confirmPassword(xss(req.body.password), xss(req.body.confirmPassword), false);
         } catch (e) {
             response['confirmPassword'.concat('Error')] = e;
         }
     }
     if ('firstName' in req.body) {
         try {
-            req.body.firstName = validation.checkString(req.body.firstName, 'first name');
+            req.body.firstName = validation.checkString(xss(req.body.firstName), 'first name');
         } catch (e) {
             response['firstName'.concat('Error')] = e;
         }
     }
     if ('lastName' in req.body) {
         try {
-            req.body.lastName = validation.checkString(req.body.lastName, 'last name');
+            req.body.lastName = validation.checkString(xss(req.body.lastName), 'last name');
         } catch (e) {
             response['lastName'.concat('Error')] = e;
         }
     }
     if ('email' in req.body) {
         try {
-            req.body.email = validation.checkEmail(req.body.email);
-            if (await userData.getUserByEmail(req.body.email)) throw 'Email is in use.';
+            req.body.email = validation.checkEmail(xss(req.body.email));
+            if (await userData.getUserByEmail(xss(req.body.email))) throw 'Email is in use.';
         } catch (e) {
             response['email'.concat('Error')] = e;
         }
@@ -162,22 +163,29 @@ router.post('/publish', async (req, res) => {
     let response = {errors: {}};
     if ('movieId' in req.body) {
         try {
-            req.body.movieId = validation.checkString(req.body.movieId, 'movie');
-            const movie = await movieData.getMovie(req.body.movieId);
+            req.body.movieId = validation.checkString(xss(req.body.movieId), 'movie');
+            const movie = await movieData.getMovie(xss(req.body.movieId));
         } catch (e) {
             response.errors['movieId'] = e;
         }
     }
+    if ('rating' in req.body) {
+        try {
+            req.body.rating = validation.checkRating(xss(req.body.rating), 'rating');
+        } catch (e) {
+            response.errors['rating'] = e;
+        }
+    }
     if ('title' in req.body) {
         try {
-            req.body.title = validation.checkString(req.body.title, 'review title');
+            req.body.title = validation.checkString(xss(req.body.title), 'review title');
         } catch (e) {
             response.errors['title'] = e;
         }
     }
     if ('content' in req.body) {
         try {
-            req.body.content = validation.checkString(req.body.content, 'review body');
+            req.body.content = validation.checkString(xss(req.body.content), 'review body');
         } catch (e) {
             response.errors['content'] = e;
         }
@@ -186,16 +194,14 @@ router.post('/publish', async (req, res) => {
         res.json(response);
     } else {
         try {
-            const review = await reviewData.createReview(req.session.user, req.body.movieId, req.body.title, req.body.content, req.body.rating);
+            const review = await reviewData.createReview(req.session.user, xss(req.body.movieId), xss(req.body.title), xss(req.body.content), xss(req.body.rating));
             if (review.id) {
                 response.reviewId = review.id;
                 res.json(response);
             } else {
-                // TODO: Complete
                 res.json({error: 'Internal Server Error'});
             }
         } catch (e) {
-            // TODO: Complete
             res.json({error: e});
         }
     }
@@ -207,8 +213,7 @@ router.get('/settings', async (req, res) => {
             const user = await userData.getUser(req.session.user)
             res.render('partials/settings', {user: user});
         } catch (e) {
-            // TODO: Implement non-JSON response
-            res.json({error: "Something went wrong..."});
+            res.redirect('/login');
         }
     } else {
         res.redirect('/login');
@@ -219,38 +224,39 @@ router.post('/settings', async (req, res) => {
     let response = {};
     if ('username' in req.body) {
         try {
-            req.body.username = validation.checkUsername(req.body.username);
-            if (await userData.getUserByUsername(req.body.username)) throw 'Username is taken.';
+            req.body.username = validation.checkUsername(xss(req.body.username));
+            if (await userData.getUserByUsername(xss(req.body.username))) throw 'Username is taken.';
         } catch (e) {
             response.error = e;
         }
     } else if ('password' in req.body) {
         try {
-            req.body.password = validation.checkPassword(req.body.password);
+            req.body.password = validation.checkPassword(xss(req.body.password));
         } catch (e) {
             response.error = e;
         }
         try {
-            req.body.confirmPassword = await userData.confirmPassword(req.body.password, req.body.confirmPassword, false);
+            req.body.confirmPassword = validation.checkPassword(xss(req.body.confirmPassword));
+            req.body.confirmPassword = await userData.confirmPassword(xss(req.body.password), xss(req.body.confirmPassword, false));
         } catch (e) {
             response.secondaryError = e;
         }
     } else if ('firstName' in req.body) {
         try {
-            req.body.firstName = validation.checkString(req.body.firstName, 'first name');
+            req.body.firstName = validation.checkString(xss(req.body.firstName), 'first name');
         } catch (e) {
             response.error = e;
         }
     } else if ('lastName' in req.body) {
         try {
-            req.body.lastName = validation.checkString(req.body.lastName, 'last name');
+            req.body.lastName = validation.checkString(xss(req.body.lastName), 'last name');
         } catch (e) {
             response.error = e;
         }
     } else if ('email' in req.body) {
         try {
-            req.body.email = validation.checkEmail(req.body.email);
-            if (await userData.getUserByEmail(req.body.email)) throw 'Email is in use.';
+            req.body.email = validation.checkEmail(xss(req.body.email));
+            if (await userData.getUserByEmail(xss(req.body.email))) throw 'Email is in use.';
         } catch (e) {
             response.error = e;
         }
@@ -260,29 +266,21 @@ router.post('/settings', async (req, res) => {
     } else {
         try {
             if ('username' in req.body) {
-                userData.updateUsername(req.session.user, req.body.username);
+                userData.updateUsername(req.session.user, xss(req.body.username));
             } else if ('password' in req.body) {
-                userData.updatePassword(req.session.user, req.body.password);
+                userData.updatePassword(req.session.user, xss(req.body.password));
             } else if ('firstName' in req.body) {
-                userData.updateFirstName(req.session.user, req.body.firstName);
+                userData.updateFirstName(req.session.user, xss(req.body.firstName));
             } else if ('lastName' in req.body) {
-                userData.updateLastName(req.session.user, req.body.lastName);
+                userData.updateLastName(req.session.user, xss(req.body.lastName));
             } else if ('email' in req.body) {
-                userData.updateEmail(req.session.user, req.body.email);
+                userData.updateEmail(req.session.user, xss(req.body.email));
             } 
             res.json(response);
-            // res.redirect('/settings');
         } catch (e) {
-            // TODO: Render this properly
             res.json({error: e});
         }
     }
 });
-
-// ALL ROUTES PREPENDED WITH "test" ARE EXCLUSIVELY FOR TESTING PURPOSES AND WILL BE REMOVED!
-
-
-
-
 
 module.exports = router;

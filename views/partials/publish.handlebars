@@ -6,7 +6,7 @@
         <div class="col order-xs-2 order-3 order-sm-3 order-md-2">
             <div class="input-group">
                 <form method="POST" action="/reviews" id="searchForm">
-                    <label for="keyword"> Select Keyword</label>
+                    <label for="keyword">Select Keyword</label>
                     <select name="keyword" id="keyword">
                         <option value = "Title" >Title</option>
                         <option value = "Director" >Director</option>
@@ -23,19 +23,20 @@
             </div>
         </div>
         <div class="col-6 col-md-2 order-2 order-md-3 text-right">
-            <button type="button" class="btn btn-primary" data-toggle="dropdown">
+            <label for="userOptionsDropdown"></label>
+            <button type="button" class="btn btn-primary" data-toggle="dropdown" id="userOptionsDropdown">
                 <i class="fa fa-bars fa-lg"></i>
             </button>
             <div class="dropdown-menu dropdown-menu-right">
-                <a class="dropdown-item browseReviews" href="reviews">Browse</a>
+                <a class="dropdown-item" aria-label="Browse All Reviews" href="/reviews">Browse</a>
                 {{#if user}}
-                <a class="dropdown-item" href="publish">Publish</a>
-                <a class="dropdown-item" href="settings">Settings</a>
+                <a class="dropdown-item" href="/publish">Publish</a>
+                <a class="dropdown-item" href="/settings">Settings</a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="logout">Sign Out</a>
+                <a class="dropdown-item" href="/logout">Sign Out</a>
                 {{else}}
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="login">Sign In</a>
+                <a class="dropdown-item" href="/login">Sign In</a>
                 {{/if}}
             </div>
         </div>
@@ -44,6 +45,9 @@
     <div class="row raise add-to-top">
         <div id="publish" class="container publish-container">
             <h2>Publish Review</h2>
+            {{#if error}}
+            <div id="publish-alert" class="alert alert-danger add-to-top-greater" role="alert">{{error}}</div>
+            {{/if}}
             <form id="publish-form" class="needs-validation" method="POST" action="/publish" novalidate>
                 <div class="form-group publish-group">
                     <label for="movie-search">Movie</label>
@@ -58,7 +62,8 @@
                     </div>
                     <div class="col-12 col-sm-3 align-self-start form-group publish-group">
                         <label for="review-rating">Rating</label>
-                        <select id="review-rating" class="form-control custom-select publish-input" name="rating" required>
+                        <select id="review-rating" class="form-control custom-select publish-input" name="rating" size="1" required>
+                            <option value="" id="defaultRatingOption" label=" "></option>
                             <option>1</option>
                             <option>2</option>
                             <option>3</option>
@@ -79,7 +84,7 @@
                     <div class="invalid-feedback publish-error">Please provide a review body.</div>
                 </div>
                 <button id="publish-button" class="btn btn-primary" form="publish-form" type="submit">Publish</button>
-                <a class="btn btn-secondary add-to-left-lesser" href="home">Cancel</a>
+                <a class="btn btn-secondary add-to-left-lesser" href="/home">Cancel</a>
             </form>
         </div>
     </div>

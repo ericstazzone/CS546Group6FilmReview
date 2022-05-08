@@ -1,7 +1,7 @@
 <div class="container home-container" id="review-catalog">
     <div class="row raise">
         <div class="col-6 col-md-4 order-md-1 site-header">
-            <h1><a class="text-reset text-decoration-none" href="home">Film Reviews</a></h1>
+            <h1><a class="text-reset text-decoration-none" href="/home">Film Reviews</a></h1>
         </div>
         <div class="col order-xs-2 order-3 order-sm-3 order-md-2">
             <div class="input-group">
@@ -23,19 +23,20 @@
             </div>
         </div>
         <div class="col-6 col-md-2 order-2 order-md-3 text-right">
-            <button type="button" class="btn btn-primary" data-toggle="dropdown">
+            <label for="userOptionsDropdown"></label>
+            <button type="button" class="btn btn-primary" data-toggle="dropdown" id="userOptionsDropdown">
                 <i class="fa fa-bars fa-lg"></i>
             </button>
             <div class="dropdown-menu dropdown-menu-right">
-                <a class="dropdown-item browseReviews" href="reviews">Browse</a>
+                <a class="dropdown-item browseReviews" href="/reviews">Browse</a>
                 {{#if user}}
-                <a class="dropdown-item" href="publish">Publish</a>
-                <a class="dropdown-item" href="settings">Settings</a>
+                <a class="dropdown-item" href="/publish">Publish</a>
+                <a class="dropdown-item" href="/settings">Settings</a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="logout">Sign Out</a>
+                <a class="dropdown-item" href="/logout">Sign Out</a>
                 {{else}}
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="login">Sign In</a>
+                <a class="dropdown-item" href="/login">Sign In</a>
                 {{/if}}
             </div>
         </div>

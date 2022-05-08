@@ -40,7 +40,7 @@ function checkKeyword(keyword){ //validation function for keyword from main vali
 
 function checkSearchTerm(searchTerm,keyword){
     if(searchTerm){
-        if (!/^[a-zA-Z0-9\-]+$/g.test(searchTerm)) throw 'Search term contains illegal characters.';
+        if (!/^[a-zA-Z0-9\ \-]+$/g.test(searchTerm)) throw 'Search term contains illegal characters.';
         if(typeof searchTerm != 'string' || searchTerm.trim().length == 0){ throw 'Search term is invalid';} //search term exists make sure it is correct type and not just spaces
         searchTerm = searchTerm.trim();
         if(keyword == "Release Date"){ checkValidDate(searchTerm); } //validate that the user provides a data in the form of 2001-01-30
@@ -60,23 +60,24 @@ function checkSearchTerm(searchTerm,keyword){
             $('#reviewListRecent').empty();
             $('#reviewListPopular').empty();
             $('#reviewListAlphabetical').empty();
-            let reviewDisplayInfo = JSON.parse($('#hiddeninfo').text());
+            let reviewDisplayInfo = JSON.parse($('#hiddeninfo').text()); //retrieve data from handlebars render
+            //recent
             for(let item of reviewDisplayInfo){ //append all shows to showList ul elemen
-                let li = `<a href="/reviews/${item.reviewId}" target="_blank"><button class="list-group-item list-group-item-action" type="button" "><medium>${item.reviewTitle}</medium> <br><small class="font-italic">${item.movieTitle}</small><br> <small>${item.reviewerName}</small> </button></a>`;                    
+                let li = `<li> <a class="list-group-item list-group-item-action" href="/reviews/${item.reviewId}" target="_blank"> <span class="medium">${item.reviewTitle}</span> <br><span class="font-italic small">${item.movieTitle}</span></br> <span class="small">${item.reviewerName}</span></div></li>`;                    
                 $('#reviewListRecent').append(li);
             }
             //popular
             let reviewDisplayListPopular = reviewDisplayInfo;
             reviewDisplayListPopular.sort((a, b) => { return b.counter - a.counter; });
             for(let item of reviewDisplayListPopular){ //append all shows to showList ul elemen
-                let li = `<a href="/reviews/${item.reviewId}" target="_blank"><button class="list-group-item list-group-item-action" type="button" "><medium>${item.reviewTitle}</medium> <br><small class="font-italic">${item.movieTitle}</small><br> <small>${item.reviewerName}</small> </button></a>`;                    
+                let li = `<li> <a class="list-group-item list-group-item-action" href="/reviews/${item.reviewId}" target="_blank"> <span class="medium">${item.reviewTitle}</span> <br><span class="font-italic small">${item.movieTitle}</span></br> <span class="small">${item.reviewerName}</span></div></li>`;                    
                 $('#reviewListPopular').append(li);
             }
             //alphabetical
             let reviewDisplayListAlphabetical = reviewDisplayInfo;
             reviewDisplayListAlphabetical.sort((a, b) => a.reviewTitle.localeCompare(b.reviewTitle)); //sort reviews alphabetically
             for(let item of reviewDisplayListAlphabetical){ //append all shows to showList ul elemen
-                let li = `<a href="/reviews/${item.reviewId}" target="_blank"><button class="list-group-item list-group-item-action" type="button" "><medium>${item.reviewTitle}</medium> <br><small class="font-italic">${item.movieTitle}</small><br> <small>${item.reviewerName}</small> </button></a>`;                    
+                let li = `<li> <a class="list-group-item list-group-item-action" href="/reviews/${item.reviewId}" target="_blank"> <span class="medium">${item.reviewTitle}</span> <br><span class="font-italic small">${item.movieTitle}</span></br> <span class="small">${item.reviewerName}</span></div></li>`;                    
                 $('#reviewListAlphabetical').append(li);
             }
             $('#reviewListRecent').show();
