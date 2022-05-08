@@ -85,7 +85,7 @@ function checkKeyword(keyword){
 
 function checkSearchTerm(searchTerm,keyword){
     if(searchTerm){
-        if (!/^[a-zA-Z0-9\-]+$/g.test(searchTerm)) throw 'Search term contains illegal characters.';
+        if (!/^[a-zA-Z0-9\ \-]+$/g.test(searchTerm)) throw 'Search term contains illegal characters.';
         if(typeof searchTerm != 'string' || searchTerm.trim().length == 0){ throw 'Search term is invalid';} //search term exists make sure it is correct type and not just spaces
         searchTerm = searchTerm.trim();
         if(keyword == "Release Date"){ checkValidDate(searchTerm); } //validate that the user provides a data in the form of 2001-01-30

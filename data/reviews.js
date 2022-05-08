@@ -17,10 +17,10 @@ function userSearchFilter(movieRecord, keyword, searchTerm, reviewer){
     if(keyword=="Title"){
         if(movieRecord.title.toLowerCase() == searchTerm){ check = true; }
     } else if(keyword=="Director"){
-        let dList = movieRecord.directorList.map(attrgetter('name').toLowerCase())
+        let dList = movieRecord.directorList.map(elem => elem.name.toLowerCase())
         if(dList.includes(searchTerm)){ check = true; }
     } else if(keyword=="Actor"){
-        let aList = movieRecord.starList.map(attrgetter('name').toLowerCase())
+        let aList = movieRecord.starList.map(elem => elem.name.toLowerCase())
         if(aList.includes(searchTerm)){ check = true; }
     } else if (keyword=="Release Date"){
         if(movieRecord.releaseDate == searchTerm){ check = true; }
