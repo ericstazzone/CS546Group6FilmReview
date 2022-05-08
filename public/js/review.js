@@ -60,7 +60,8 @@ function checkSearchTerm(searchTerm,keyword){
             $('#reviewListRecent').empty();
             $('#reviewListPopular').empty();
             $('#reviewListAlphabetical').empty();
-            let reviewDisplayInfo = JSON.parse($('#hiddeninfo').text());
+            let reviewDisplayInfo = JSON.parse($('#hiddeninfo').text()); //retrieve data from handlebars render
+            //recent
             for(let item of reviewDisplayInfo){ //append all shows to showList ul elemen
                 let li = `<a href="/reviews/${item.reviewId}" target="_blank"><button class="list-group-item list-group-item-action" type="button" "><medium>${item.reviewTitle}</medium> <br><small class="font-italic">${item.movieTitle}</small><br> <small>${item.reviewerName}</small> </button></a>`;                    
                 $('#reviewListRecent').append(li);

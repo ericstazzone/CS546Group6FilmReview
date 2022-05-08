@@ -3,6 +3,7 @@ const router = express.Router();
 const data = require('../data');
 const commentData = data.comments;
 const {ObjectId} = require('mongodb');
+const xss = require('xss');
 const validation = require('../validation');
 const reviewData = data.reviews
 
@@ -26,9 +27,9 @@ router.post('/', async (req, res) => {
         isLoggedIn = true;
     }
     try{
-        commentContent = validation.isString(commentContent);
-        reviewId = validation.checkId(reviewId);
-        userId = validation.checkId(userId);
+        commentContent = validation.isString(xss(commentContent));
+        reviewId = validation.checkId(xss(reviewId));
+        userId = validation.checkId(xss(userId));
     } catch(e){
         return res.status(400).json({error: "Comment must be a string and cannot be empty"});
     }

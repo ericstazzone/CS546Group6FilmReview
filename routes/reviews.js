@@ -5,6 +5,7 @@ const reviewData = data.reviews;
 const userData = data.users;
 const movieData = data.movies;
 const {ObjectId} = require('mongodb');
+const xss = require('xss');
 const validation = require('../validation');
 
 module.exports = router;
@@ -17,9 +18,9 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
     let reviewList = []; //declare reviewList before attempting to populate it with data from database
     try{
-        req.body.keyword = validation.checkKeyword(req.body.keyword);
-        req.body.searchbar = validation.checkSearchTerm(req.body.searchbar,req.body.keyword);
-        req.body.searchbar = (!req.body.searchbar ? '' : req.body.searchbar.toLowerCase());
+        req.body.keyword = validation.checkKeyword(xss(req.body.keyword));
+        req.body.searchbar = validation.checkSearchTerm(xss(req.body.searchbar), xss(req.body.keyword));
+        req.body.searchbar = (!xss(req.body.searchbar) ? '' : xss(req.body.searchbar.toLowerCase()));
     } catch (e){
         return res.status(400).render('partials/reviews', {user: req.session.user, reviewDisplayInfo:reviewList, error:e}); 
     }
@@ -27,11 +28,11 @@ router.post('/', async (req, res) => {
     try{
         reviewList = await reviewData.getAllReviewDisplayInfo(req.body.keyword, req.body.searchbar); //attempt to retrieve all review titles and thier corresponding movie titles from the database
     }catch(e){
-        return res.status(500).json({error:e});
+        return res.status(500).render('partials/reviews', {user: req.session.user, reviewDisplayInfo:[], error:e}); 
     }
 
     reviewList = reviewList.map(elem => JSON.stringify(elem))
-    return res.status(200).render('partials/reviews', {user: req.session.user, reviewDisplayInfo:reviewList});
+    return res.status(200).render('partials/reviews', {user: req.session.user, reviewDisplayInfo:reviewList, error:""});
 });
 
 router.get('/home', async (req, res) => {
@@ -40,7 +41,7 @@ router.get('/home', async (req, res) => {
         reviewList = await reviewData.getAllReviewDisplayInfo('Title',''); //no search term will display all reviews
         reviewList = reviewList.slice(0,5);
     }catch(e){
-        return res.status(500).json({error:e});
+        return res.status(500).json({success: true, reviewDisplayInfo: []});
     }
     return res.status(200).json({success: true, reviewDisplayInfo: reviewList});
 });
@@ -50,7 +51,7 @@ router
     .get(async (req, res) => {
         let id = req.params.id;
         try {
-            id = validation.checkId(id.toString());
+            id = validation.checkId(xss(id.toString()));
         } catch (e){
             res.status(400).json({error: 'Invalid id'});
         }
