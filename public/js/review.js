@@ -63,21 +63,21 @@ function checkSearchTerm(searchTerm,keyword){
             let reviewDisplayInfo = JSON.parse($('#hiddeninfo').text()); //retrieve data from handlebars render
             //recent
             for(let item of reviewDisplayInfo){ //append all shows to showList ul elemen
-                let li = `<a href="/reviews/${item.reviewId}" target="_blank"><button class="list-group-item list-group-item-action" type="button" "><medium>${item.reviewTitle}</medium> <br><small class="font-italic">${item.movieTitle}</small><br> <small>${item.reviewerName}</small> </button></a>`;                    
+                let li = `<li> <a class="list-group-item list-group-item-action" href="/reviews/${item.reviewId}" target="_blank"> <span class="medium">${item.reviewTitle}</span> <br><span class="font-italic small">${item.movieTitle}</span></br> <span class="small">${item.reviewerName}</span></div></li>`;                    
                 $('#reviewListRecent').append(li);
             }
             //popular
             let reviewDisplayListPopular = reviewDisplayInfo;
             reviewDisplayListPopular.sort((a, b) => { return b.counter - a.counter; });
             for(let item of reviewDisplayListPopular){ //append all shows to showList ul elemen
-                let li = `<a href="/reviews/${item.reviewId}" target="_blank"><button class="list-group-item list-group-item-action" type="button" "><medium>${item.reviewTitle}</medium> <br><small class="font-italic">${item.movieTitle}</small><br> <small>${item.reviewerName}</small> </button></a>`;                    
+                let li = `<li> <a class="list-group-item list-group-item-action" href="/reviews/${item.reviewId}" target="_blank"> <span class="medium">${item.reviewTitle}</span> <br><span class="font-italic small">${item.movieTitle}</span></br> <span class="small">${item.reviewerName}</span></div></li>`;                    
                 $('#reviewListPopular').append(li);
             }
             //alphabetical
             let reviewDisplayListAlphabetical = reviewDisplayInfo;
             reviewDisplayListAlphabetical.sort((a, b) => a.reviewTitle.localeCompare(b.reviewTitle)); //sort reviews alphabetically
             for(let item of reviewDisplayListAlphabetical){ //append all shows to showList ul elemen
-                let li = `<a href="/reviews/${item.reviewId}" target="_blank"><button class="list-group-item list-group-item-action" type="button" "><medium>${item.reviewTitle}</medium> <br><small class="font-italic">${item.movieTitle}</small><br> <small>${item.reviewerName}</small> </button></a>`;                    
+                let li = `<li> <a class="list-group-item list-group-item-action" href="/reviews/${item.reviewId}" target="_blank"> <span class="medium">${item.reviewTitle}</span> <br><span class="font-italic small">${item.movieTitle}</span></br> <span class="small">${item.reviewerName}</span></div></li>`;                    
                 $('#reviewListAlphabetical').append(li);
             }
             $('#reviewListRecent').show();
