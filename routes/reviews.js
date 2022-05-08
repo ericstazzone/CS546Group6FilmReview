@@ -62,6 +62,18 @@ router
                 if (!review) {throw 'no review'};
                 let tempUser = await userData.getUser(review.userId.toString());
                 if (!tempUser) {throw 'invalid review'};
+                // get the movie, director, actor list and movie release date
+                let movie = await movieData.getMovie(review.movieId.toString());
+                if (!movie) {throw 'invalid review'};
+
+                let movieDirector = movie.directorList;
+                if(!movieDirector){movieDirector=[];} else{movieDirector = movieDirector.map(elem => elem.name);}
+
+                let actorList = movie.starList;
+                if(!actorList){actorList=[];} else{actorList = actorList.map(elem => elem.name);}
+                
+                let movieReleaseDate = movie.releaseDate;
+                if(!movieReleaseDate){movieReleaseDate="N/A";}
 
                 if (review) {
                     review._id = review._id || 'N/A';
@@ -74,8 +86,12 @@ router
                     review.userId = review.userId || 'N/A';
                     review.counter = review.counter.toString() || 'N/A';
                     // if there are no comments we don't really care
+                    movieDirector = movieDirector || 'N/A';
+                    actorList = actorList || 'N/A';
+                    movieReleaseDate = movieReleaseDate || 'N/A';
                 }
                 // use the function updateReviewCounter(reviewId) in the reviewData.js file to increment the counter for the review
+                console.log("4");
                 try{
                     await reviewData.updateReviewCounter(id);
                 } catch(e){
@@ -86,6 +102,7 @@ router
                 if(req.session.user){
                     isLoggedIn = true
                 }
+                console.log("5");
                 //render handlebars file in views/layouts/reviews.handlebars
                 res.render('partials/review', {
                     _id: review._id,
@@ -98,7 +115,10 @@ router
                     counter: review.counter,
                     comments: review.comments,
                     isLoggedIn: isLoggedIn,
-                    user: req.session.user
+                    user: req.session.user, 
+                    director: movieDirector,
+                    actorList: actorList,
+                    movieReleaseDate: movieReleaseDate
                 });
             } catch (e) {
                 return res.status(500).json({error: e});
