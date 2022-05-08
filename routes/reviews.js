@@ -91,7 +91,6 @@ router
                     movieReleaseDate = movieReleaseDate || 'N/A';
                 }
                 // use the function updateReviewCounter(reviewId) in the reviewData.js file to increment the counter for the review
-                console.log("4");
                 try{
                     await reviewData.updateReviewCounter(id);
                 } catch(e){
@@ -102,7 +101,6 @@ router
                 if(req.session.user){
                     isLoggedIn = true
                 }
-                console.log("5");
                 //render handlebars file in views/layouts/reviews.handlebars
                 res.render('partials/review', {
                     _id: review._id,
