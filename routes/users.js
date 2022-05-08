@@ -169,6 +169,13 @@ router.post('/publish', async (req, res) => {
             response.errors['movieId'] = e;
         }
     }
+    if ('rating' in req.body) {
+        try {
+            req.body.rating = validation.checkRating(xss(req.body.rating), 'rating');
+        } catch (e) {
+            response.errors['rating'] = e;
+        }
+    }
     if ('title' in req.body) {
         try {
             req.body.title = validation.checkString(xss(req.body.title), 'review title');

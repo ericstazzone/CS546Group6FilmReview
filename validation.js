@@ -99,8 +99,8 @@ function checkRating(rating){
     if (!rating) {throw 'Error: You must provide a valid rating';}
     if (rating.trim().length === 0){throw 'Error: You must provide a valid rating';}
     rating = Number(rating);
-    if(typeof rating !== 'number' || isNaN(rating)){throw 'Error: You must provide a valid rating';}
-    if(rating < 1 || rating > 10){throw 'Error: You must provide a rating';}
+    if (typeof rating !== 'number' || isNaN(rating)){throw 'Error: You must provide a valid rating';}
+    if (rating < 1 || rating > 10){throw 'Error: You must provide a valid rating';}
     return rating;
 }
 

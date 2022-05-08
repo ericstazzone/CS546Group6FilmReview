@@ -14,6 +14,20 @@ function styleReviewInput(label, input, errorDiv, errorMsg) {
     }
 }
 
+function checkString(string, parameter) {
+    if (!string || typeof string != 'string' || string.trim().length == 0) throw `Please enter your ${parameter}.`;
+    return string.trim();
+}
+
+function checkRating(rating){
+    if (!rating) {throw 'Error: You must provide a valid rating';}
+    if (rating.trim().length === 0){throw 'Error: You must provide a valid rating';}
+    rating = Number(rating);
+    if (typeof rating !== 'number' || isNaN(rating)){throw 'Error: You must provide a valid rating';}
+    if (rating < 1 || rating > 10){throw 'Error: You must provide a valid rating';}
+    return rating;
+}
+
 $(document).ready(function() {
     let publishForm = $('#publish-form');
     let validated = false;
@@ -38,6 +52,8 @@ $(document).ready(function() {
             try {
                 if (input.attr('name') === 'movieId') {
                     checkString(input.val(), 'movie');
+                } else if (input.attr('name') === 'rating') {
+                    checkRating(input.val(), 'rating');
                 } else if (input.attr('name') === 'title') {
                     checkString(input.val(), 'review title');
                 } else if (input.attr('name') === 'content') {
