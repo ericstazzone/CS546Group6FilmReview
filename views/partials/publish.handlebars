@@ -6,7 +6,7 @@
         <div class="col order-xs-2 order-3 order-sm-3 order-md-2">
             <div class="input-group">
                 <form method="POST" action="/reviews" id="searchForm">
-                    <label for="keyword"> Select Keyword</label>
+                    <label for="keyword">Select Keyword</label>
                     <select name="keyword" id="keyword">
                         <option value = "Title" >Title</option>
                         <option value = "Director" >Director</option>
@@ -23,11 +23,12 @@
             </div>
         </div>
         <div class="col-6 col-md-2 order-2 order-md-3 text-right">
-            <button type="button" class="btn btn-primary" data-toggle="dropdown">
+            <label for="user options dropdown"></label>
+            <button type="button" class="btn btn-primary" data-toggle="dropdown" id="user options dropdown">
                 <i class="fa fa-bars fa-lg"></i>
             </button>
             <div class="dropdown-menu dropdown-menu-right">
-                <a class="dropdown-item browseReviews" href="reviews">Browse</a>
+                <a class="dropdown-item" aria-label="Browse All Reviews" href="reviews">Browse</a>
                 {{#if user}}
                 <a class="dropdown-item" href="publish">Publish</a>
                 <a class="dropdown-item" href="settings">Settings</a>
