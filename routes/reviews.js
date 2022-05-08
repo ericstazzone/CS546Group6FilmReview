@@ -53,7 +53,7 @@ router
         try {
             id = validation.checkId(xss(id.toString()));
         } catch (e){
-            res.status(400).json({error: 'Invalid id'});
+            return res.status(400).json({error: 'Invalid id'});
         }
 
         if (id) {
@@ -76,8 +76,12 @@ router
                     // if there are no comments we don't really care
                 }
                 // use the function updateReviewCounter(reviewId) in the reviewData.js file to increment the counter for the review
-                await reviewData.updateReviewCounter(id);
-
+                try{
+                    await reviewData.updateReviewCounter(id);
+                } catch(e){
+                    return res.status(500).json({error: e});
+                }
+                
                 var isLoggedIn = false
                 if(req.session.user){
                     isLoggedIn = true
@@ -97,9 +101,9 @@ router
                     user: req.session.user
                 });
             } catch (e) {
-                res.status(500).json({error: e});
+                return res.status(500).json({error: e});
             }
         } else {
-            res.status(400).json({error: 'Invalid id'});
+            return res.status(400).json({error: 'Invalid id'});
         }
     });

@@ -24,7 +24,9 @@ async function addComment(reviewId, userId, commentContent){
     userId = validation.checkId(userId);
     
     var review = await reviews.getReviewById(reviewId);
+    if(!review){throw 'Could not get review';}
     var user = await users.getUser(userId);
+    if(!user){throw 'Could not get user';}
     
     let comment = {
         userId : userId,
