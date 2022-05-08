@@ -29,13 +29,31 @@ $(document).ready(function() {
     });
 
     function validateReview(field) {
-        let data = {};
-        if (field) {
-            data[field.input.attr('name')] = field.input.val();
-        } else {
-            for (const f of publishFields) {
-                data[f.input.attr('name')] = f.input.val();
+        // CLIENT-SIDE
+
+        let fields = field ? [field] : publishFields;
+        let validateFields = [];
+        for (const field of fields) {
+            let input = field.input;
+            try {
+                if (input.attr('name') === 'movieId') {
+                    checkString(input.val(), 'movie');
+                } else if (input.attr('name') === 'title') {
+                    checkString(input.val(), 'review title');
+                } else if (input.attr('name') === 'content') {
+                    checkString(input.val(), 'review body');
+                }
+                validateFields.push(field);
+            } catch (e) {
+                styleReviewInput(field.label, field.input, field.error, e);
             }
+        }
+
+        // AJAX
+
+        let data = {};
+        for (const f of validateFields) {
+            data[f.input.attr('name')] = f.input.val();
         }
     
         var requestConfig = {
@@ -46,23 +64,7 @@ $(document).ready(function() {
         };
     
         $.ajax(requestConfig).then(function(data) {
-            if (Object.keys(data.errors).length > 0) {
-                if (field) {
-                    if (field.input.attr('name') in data.errors) {
-                        styleReviewInput(field.label, field.input, field.error, data.errors[field.input.attr('name')]);
-                    } else {
-                        styleReviewInput(field.label, field.input, field.error);
-                    }
-                } else {
-                    for (const field of publishFields) {
-                        if (field.input.attr('name') in data.errors) {
-                            styleReviewInput(field.label, field.input, field.error, data.errors[field.input.attr('name')]);
-                        } else {
-                            styleReviewInput(field.label, field.input, field.error);
-                        }
-                    }
-                }
-            } else {
+            if ((Object.keys(data.errors).length === 0) && (Object.keys(validateFields).length === Object.keys(publishFields).length)) {
                 if (field) {
                     styleReviewInput(field.label, field.input, field.error);
                 } else {
@@ -71,8 +73,15 @@ $(document).ready(function() {
                     }
                 }
                 if ('reviewId' in data) {
-                    // TODO: Fix redirect!
                     window.location.replace(`reviews/${data.reviewId}`);
+                }
+            } else {
+                for (const field of validateFields) {
+                    if (field.input.attr('name') in data.errors) {
+                        styleReviewInput(field.label, field.input, field.error, data.errors[field.input.attr('name')]);
+                    } else {
+                        styleReviewInput(field.label, field.input, field.error);
+                    }
                 }
             }
         });

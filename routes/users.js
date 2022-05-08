@@ -16,12 +16,9 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/login', async (req, res) => {
-    // userData.updatePassword('6269786a8c3f8451f36f8d21', 'mypassword')
     if (req.session.user) {
         res.redirect('/home');
     } else {
-        // NOTE: Old query string method
-        // if (req.query.success) {
         if (successFlag) {
             successFlag = false;
             res.render('partials/login', {success: true});
@@ -59,11 +56,13 @@ router.post('/login', async (req, res) => {
 router.post('/signup', async (req, res) => {
     try {
         req.body.username = validation.checkUsername(req.body.username);
+        if (await userData.getUserByUsername(req.body.username)) throw 'Username is taken.';
         req.body.password = validation.checkPassword(req.body.password);
         req.body.confirmPassword = await userData.confirmPassword(req.body.password, req.body.confirmPassword, false);
         req.body.firstName = validation.checkString(req.body.firstName, 'first name');
         req.body.lastName = validation.checkString(req.body.lastName, 'last name');
         req.body.email = validation.checkEmail(req.body.email);
+        if (await userData.getUserByEmail(req.body.email)) throw 'Email is in use.';
 
         const user = await userData.createUser(req.body.firstName, req.body.lastName, req.body.username, req.body.password, req.body.email);
         if (user.userInserted) {
@@ -71,11 +70,9 @@ router.post('/signup', async (req, res) => {
             successFlag = true;
             res.status(200).redirect('/login');
         } else {
-            // TODO
             res.status(500).render('partials/login', {error: 'Internal Server Error'});
         }
     } catch (e) {
-        // TODO
         res.status(400).render('partials/signup', {error: e});
     }
 });
@@ -93,7 +90,9 @@ router.get('/logout', async (req, res) => {
 router.post('/loginValidation', async (req, res) => {
     let response = {};
     try {
-        // TODO: Account for internal server error
+        req.body.username = validation.checkUsername(req.body.username);
+        req.body.password = validation.checkPassword(req.body.password);
+
         const user = await userData.checkUser(req.body.username, req.body.password);
     } catch (e) {
         response['error'] = 'Either the username or password is invalid.';
@@ -120,6 +119,7 @@ router.post('/signupValidation', async (req, res) => {
     }
     if ('confirmPassword' in req.body) {
         try {
+            req.body.confirmPassword = validation.checkPassword(req.body.confirmPassword);
             req.body.confirmPassword = await userData.confirmPassword(req.body.password, req.body.confirmPassword, false);
         } catch (e) {
             response['confirmPassword'.concat('Error')] = e;
@@ -191,11 +191,9 @@ router.post('/publish', async (req, res) => {
                 response.reviewId = review.id;
                 res.json(response);
             } else {
-                // TODO: Complete
                 res.json({error: 'Internal Server Error'});
             }
         } catch (e) {
-            // TODO: Complete
             res.json({error: e});
         }
     }
@@ -207,8 +205,7 @@ router.get('/settings', async (req, res) => {
             const user = await userData.getUser(req.session.user)
             res.render('partials/settings', {user: user});
         } catch (e) {
-            // TODO: Implement non-JSON response
-            res.json({error: "Something went wrong..."});
+            res.redirect('/login');
         }
     } else {
         res.redirect('/login');
@@ -231,6 +228,7 @@ router.post('/settings', async (req, res) => {
             response.error = e;
         }
         try {
+            req.body.confirmPassword = validation.checkPassword(req.body.confirmPassword);
             req.body.confirmPassword = await userData.confirmPassword(req.body.password, req.body.confirmPassword, false);
         } catch (e) {
             response.secondaryError = e;
@@ -271,18 +269,10 @@ router.post('/settings', async (req, res) => {
                 userData.updateEmail(req.session.user, req.body.email);
             } 
             res.json(response);
-            // res.redirect('/settings');
         } catch (e) {
-            // TODO: Render this properly
             res.json({error: e});
         }
     }
 });
-
-// ALL ROUTES PREPENDED WITH "test" ARE EXCLUSIVELY FOR TESTING PURPOSES AND WILL BE REMOVED!
-
-
-
-
 
 module.exports = router;

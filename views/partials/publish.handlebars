@@ -44,6 +44,9 @@
     <div class="row raise add-to-top">
         <div id="publish" class="container publish-container">
             <h2>Publish Review</h2>
+            {{#if error}}
+            <div id="publish-alert" class="alert alert-danger add-to-top-greater" role="alert">{{error}}</div>
+            {{/if}}
             <form id="publish-form" class="needs-validation" method="POST" action="/publish" novalidate>
                 <div class="form-group publish-group">
                     <label for="movie-search">Movie</label>

@@ -21,15 +21,15 @@ router.post('/', async (req, res) => {
         req.body.searchbar = validation.checkSearchTerm(req.body.searchbar,req.body.keyword);
         req.body.searchbar = (!req.body.searchbar ? '' : req.body.searchbar.toLowerCase());
     } catch (e){
-
         return res.status(400).render('partials/reviews', {user: req.session.user, reviewDisplayInfo:reviewList, error:e}); 
     }
+
     try{
         reviewList = await reviewData.getAllReviewDisplayInfo(req.body.keyword, req.body.searchbar); //attempt to retrieve all review titles and thier corresponding movie titles from the database
     }catch(e){
         return res.status(500).json({error:e});
     }
-    //return res.status(200).json({success: true, reviewDisplayInfo: reviewList});
+
     reviewList = reviewList.map(elem => JSON.stringify(elem))
     return res.status(200).render('partials/reviews', {user: req.session.user, reviewDisplayInfo:reviewList});
 });
@@ -54,17 +54,14 @@ router
         } catch (e){
             res.status(400).json({error: 'Invalid id'});
         }
+
         if (id) {
             try {
                 const review = await reviewData.getReviewById(id);
                 if (!review) {throw 'no review'};
-                let tempMovie = await movieData.getMovie(review.movieId);
                 let tempUser = await userData.getUser(review.userId.toString());
-                if (!tempMovie || !tempUser) {throw 'invalid review'};
-                console.log(tempUser.username);
-                console.log(tempMovie.fullTitle);
+                if (!tempUser) {throw 'invalid review'};
 
-                // let tempUser = await userData.getUser(review.userId);
                 if (review) {
                     review._id = review._id || 'N/A';
                     review.title = review.title || 'N/A';
@@ -72,6 +69,7 @@ router
                     review.content = review.content || 'N/A';
                     review.rating = review.rating || 'N/A';
                     review.movieId = review.movieId || 'N/A';
+                    review.movieTitle = review.movieTitle || 'N/A';
                     review.userId = review.userId || 'N/A';
                     review.counter = review.counter.toString() || 'N/A';
                     // if there are no comments we don't really care
@@ -90,7 +88,7 @@ router
                     createdDate: review.createdDate,
                     content: review.content,
                     rating: review.rating,
-                    movieTitle: tempMovie.fullTitle,
+                    movieTitle: review.movieTitle,
                     reviewAuthor: tempUser.username,
                     counter: review.counter,
                     comments: review.comments,

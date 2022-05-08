@@ -78,7 +78,7 @@ async function main() {
     try {
         let temp1 = await users.getUserByUsername("jonnjonn");
         let tempb = await users.getUserByUsername("eapplesauce");
-        review1 = await reviews.createReview(temp1._id, movie1.id, "A Good Movie", "Good Job Steve", 5);
+        review1 = await reviews.createReview(temp1._id, movie1.id, "A Good Movie", "Good Job Steve", "5");
 
         let userIdString = temp1._id.toString();
         let reviewIdString = review1.id.toString();
@@ -94,14 +94,14 @@ async function main() {
     }
     try {
         let temp2 = await users.getUserByUsername("savsavsav");
-        review2 = await reviews.createReview(temp2._id, movie2.id, "Bad Can't Believe I Saw This", "Good Job Steve", 7);
+        review2 = await reviews.createReview(temp2._id, movie2.id, "Bad Can't Believe I Saw This", "Good Job Steve", "7");
     } catch(e) {
         console.log(e);
     }
     try {
         let temp3 = await users.getUserByUsername("KennsworthS");
         let tempb = await users.getUserByUsername("savsavsav");
-        review3 = await reviews.createReview(temp3._id, movie3.id, "Crazy Spectacle!", "Good Job Steve", 2);
+        review3 = await reviews.createReview(temp3._id, movie3.id, "Crazy Spectacle!", "Good Job Steve", "2");
 
         let userIdString = tempb._id.toString();
         let reviewIdString = review3.id.toString();
@@ -112,14 +112,14 @@ async function main() {
     }
     try {
         let temp4 = await users.getUserByUsername("Abcd1234");
-        review4 = await reviews.createReview(temp4._id, movie4.id, "Down Right Evil", "Good Job Steve", 10);
+        review4 = await reviews.createReview(temp4._id, movie4.id, "Down Right Evil", "Good Job Steve", "10");
     } catch(e) {
         console.log(e);
     }
     try {
         let temp5 = await users.getUserByUsername("eapplesauce");
         let tempb = await users.getUserByUsername("Abcd1234");
-        review5 = await reviews.createReview(temp5._id, movie5.id, "Everyone Loved It", "Good Job Steve", 4);
+        review5 = await reviews.createReview(temp5._id, movie5.id, "Everyone Loved It", "Good Job Steve", "4");
 
         let userIdString = temp5._id.toString();
         let reviewIdString = review5.id.toString();
@@ -135,13 +135,13 @@ async function main() {
     }
     try {
         let temp6 = await users.getUserByUsername("eapplesauce");
-        review6 = await reviews.createReview(temp6._id, movie3.id, "What A Show!", "Good Job Steve", 6);
+        review6 = await reviews.createReview(temp6._id, movie3.id, "What A Show!", "Good Job Steve", "6");
     } catch(e) {
         console.log(e);
     }
     try {
         let temp7 = await users.getUserByUsername("savsavsav");
-        review7 = await reviews.createReview(temp7._id, movie5.id, "Out of My Seat Crazy!", "Good Job Steve", 8);
+        review7 = await reviews.createReview(temp7._id, movie5.id, "Out of My Seat Crazy!", "Good Job Steve", "8");
     } catch(e) {
         console.log(e);
     }

@@ -23,6 +23,8 @@ async function getUserByUsername(username) {
 
     const userCollection = await users();
     const user = await userCollection.findOne({username: {$regex: new RegExp(`^${username}$`, 'i')}});
+    if (user) {user._id = user._id.toString();};
+    
     return user;
 }
 
@@ -31,6 +33,7 @@ async function getUserByEmail(email) {
 
     const userCollection = await users();
     const user = await userCollection.findOne({email: {$regex: new RegExp(`^${email}$`, 'i')}});
+    if (user) {user._id = user._id.toString();};
     return user;
 }
 
@@ -57,6 +60,7 @@ async function checkUser(username, password) {
 }
 
 async function confirmPassword(password1, password2, hash) {
+    password1 = validation.checkPassword(password1);
     password2 = validation.checkPassword(password2);
 
     if (hash) {

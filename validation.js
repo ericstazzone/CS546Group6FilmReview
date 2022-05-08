@@ -95,6 +95,23 @@ function checkSearchTerm(searchTerm,keyword){
     }   
 }
 
+function checkRating(rating){
+    if (!rating) {throw 'Error: You must provide a valid rating';}
+    if (rating.trim().length === 0){throw 'Error: You must provide a valid rating';}
+    rating = Number(rating);
+    if(typeof rating !== 'number' || isNaN(rating)){throw 'Error: You must provide a valid rating';}
+    if(rating < 1 || rating > 10){throw 'Error: You must provide a rating';}
+    return rating;
+}
+
+function validateMovieData(movieData){
+    if(!movieData){throw 'Error: Movie data was unable to be retrieved';}
+    if(!movieData.title){ movieData.title = "";}
+    if(!movieData.directorList){movieData.directorList = [];}
+    if(!movieData.starList){movieData.starList = [];}
+    if(!movieData.releaseDate){movieData.title = "";}
+}
+
 module.exports = {
     checkId,
     checkString,
@@ -102,5 +119,7 @@ module.exports = {
     checkPassword,
     checkEmail,
     checkKeyword,
-    checkSearchTerm
+    checkSearchTerm,
+    checkRating,
+    validateMovieData
 }
