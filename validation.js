@@ -110,6 +110,7 @@ function validateMovieData(movieData){
     if(!movieData.directorList){movieData.directorList = [];}
     if(!movieData.starList){movieData.starList = [];}
     if(!movieData.releaseDate){movieData.title = "";}
+    return movieData;
 }
 
 module.exports = {
