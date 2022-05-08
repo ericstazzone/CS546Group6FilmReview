@@ -28,15 +28,15 @@
                 <i class="fa fa-bars fa-lg"></i>
             </button>
             <div class="dropdown-menu dropdown-menu-right">
-                <a class="dropdown-item browseReviews" href="reviews">Browse</a>
+                <a class="dropdown-item browseReviews" href="/reviews">Browse</a>
                 {{#if user}}
-                <a class="dropdown-item" href="publish">Publish</a>
-                <a class="dropdown-item" href="settings">Settings</a>
+                <a class="dropdown-item" href="/publish">Publish</a>
+                <a class="dropdown-item" href="/settings">Settings</a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="logout">Sign Out</a>
+                <a class="dropdown-item" href="/logout">Sign Out</a>
                 {{else}}
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="login">Sign In</a>
+                <a class="dropdown-item" href="/login">Sign In</a>
                 {{/if}}
             </div>
         </div>
