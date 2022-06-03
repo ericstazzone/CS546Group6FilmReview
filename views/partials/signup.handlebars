@@ -1,16 +1,14 @@
 <div class="container main-container">
     <div class="row raise">
         <div class="col-12">
-            <h1><a class="text-reset text-decoration-none" href="/home">Film Reviews</a></h1>
+            <h1><a class="text-reset text-decoration-none" href="/home">Demo</a></h1>
         </div>
     </div>
     <div class="row raise">
         <div class="col-12">
             <div id="signup" class="container login-container show-border">
                 <h2>Sign Up</h2>
-                {{#if error}}
-                <div id="signup-alert" class="alert alert-danger add-to-top-greater" role="alert">{{error}}</div>
-                {{/if}}
+                <div id="signup-alert" class="alert alert-danger add-to-top-greater" role="alert" hidden></div>
                 <form id="signup-form" class="needs-validation" method="POST" action="/signup" novalidate>
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-6 align-self-start form-group signup-group">

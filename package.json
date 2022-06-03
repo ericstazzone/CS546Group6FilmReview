@@ -1,28 +1,19 @@
 {
-  "name": "cs546group6filmreview",
+  "name": "user-authentication",
   "version": "1.0.0",
-  "description": "Introduction\r For our project, we propose a platform for film self-reviews. Users will be required to create accounts in order to upload reviews. When uploading reviews, users will be presented with a form with numerous fields to fill out, including film title, rating, and review body. Film title is to be matched with entries pulled from a third-party API. Users can browse reviews via the central catalog page and sort by such categories as title and reviewer. Users can also view pages dedicated to individual reviews.",
+  "description": "Demo of the user authentication system I developed for personal use.",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
     "seed": "node tasks/seed.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ericstazzone/CS546Group6FilmReview.git"
-  },
-  "author": "",
+  "author": "Patrick Juliano",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/ericstazzone/CS546Group6FilmReview/issues"
-  },
-  "homepage": "https://github.com/ericstazzone/CS546Group6FilmReview#readme",
   "dependencies": {
     "axios": "^0.26.1",
     "bcrypt": "^5.0.1",
     "bootstrap-icons": "^1.8.1",
     "bootstrap-select": "^1.13.18",
-    "dotenv": "^16.0.0",
     "email-validator": "^2.0.4",
     "express": "^4.18.0",
     "express-handlebars": "^6.0.5",
@@ -31,7 +22,6 @@
     "install": "^0.13.0",
     "jquery-ui-dist": "^1.13.1",
     "mongodb": "^4.4.1",
-    "tota11y": "^0.1.6",
     "xss": "^1.0.11"
   }
 }
