@@ -1,9 +1,11 @@
+const axios = require('axios');
 const bcrypt = require('bcrypt');
-const saltRounds = 10;
+const saltRounds = 16;
 const mongoCollections = require('../config/mongoCollections');
 const users = mongoCollections.users;
 const { ObjectId } = require('mongodb');
 const validation = require('../validation');
+const { endpoint, apiKey } = require('../config');
 
 async function getUser(id) {
     id = validation.checkId(id);
@@ -76,9 +78,9 @@ async function createUser(firstName, lastName, username, password, email) {
     username = validation.checkUsername(username);
     password = validation.checkPassword(password);
     email = validation.checkEmail(email);
+    // TODO: Verify that email is of the proper format and has not been registered
 
     if (await getUserByUsername(username)) throw 'Error: username is taken';
-    if (await getUserByEmail(email)) throw 'Error: email is in use';
 
     const hash = await bcrypt.hash(password, saltRounds);
     const userCollection = await users();
@@ -87,7 +89,9 @@ async function createUser(firstName, lastName, username, password, email) {
         lastName: lastName,
         username: username,
         password: hash,
-        email: email
+        email: email,
+        reviews: [],
+        moviesReviewed: []
     };
 
     const insertInfo = await userCollection.insertOne(newUser);
@@ -113,9 +117,7 @@ async function updateUsername(id, username) {
     id = validation.checkId(id);
     username = validation.checkUsername(username);
 
-    let user = await this.getUser(id);
-    const currentUsername = user.username;
-    if ((username.toLowerCase() !== currentUsername.toLowerCase()) && (await getUserByUsername(username))) throw 'Username is taken.';
+    if (await getUserByUsername(username)) throw 'Username is taken.';
 
     const userCollection = await users();
     const updateInfo = await userCollection.updateOne(
@@ -124,7 +126,7 @@ async function updateUsername(id, username) {
     );
     if (!updateInfo.matchedCount && !updateInfo.modifiedCount) throw 'Could not update username.';
 
-    user = await this.getUser(id);
+    const user = await this.getUser(id);
     return user;
 }
 
@@ -148,9 +150,7 @@ async function updateEmail(id, email) {
     id = validation.checkId(id);
     email = validation.checkEmail(email);
 
-    let user = await this.getUser(id);
-    const currentEmail = user.email;
-    if ((email.toLowerCase() !== currentEmail.toLowerCase()) && (await getUserByEmail(email))) throw 'Email is in use.';
+    if (await getUserByEmail(email)) throw 'Email is in use.';
 
     const userCollection = await users();
     const updateInfo = await userCollection.updateOne(
@@ -159,7 +159,7 @@ async function updateEmail(id, email) {
     );
     if (!updateInfo.matchedCount && !updateInfo.modifiedCount) throw 'Could not update email.';
 
-    user = await this.getUser(id);
+    const user = await this.getUser(id);
     return user;
 }
 

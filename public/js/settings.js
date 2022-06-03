@@ -14,7 +14,6 @@ function styleInput(label, input, errorDiv, errorMsg) {
 }
 
 function checkString(string, parameter) {
-    // Check if string is valid and nonempty
     if (!string || typeof string != 'string' || string.trim().length == 0) throw `Please enter your ${parameter}.`;
     return string.trim();
 }
@@ -86,11 +85,11 @@ $(document).ready(function() {
         let current = input.val();
         let validated = false;
 
-        // Remove all other fields
+        // Hide all other fields
         $('.form-group').each(function() {
             if (!$(this).is(group)) {
-                if ((input.attr('name') === 'password') && $(this).is(confirmPasswordGroup)) return;
-                $(this).remove();
+                $(this).hide();
+                $(this).find('input').prop('disabled', true);
             }
         });
 
@@ -123,20 +122,16 @@ $(document).ready(function() {
                 } else if (input.attr('name') === 'username') {
                     checkUsername(input.val());
                 } else if (input.attr('name') === 'password') {
-                    let passwordErrors = 0;
                     try {
                         checkPassword(passwordInput.val());
                     } catch (e) {
-                        passwordErrors++;
                         styleInput(passwordLabel, passwordInput, passwordErrorDiv, e);
                     }
                     try {
                         confirmPassword(passwordInput.val(), confirmPasswordInput.val());
                     } catch (e) {
-                        passwordErrors++;
                         styleInput(confirmPasswordLabel, confirmPasswordInput, confirmPasswordErrorDiv, e);
                     }
-                    cancelValidation = (passwordErrors === 2);
                 }
             } catch (e) {
                 styleInput(label, input, errorDiv, e);
@@ -146,7 +141,7 @@ $(document).ready(function() {
             // AJAX
 
             if (!cancelValidation) {
-                if ((input.attr('name') !== 'password') && (input.val() === current)) {
+                if ((input.attr('name') !== 'password') && (input.val().toLowerCase() === current.toLowerCase())) {
                     styleInput(label, input, errorDiv);
                 } else {
                     let data = {
@@ -161,17 +156,17 @@ $(document).ready(function() {
                         contentType: 'application/json',
                         data: JSON.stringify(data)
                     };
-                    
+        
                     $.ajax(requestConfig).then(function(data) {
-                        if (('error' in data) || ('secondaryError' in data)) {
+                        if (Object.keys(data).length > 0) {
                             data.error ? styleInput(label, input, errorDiv, data.error) : styleInput(label, input, errorDiv);
                             data.secondaryError ? styleInput(confirmPasswordLabel, confirmPasswordInput, confirmPasswordErrorDiv, data.secondaryError) : styleInput(confirmPasswordLabel, confirmPasswordInput, confirmPasswordErrorDiv);
                         } else {
                             if (stopSubmission) {
                                 styleInput(label, input, errorDiv);
                                 styleInput(confirmPasswordLabel, confirmPasswordInput, confirmPasswordErrorDiv);
-                            } else if ('url' in data) {
-                                window.location.replace(data.url);
+                            } else {
+                                window.location.replace('settings');
                             }
                         }
                     });
@@ -195,8 +190,8 @@ $(document).ready(function() {
         settingsForm.submit(function(event) {
             event.preventDefault();
 
-            if ((input.attr('name') !== 'password') && (input.val() === current)) {
-                window.location.replace('/settings');
+            if ((input.attr('name') !== 'password') && (input.val().toLowerCase() === current.toLowerCase())) {
+                window.location.replace('settings');
             } else {
                 validated = true;
                 validate(false);

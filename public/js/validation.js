@@ -42,8 +42,18 @@ function toggleForm(form) {
     });
 }
 
+function validateForm() {
+    let string = document.forms["commentForm"]["comment"].value;
+
+    //console.log("String is: "+string)
+
+    if (!string || typeof string != 'string' || string.trim().length == 0){
+        alert("Invalid Comment String");
+        return false;
+    }
+}
+
 function checkString(string, parameter) {
-    // Check if string is valid and nonempty
     if (!string || typeof string != 'string' || string.trim().length == 0) throw `Please enter your ${parameter}.`;
     return string.trim();
 }
@@ -94,6 +104,19 @@ function checkUserLogin(username, password) {
 $(document).ready(function() {
     let loginForm = $('#login-form');
     let loginAlert = $('#login-alert');
+    let loginSuccess = false;
+    // loginForm.submit(function(event) {
+    //     event.preventDefault();
+    //     event.stopPropagation();
+    //     toggleForm(loginForm);
+
+
+    //     if (!loginForm[0].checkValidity()) {
+    //         event.preventDefault();
+    //         event.stopPropagation();
+    //     }
+    //     loginForm.addClass('was-validated');
+    // });
 
     let loginFields = [];
     $('.login-group').each(function(index) {
@@ -119,61 +142,63 @@ $(document).ready(function() {
     });
 
     loginForm.submit(function(event) {
-        event.preventDefault();
-        event.stopPropagation();
+        if (!loginSuccess) {
+            event.preventDefault();
+            event.stopPropagation();
 
-        let cancelValidation = false;
-        $('.login-group').each(function(index) {
-            let input = loginFields[index].input;
-            let label = loginFields[index].label;
+            let cancelValidation = false;
+            $('.login-group').each(function(index) {
+                let input = loginFields[index].input;
+                let label = loginFields[index].label;
 
-            if (input.val().trim().length === 0) {
-                label.addClass('text-danger');
-                input.addClass('is-invalid');
-                loginForm.addClass('validated');
-                cancelValidation = true;
-            } else {
-                label.removeClass('text-danger');
-                input.removeClass('is-invalid');
-            }
-        });
-        if (!cancelValidation) {
-            loginAlert.attr('hidden', true);
-            let errors = checkUserLogin($('#login-username').val(), $('#login-password').val());
-            if (Object.keys(errors).length > 0) {
-                toggleAlert(loginAlert, false, 'Either the username or password is invalid.');
-                cancelValidation = true;
-            }
-        }
-
-        if (!cancelValidation) {
-            toggleForm(loginForm);
-
-            var requestConfig = {
-                method: 'POST',
-                url: '/login',
-                contentType: 'application/json',
-                data: JSON.stringify({
-                    username: $('#login-username').val(),
-                    password: $('#login-password').val()
-                })
-            };
-
-            $.ajax(requestConfig).then(function(data) {
-                if ('error' in data) {
-                    toggleAlert(loginAlert, false, data.error);
+                if (input.val().trim().length === 0) {
+                    label.addClass('text-danger');
+                    input.addClass('is-invalid');
+                    loginAlert.attr('hidden', true);
                     loginForm.addClass('validated');
-                    toggleForm(loginForm);
-                } else if ('url' in data) {
-                    // toggleAlert(loginAlert, true, 'You have been signed in!');
-                    window.location.replace(data.url);
+                    cancelValidation = true;
+                } else {
+                    label.removeClass('text-danger');
+                    input.removeClass('is-invalid');
                 }
             });
+            if (!cancelValidation) {
+                let errors = checkUserLogin($('#login-username').val(), $('#login-password').val());
+                if (Object.keys(errors).length > 0) {
+                    toggleAlert(loginAlert, false, 'Either the username or password is invalid.');
+                    cancelValidation = true;
+                }
+            }
+
+            if (!cancelValidation) {
+                toggleForm(loginForm);
+
+                var requestConfig = {
+                    method: 'POST',
+                    url: '/loginValidation',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        username: $('#login-username').val(),
+                        password: $('#login-password').val()
+                    })
+                };
+
+                $.ajax(requestConfig).then(function(data) {
+                    if (!('error' in data)) {
+                        loginSuccess = true;
+                        toggleAlert(loginAlert, true, 'You have been signed in!');
+                        loginForm.submit();
+                    } else {
+                        toggleForm(loginForm);
+                        toggleAlert(loginAlert, false, data.error);
+                        loginForm.addClass('validated');
+                    }
+                });
+            }
         }
     });
     
     let signupForm = $('#signup-form');
-    let signupAlert = $('#signup-alert');
     let signupFields = [];
     $('.signup-group').each(function(index) {
         signupFields.push({
@@ -187,7 +212,6 @@ $(document).ready(function() {
             if (signupForm.hasClass('validated')) {
                 // CLIENT-SIDE
 
-                let validateFields = [];
                 let cancelValidation = false;
                 try {
                     if (input.attr('name') === 'firstName') {
@@ -198,40 +222,40 @@ $(document).ready(function() {
                         checkString(input.val(), 'email');
                     } else if (input.attr('name') === 'username') {
                         checkUsername(input.val());
+                    } else if (input.attr('name') === 'password') {
+                        checkPassword(input.val());
+                    } else if (input.attr('name') === 'confirmPassword') {
+                        confirmPassword($('#signup-password').val(), input.val());
                     }
-                    validateFields.push(signupFields[index]);
                 } catch (e) {
                     styleInputSignUp(signupFields[index], e);
-                }
-                if ((input.attr('name') === 'password') || (input.attr('name') === 'confirmPassword')) {
-                    validateFields.push(signupFields[signupFields.length - 2]);
-                    validateFields.push(signupFields[signupFields.length - 1]);
-                }
-                if (validateFields.length === 0) cancelValidation = true;
-                
+                    cancelValidation = true;
+                }                
+
                 // AJAX
 
                 if (!cancelValidation) {
-                    signupAlert.attr('hidden', true);
-                    let data = {};
-                    for (const field of validateFields) {
-                        data[field.input.attr('name')] = field.input.val();
-                    }
-
+                    let data = {
+                        [input.attr('name')]: input.val()
+                    };
+                    // Pass through both password fields whenever one is updated
                     if (input.attr('name') === 'password') {
                         data['confirmPassword'] = $('#confirm-password').val();
+                    } else if (input.attr('name') === 'confirmPassword') {
+                        data['password'] = $('#signup-password').val();
                     }
     
                     var requestConfig = {
                         method: 'POST',
-                        url: '/signup',
+                        url: '/signupValidation',
                         contentType: 'application/json',
                         data: JSON.stringify(data)
                     };
                     
-                    $.ajax(requestConfig).then(function(data) {
-                        for (const field of validateFields) {
-                            styleInputSignUp(field, data.error[field.input.attr('name')]);
+                    $.ajax(requestConfig).then(function(data) {      
+                        styleInputSignUp(signupFields[index], data[input.attr('name').concat('Error')]);
+                        if (input.attr('name') === 'password') {
+                            styleInputSignUp(signupFields.find(field => field.input.attr('name') === 'confirmPassword'), data['confirmPasswordError']);
                         }
                     });
                 }
@@ -239,64 +263,62 @@ $(document).ready(function() {
         }));
     });
 
+    let signupSuccess = false;
     signupForm.submit(function(event) {
-        event.preventDefault();
-        event.stopPropagation();
+        if (!signupSuccess) {
+            event.preventDefault();
+            event.stopPropagation();
 
-        // CLIENT-SIDE
+            // CLIENT-SIDE
 
-        let validateFields = [];
-        for (const field of signupFields) {
-            let input = field.input;
-            try {
-                if (input.attr('name') === 'firstName') {
-                    checkString(input.val(), 'first name');
-                } else if (input.attr('name') === 'lastName') {
-                    checkString(input.val(), 'last name');
-                } else if (input.attr('name') === 'email') {
-                    checkString(input.val(), 'email');
-                } else if (input.attr('name') === 'username') {
-                    checkUsername(input.val());
-                } else if (input.attr('name') === 'password') {
-                    checkPassword(input.val());
-                } else if (input.attr('name') === 'confirmPassword') {
-                    confirmPassword($('#signup-password').val(), input.val());
+            let validateFields = [];
+            for (const field of signupFields) {
+                let input = field.input;
+                try {
+                    if (input.attr('name') === 'firstName') {
+                        checkString(input.val(), 'first name');
+                    } else if (input.attr('name') === 'lastName') {
+                        checkString(input.val(), 'last name');
+                    } else if (input.attr('name') === 'email') {
+                        checkString(input.val(), 'email');
+                    } else if (input.attr('name') === 'username') {
+                        checkUsername(input.val());
+                    } else if (input.attr('name') === 'password') {
+                        checkPassword(input.val());
+                    } else if (input.attr('name') === 'confirmPassword') {
+                        confirmPassword($('#signup-password').val(), input.val());
+                    }
+                    validateFields.push(field);
+                } catch (e) {
+                    styleInputSignUp(field, e);
                 }
-                validateFields.push(field);
-            } catch (e) {
-                styleInputSignUp(field, e);
             }
-        }
 
-        // AJAX
+            // AJAX
 
-        toggleForm(signupForm);
+            let data = {};
+            for (const field of validateFields) {
+                data[field.input.attr('name')] = field.input.val();
+            }
 
-        signupAlert.attr('hidden', true);
-        let data = {};
-        for (const field of validateFields) {
-            data[field.input.attr('name')] = field.input.val();
-        }
-        if (Object.keys(validateFields).length === Object.keys(signupFields).length) data.submit = true;
+            var requestConfig = {
+                method: 'POST',
+                url: '/signupValidation',
+                contentType: 'application/json',
+                data: JSON.stringify(data)
+            };
 
-        var requestConfig = {
-            method: 'POST',
-            url: '/signup',
-            contentType: 'application/json',
-            data: JSON.stringify(data)
-        };
-
-        $.ajax(requestConfig).then(function(data) {
-            if ('url' in data) {
-                window.location.replace(data.url);
-            } else {
-                for (const field of validateFields) {
-                    styleInputSignUp(field, data.error[field.input.attr('name')]);
+            $.ajax(requestConfig).then(function(data) {
+                if ((Object.keys(data).length === 0) && (Object.keys(validateFields).length === Object.keys(signupFields).length)) {
+                    signupSuccess = true;
+                    signupForm.submit();
+                } else {
+                    for (const field of validateFields) {
+                        styleInputSignUp(field, data[field.input.attr('name').concat('Error')]);
+                    }
+                    signupForm.addClass('validated');
                 }
-                if ('other' in data.error) toggleAlert(signupAlert, false, data.error.other);
-                signupForm.addClass('validated');
-                toggleForm(signupForm);
-            }
-        });
+            });
+        }
     });
 });

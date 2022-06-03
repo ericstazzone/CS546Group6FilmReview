@@ -58,6 +58,10 @@ ul {
     box-sizing: content-box;
 }
 
+.test-class {
+    top: 0;
+}
+
 body {
     height: 100vh;
 }
@@ -94,4 +98,9 @@ body {
     to {
         -webkit-transform: translate(500px, 0);
     }
+}
+
+.list-group-item {
+    overflow: hidden;
+    text-overflow: ellipsis;
 }

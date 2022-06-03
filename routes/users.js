@@ -2,8 +2,13 @@ const express = require('express');
 const router = express.Router();
 const data = require('../data');
 const userData = data.users;
-const validation = require('../validation');
+const movieData = data.movies;
+const reviewData = data.reviews;
 const xss = require('xss');
+const validation = require('../validation');
+const {ObjectId} = require('mongodb');
+const { response } = require('express');
+const { updateUsername } = require('../data/users');
 
 let successFlag = false;
 
@@ -11,25 +16,16 @@ router.get('/', async (req, res) => {
     res.redirect('/home');
 });
 
-router.get('/home', async (req, res) => {    
-    if (req.session.user) {
-        try {
-            const user = await userData.getUser(req.session.user);
-            res.render('partials/home', {user: user});
-        } catch (e) {
-            res.redirect('/login'); // TODO
-        }
-    } else {
-        res.redirect('/login');
-    }
-});
-
 router.get('/login', async (req, res) => {
     if (req.session.user) {
         res.redirect('/home');
     } else {
-        res.render('partials/login', {success: successFlag});
-        successFlag = false;
+        if (successFlag) {
+            successFlag = false;
+            res.render('partials/login', {success: true});
+        } else {
+            res.render('partials/login');
+        }
     }
 });
 
@@ -42,7 +38,6 @@ router.get('/signup', async (req, res) => {
 });
 
 router.post('/login', async (req, res) => {
-    let response = {};
     try {
         req.body.username = validation.checkUsername(xss(req.body.username));
         req.body.password = validation.checkPassword(xss(req.body.password));
@@ -50,79 +45,42 @@ router.post('/login', async (req, res) => {
         const user = await userData.checkUser(xss(req.body.username), xss(req.body.password));
         if (user.id) {
             req.session.user = user.id;
-            response.url = '/home';
+            res.status(200).redirect('/home');
         } else {
-            response.error = 'Internal Server Error';
+            res.status(500).render('partials/login', {error: 'Internal Server Error', noRaise: true});
         }
     } catch (e) {
-        response.error = 'Either the username or password is invalid.';
+        res.status(400).render('partials/login', {error: e, noRaise: true});
     }
-    res.json(response);
 });
 
 router.post('/signup', async (req, res) => {
-    let response = {error: {}};
-    if ('username' in req.body) {
-        try {
-            req.body.username = validation.checkUsername(xss(req.body.username));
-            if (await userData.getUserByUsername(xss(req.body.username))) throw 'Username is taken.';
-        } catch (e) {
-            response.error.username = e;
-        }
-    }
-    if ('password' in req.body) {
-        try {
-            req.body.password = validation.checkPassword(xss(req.body.password));
-        } catch (e) {
-            response.error.password = e;
-        }
-    }
-    if ('confirmPassword' in req.body) {
-        try {
-            req.body.confirmPassword = validation.checkPassword(xss(req.body.confirmPassword));
-            req.body.confirmPassword = await userData.confirmPassword(xss(req.body.password), xss(req.body.confirmPassword), false);
-        } catch (e) {
-            response.error.confirmPassword = e;
-        }
-    }
-    if ('firstName' in req.body) {
-        try {
-            req.body.firstName = validation.checkString(xss(req.body.firstName), 'first name');
-        } catch (e) {
-            response.error.firstName = e;
-        }
-    }
-    if ('lastName' in req.body) {
-        try {
-            req.body.lastName = validation.checkString(xss(req.body.lastName), 'last name');
-        } catch (e) {
-            response.error.lastName = e;
-        }
-    }
-    if ('email' in req.body) {
-        try {
-            req.body.email = validation.checkEmail(xss(req.body.email));
-            if (await userData.getUserByEmail(xss(req.body.email))) throw 'Email is in use.';
-        } catch (e) {
-            response.error.email = e;
-        }
-    }
+    try {
+        req.body.username = validation.checkUsername(xss(req.body.username));
+        if (await userData.getUserByUsername(xss(req.body.username))) throw 'Username is taken.';
+        req.body.password = validation.checkPassword(xss(req.body.password));
+        req.body.confirmPassword = await userData.confirmPassword(xss(req.body.password), xss(req.body.confirmPassword), false);
+        req.body.firstName = validation.checkString(xss(req.body.firstName), 'first name');
+        req.body.lastName = validation.checkString(xss(req.body.lastName), 'last name');
+        req.body.email = validation.checkEmail(xss(req.body.email));
+        if (await userData.getUserByEmail(xss(req.body.email))) throw 'Email is in use.';
 
-    if ((Object.keys(response.error).length === 0) && ('submit' in req.body)) {
-        try {
-            const user = await userData.createUser(xss(req.body.firstName), xss(req.body.lastName), xss(req.body.username), xss(req.body.password), xss(req.body.email));
-            if (user.userInserted) {
-                successFlag = true;
-                response.url = '/login';
-            } else {
-                response.error.other = 'Internal Server Error';
-            }
-        } catch (e) {
-            response.error.other = e;
+        const user = await userData.createUser(xss(req.body.firstName), xss(req.body.lastName), xss(req.body.username), xss(req.body.password), xss(req.body.email));
+        if (user.userInserted) {
+            const success = encodeURIComponent(true);
+            successFlag = true;
+            res.status(200).redirect('/login');
+        } else {
+            res.status(500).render('partials/login', {error: 'Internal Server Error'});
         }
+    } catch (e) {
+        res.status(400).render('partials/signup', {error: e});
     }
+});
 
-    res.json(response);
+router.get('/home', async (req, res) => {
+    res.render('partials/home', {user: req.session.user});
+    
 });
 
 router.get('/logout', async (req, res) => {
@@ -130,13 +88,132 @@ router.get('/logout', async (req, res) => {
     res.redirect('/login');
 });
 
+router.post('/loginValidation', async (req, res) => {
+    let response = {};
+    try {
+        req.body.username = validation.checkUsername(xss(req.body.username));
+        req.body.password = validation.checkPassword(xss(req.body.password));
+
+        const user = await userData.checkUser(xss(req.body.username), xss(req.body.password));
+    } catch (e) {
+        response['error'] = 'Either the username or password is invalid.';
+    }
+    res.json(response);
+});
+
+router.post('/signupValidation', async (req, res) => {
+    let response = {};
+    if ('username' in req.body) {
+        try {
+            req.body.username = validation.checkUsername(xss(req.body.username));
+            if (await userData.getUserByUsername(xss(req.body.username))) throw 'Username is taken.';
+        } catch (e) {
+            response['username'.concat('Error')] = e;
+        }
+    }
+    if ('password' in req.body) {
+        try {
+            req.body.password = validation.checkPassword(xss(req.body.password));
+        } catch (e) {
+            response['password'.concat('Error')] = e;
+        }
+    }
+    if ('confirmPassword' in req.body) {
+        try {
+            req.body.confirmPassword = validation.checkPassword(xss(req.body.confirmPassword));
+            req.body.confirmPassword = await userData.confirmPassword(xss(req.body.password), xss(req.body.confirmPassword), false);
+        } catch (e) {
+            response['confirmPassword'.concat('Error')] = e;
+        }
+    }
+    if ('firstName' in req.body) {
+        try {
+            req.body.firstName = validation.checkString(xss(req.body.firstName), 'first name');
+        } catch (e) {
+            response['firstName'.concat('Error')] = e;
+        }
+    }
+    if ('lastName' in req.body) {
+        try {
+            req.body.lastName = validation.checkString(xss(req.body.lastName), 'last name');
+        } catch (e) {
+            response['lastName'.concat('Error')] = e;
+        }
+    }
+    if ('email' in req.body) {
+        try {
+            req.body.email = validation.checkEmail(xss(req.body.email));
+            if (await userData.getUserByEmail(xss(req.body.email))) throw 'Email is in use.';
+        } catch (e) {
+            response['email'.concat('Error')] = e;
+        }
+    }
+    res.json(response);
+});
+
+router.get('/publish', async (req, res) => {
+    if (req.session.user) {
+        res.render('partials/publish', {user: req.session.user});
+    } else {
+        res.redirect('/login');
+    }
+});
+
+router.post('/publish', async (req, res) => {
+    let response = {errors: {}};
+    if ('movieId' in req.body) {
+        try {
+            req.body.movieId = validation.checkString(xss(req.body.movieId), 'movie');
+            const movie = await movieData.getMovie(xss(req.body.movieId));
+        } catch (e) {
+            response.errors['movieId'] = e;
+        }
+    }
+    if ('rating' in req.body) {
+        try {
+            req.body.rating = validation.checkRating(xss(req.body.rating), 'rating');
+        } catch (e) {
+            response.errors['rating'] = e;
+        }
+    }
+    if ('title' in req.body) {
+        try {
+            req.body.title = validation.checkString(xss(req.body.title), 'review title');
+        } catch (e) {
+            response.errors['title'] = e;
+        }
+    }
+    if ('content' in req.body) {
+        try {
+            req.body.content = validation.checkString(xss(req.body.content), 'review body');
+        } catch (e) {
+            response.errors['content'] = e;
+        }
+    }
+    if ((Object.keys(req.body).length < 4) || (Object.keys(response.errors).length > 0)) {
+        res.json(response);
+    } else {
+        try {
+            const review = await reviewData.createReview(req.session.user, xss(req.body.movieId), xss(req.body.title), xss(req.body.content), xss(req.body.rating));
+            if (review.id) {
+                response.reviewId = review.id;
+                res.json(response);
+            } else {
+                res.json({error: 'Internal Server Error'});
+            }
+        } catch (e) {
+            res.json({error: e});
+        }
+    }
+});
+
 router.get('/settings', async (req, res) => {
     if (req.session.user) {
         try {
-            const user = await userData.getUser(req.session.user);
+            const user = await userData.getUser(req.session.user)
             res.render('partials/settings', {user: user});
         } catch (e) {
-            res.redirect('/login'); // TODO
+            res.redirect('/login');
         }
     } else {
         res.redirect('/login');
@@ -148,10 +225,7 @@ router.post('/settings', async (req, res) => {
     if ('username' in req.body) {
         try {
             req.body.username = validation.checkUsername(xss(req.body.username));
-            
-            const user = await userData.getUser(req.session.user);
-            const currentUsername = user.username;
-            if ((xss(req.body.username).toLowerCase() !== currentUsername.toLowerCase()) && (await userData.getUserByUsername(xss(req.body.username)))) throw 'Username is taken.';
+            if (await userData.getUserByUsername(xss(req.body.username))) throw 'Username is taken.';
         } catch (e) {
             response.error = e;
         }
@@ -182,16 +256,14 @@ router.post('/settings', async (req, res) => {
     } else if ('email' in req.body) {
         try {
             req.body.email = validation.checkEmail(xss(req.body.email));
-
-            const user = await userData.getUser(req.session.user);
-            const currentEmail = user.email;
-            if ((xss(req.body.email).toLowerCase() !== currentEmail.toLowerCase()) && (await userData.getUserByEmail(xss(req.body.email)))) throw 'Email is in use.';
+            if (await userData.getUserByEmail(xss(req.body.email))) throw 'Email is in use.';
         } catch (e) {
             response.error = e;
         }
     }
-    
-    if ((Object.keys(response).length === 0) && !req.body.stopSubmission) {
+    if ((Object.keys(response).length > 0) || req.body.stopSubmission === true) {
+        res.json(response);
+    } else {
         try {
             if ('username' in req.body) {
                 userData.updateUsername(req.session.user, xss(req.body.username));
@@ -203,14 +275,12 @@ router.post('/settings', async (req, res) => {
                 userData.updateLastName(req.session.user, xss(req.body.lastName));
             } else if ('email' in req.body) {
                 userData.updateEmail(req.session.user, xss(req.body.email));
-            }
-            response.url = '/settings';
+            } 
+            res.json(response);
         } catch (e) {
-            response.error = e;
+            res.json({error: e});
         }
     }
-
-    res.json(response);
 });
 
 module.exports = router;

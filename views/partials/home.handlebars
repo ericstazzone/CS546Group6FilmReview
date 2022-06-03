@@ -1,21 +1,65 @@
 <div class="container home-container">
     <div class="row raise">
-        <div class="col">
-            <h1><a class="text-reset text-decoration-none" href="/home">Welcome, {{user.username}}!</a></h1>
+        <div class="col-6 col-md-4 order-md-1 site-header">
+            <h1><a class="text-reset text-decoration-none" href="/home">Film Reviews</a></h1>
+        </div>
+        <div class="col order-xs-2 order-3 order-sm-3 order-md-2">
+            <div class="input-group">
+                <form method="POST" action="/reviews" id="searchForm">
+                    <label for="keyword"> Select Keyword</label>
+                    <select name="keyword" id="keyword">
+                        <option value = "Title" >Title</option>
+                        <option value = "Director" >Director</option>
+                        <option value = "Actor">Actor</option>
+                        <option value = "Release Date">Release Date</option>
+                        <option value = "Reviewer">Reviewer</option>
+                    </select>
+                    <br></br>
+                    <label for="searchbar">Search</label>
+                    <input type="search" placeholder="Search" name="searchbar" id="searchbar"/>
+                    <button class="btn btn-primary" type="submit">Submit</button>
+                </form>
+                <p class="searchErrorMessage">{{{error}}}</p>
+            </div>
+        </div>
+        <div class="col-6 col-md-2 order-2 order-md-3 text-right">
+            <label for="userOptionsDropdown"></label>
+            <button type="button" class="btn btn-primary" data-toggle="dropdown" id="userOptionsDropdown">
+                <i class="fa fa-bars fa-lg"></i>
+            </button>
+            <div class="dropdown-menu dropdown-menu-right">
+                <a class="dropdown-item browseReviews"  aria-label="Browse All Reviews" href="/reviews">Browse</a>
+                {{#if user}}
+                <a class="dropdown-item" aria-label="Publish a Reviews" href="/publish">Publish</a>
+                <a class="dropdown-item" aria-label="Access your settings" href="/settings">Settings</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" aria-label="Sign out of your account" href="/logout">Sign Out</a>
+                {{else}}
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" aria-label="Sign in into your account" title="Sign In Page" href="/login">Sign In</a>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+    <div class="row raise add-to-top">
+        <div class="col-12 align-self-start">
+            <h2 class="category-header">About</h2>
+            <p>Welcome to Film Reviews! Write and View Reviews About Your Favorite Movies! Sign In To Post!</p>
+        </div>
+    </div>
+    <div class="row raise add-to-top">
+        <div class="col-6 align-self-start">
+            <h2 class="category-header">Recent</h2>
+            <ul class="category-list list-group list-group-flush" id="reviewListHomeRecent"></ul>
+        </div>
+        <div class="col-6 align-self-start">
+            <h2 class="category-header">Popular</h1>
+            <ul class="category-list list-group list-group-flush" id="reviewListHomePopular"></ul>
         </div>
     </div>
     <div class="row raise">
-        <div class="col">
-            <h2>About</h2>
-            <p>This web application serves as a demo of the user authentication system I developed for personal use. Validation takes place on the client, in the routes, and in the database functions.</p>
-        </div>
-    </div>
-    <div class="row raise">
-        <div class="col-6">
-            <a class="btn btn-outline-secondary btn-lg btn-block add-to-top browseReviews" aria-label="Browse All Reviews" href="/settings">Settings</a>
-        </div>
-        <div class="col-6">
-            <a class="btn btn-outline-primary btn-lg btn-block add-to-top browseReviews" aria-label="Browse All Reviews" href="/logout">Sign Out</a>
+        <div class="col-12">
+            <a class="btn btn-outline-primary btn-lg btn-block add-to-top browseReviews" aria-label="Browse All Reviews" href="/reviews">Browse Reviews</a>
         </div>
     </div>
 </div>
